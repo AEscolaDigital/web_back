@@ -27,6 +27,14 @@ class Students extends Model {
         
     }
 
+    static associate = function(models) {
+        this.hasMany(models.User, {as: 'employes'})
+    };
+
+    // static associate = function(models) {
+    //     this.belongsTo(models.Company, 
+    //         {foreignKey: 'companyId', as: 'company'}
+    //     );
 }
 
 module.exports = Students;
