@@ -64,6 +64,13 @@ module.exports = {
         type: Sequelize.INTEGER,
          allowNull: false
       },
+      genre: {
+        type: Sequelize.INTEGER,
+        references: {
+          table: "users",
+          key: "id"
+        }
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false
