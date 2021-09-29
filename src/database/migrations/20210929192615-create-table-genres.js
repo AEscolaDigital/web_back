@@ -6,9 +6,10 @@ module.exports = {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
+        allowNull: false,
       },
-      name_genre: {
+      name: {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -19,11 +20,11 @@ module.exports = {
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false
-      },     
-    })
+      },
+    });
   },
 
   down: async (queryInterface, Sequelize) => {
-    queryInterface.dropTable("genres");
+    queryInterface.dropTable("adresses");
   }
 };

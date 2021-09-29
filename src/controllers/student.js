@@ -1,9 +1,8 @@
 const Students = require('../models/Students');
 
-
 module.exports = {
-    async store(req, res) {
 
+    async store(req, res) {
         const { name, 
                 email, 
                 password, 
@@ -35,8 +34,8 @@ module.exports = {
 
         });
 
-        return res.json({
-            gravado: "Sim"
+        return res.json({ 
+            students_id: students.id,
         });
 
     }

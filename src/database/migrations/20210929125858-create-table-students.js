@@ -63,9 +63,9 @@ module.exports = {
       genre_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'genres', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        // references: {         // Student belongsTo genre 1:1
+        //   model: 'genres', key: 'id'
+        // }
       },
       created_at: {
         type: Sequelize.DATE,
