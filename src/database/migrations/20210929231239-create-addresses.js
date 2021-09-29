@@ -51,3 +51,6 @@ module.exports = {
     queryInterface.dropTable("adresses");
   }
 };
+
+
+

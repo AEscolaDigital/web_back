@@ -8,6 +8,13 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true
       },
+      genre_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: 'genres', key: 'id'},
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
       name: {
         type: Sequelize.STRING,
         allowNull: false
@@ -60,13 +67,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true
       },
-      genre_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        // references: {         // Student belongsTo genre 1:1
-        //   model: 'genres', key: 'id'
-        // }
-      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false
@@ -82,6 +82,4 @@ module.exports = {
     queryInterface.dropTable("students");
   }
 };
-
-
 
