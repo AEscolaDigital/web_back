@@ -18,7 +18,7 @@ class Students extends Model {
                 image_cpf_responsible: DataTypes.STRING,
                 valid: DataTypes.INTEGER,
                 img_proof_of_residence: DataTypes.STRING,
-                genre: DataTypes.INTEGER,
+                genre_id: DataTypes.INTEGER,
             },
             {
                sequelize: connection,
@@ -27,14 +27,11 @@ class Students extends Model {
         
     }
 
-    static associate = function(models) {
-        this.hasMany(models.User, {as: 'employes'})
-    };
+    static associate(models){
 
-    // static associate = function(models) {
-    //     this.belongsTo(models.Company, 
-    //         {foreignKey: 'companyId', as: 'company'}
-    //     );
+        this.belongsTo(models.Genres, { foreignKey: 'genre_id', as: 'genre_student' })
+    }
+
 }
 
 module.exports = Students;

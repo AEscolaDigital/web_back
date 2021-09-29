@@ -1,10 +1,15 @@
-const routes = require("express").Router();
+const express = require('express');
 
-const studentController = require("./controllers/students");
+const StudentController = require("./controllers/student");
+const GenreController = require("./controllers/genre")
+
+
+const routes = require("express").Router();
 
 
 //rotas públicas
-routes.post('/student', studentController.store);
+routes.get('/student/:student_id/genre', GenreController.index);
+routes.post('/student', StudentController.store);
 
 
 

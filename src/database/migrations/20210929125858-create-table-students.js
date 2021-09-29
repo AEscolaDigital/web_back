@@ -60,16 +60,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true
       },
-      genre: {
+      genre_id: {
         type: Sequelize.INTEGER,
-         allowNull: false
-      },
-      genre: {
-        type: Sequelize.INTEGER,
-        references: {
-          table: "users",
-          key: "id"
-        }
+        allowNull: false,
+        references: { model: 'genres', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       created_at: {
         type: Sequelize.DATE,
@@ -86,4 +82,6 @@ module.exports = {
     queryInterface.dropTable("students");
   }
 };
+
+
 

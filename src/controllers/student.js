@@ -14,7 +14,7 @@ module.exports = {
                 cpf_responsible, 
                 image_cpf_responsible, 
                 img_proof_of_residence,
-                genre,
+                genre_id,
             } = req.body;
 
         students = await Students.create({
@@ -31,7 +31,7 @@ module.exports = {
             image_cpf_responsible: image_cpf_responsible,
             valid: 0,
             img_proof_of_residence: img_proof_of_residence,
-            genre: genre,
+            genre_id: genre_id,
 
         });
 
