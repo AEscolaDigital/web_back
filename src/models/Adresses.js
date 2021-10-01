@@ -10,6 +10,7 @@ class Adresses extends Model {
                 cep: DataTypes.STRING,
                 district: DataTypes.STRING,
                 complement: DataTypes.STRING,
+                city_id: DataTypes.INTEGER
             },
             {
                sequelize: connection,

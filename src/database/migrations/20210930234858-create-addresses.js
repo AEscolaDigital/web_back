@@ -16,6 +16,13 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
+      city_id:{
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: { model: 'cities', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
       street: {
         type: Sequelize.STRING,
         allowNull: false
@@ -51,6 +58,3 @@ module.exports = {
     queryInterface.dropTable("adresses");
   }
 };
-
-
-

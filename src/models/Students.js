@@ -29,8 +29,6 @@ class Students extends Model {
 
     static associate(models) {
         this.hasMany(models.Adresses, { foreignKey: 'student_id', as: 'addresses' });
-        // this.belongsTo(models.Company, {foreignKey: 'genre_id', as: 'genre'})
-
     }
 
 }

@@ -1,23 +1,68 @@
 const Students = require('../models/Students');
+const Address = require('../models/Adresses');
+const Cities = require('../models/Cities');
+
 
 module.exports = {
 
+    async index(req, res) {
+        const { student_id } = req.params;
+
+        const student = await Students.findByPk(student_id, {
+            include: {
+                association: 'addresses',
+            }
+        });
+
+        return res.json(student);
+    },
+
     async store(req, res) {
-        const { name, 
-                email, 
-                password, 
-                phone, 
-                birth_date, 
-                rg, image_rg, 
-                cpf, image_cpf, 
-                cpf_responsible, 
-                image_cpf_responsible, 
-                img_proof_of_residence,
-                genre_id,
-            } = req.body;
+        const { name,
+            email,
+            password,
+            phone,
+            birth_date,
+            rg, image_rg,
+            cpf, image_cpf,
+            cpf_responsible,
+            image_cpf_responsible,
+            img_proof_of_residence,
+            genre_id,
+            addresses: [{
+                street,
+                number,
+                cep,
+                district,
+                complement,
+                city,
+            }]
+        } = req.body;
+
+        let students = await Students.findOne({
+            where: {
+                email: email,
+                cpf: cpf,
+            }
+        })
+
+        // let students = await Students.findOne({
+        //     attributes: ['id'],
+        //     where: {
+        //         email: email,
+        //         cpf: cpf,
+        //     }
+        // })
+
+       // console.log(students.id);
+
+        // if (students) {
+        //     return res.status(400)
+        //         .send({ error: "Este e-mail ou CPF já está sendo utilizado" })
+        // }
 
         students = await Students.create({
-            name:  name,
+            name: name,
             email: email,
             password: password,
             phone: phone,
@@ -33,10 +78,31 @@ module.exports = {
             genre_id: genre_id,
 
         });
+        console.log("AQUI 2");
 
-        return res.json({ 
-            students_id: students.id,
+
+        const city_id = await Cities.findOrCreate({
+            attributes: ['id'],
+            where: { name: city }
         });
+
+        console.log(city_id[0].dataValues.id);
+        
+        console.log("AQUI");
+
+        const student_id = students.id
+
+        await Address.create({
+            street: street,
+            student_id: student_id,
+            city_id: 1,
+            number: number,
+            cep: cep,
+            district: district,
+            complement: complement,
+        });
+    
+        return res.json({ result: "Usuário gravado com sucesso" });
 
     }
 

@@ -11,9 +11,6 @@ module.exports = {
       genre_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'genres', key: 'id'},
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
       name: {
         type: Sequelize.STRING,
@@ -64,6 +61,10 @@ module.exports = {
         allowNull: false
       },
       img_proof_of_residence: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      profile_picture: {
         type: Sequelize.STRING,
         allowNull: true
       },
