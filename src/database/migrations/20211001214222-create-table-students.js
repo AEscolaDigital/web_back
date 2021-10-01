@@ -8,9 +8,12 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true
       },
-      genre_id: {
+      genre_id:{
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: { model: 'genres', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       name: {
         type: Sequelize.STRING,

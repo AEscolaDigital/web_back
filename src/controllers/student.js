@@ -1,7 +1,8 @@
 const Students = require('../models/Students');
 const Address = require('../models/Adresses');
 const Cities = require('../models/Cities');
-
+const States = require('../models/States');
+const Genres = require('../models/Genre');
 
 module.exports = {
 
@@ -9,8 +10,19 @@ module.exports = {
         const { student_id } = req.params;
 
         const student = await Students.findByPk(student_id, {
-            include: {
-                association: 'addresses',
+            include:
+            {
+                association: 'address',
+                attributes: ['street', 'number', 'cep', 'district', 'complement'],
+                include: [
+                    {
+                        association: 'state',
+                        attributes: ['name', 'uf']
+                    }, {
+                        association: 'city',
+                        attributes: ['name']
+                    }
+                ],
             }
         });
 
@@ -25,8 +37,7 @@ module.exports = {
             birth_date,
             rg, image_rg,
             cpf, image_cpf,
-            cpf_responsible,
-            image_cpf_responsible,
+            cpf_responsible, image_cpf_responsible,
             img_proof_of_residence,
             genre_id,
             addresses: [{
@@ -36,25 +47,17 @@ module.exports = {
                 district,
                 complement,
                 city,
+                state,
+                uf_state,
             }]
         } = req.body;
 
-        let students = await Students.findOne({
-            where: {
-                email: email,
-                cpf: cpf,
-            }
-        })
-
         // let students = await Students.findOne({
-        //     attributes: ['id'],
         //     where: {
         //         email: email,
         //         cpf: cpf,
         //     }
         // })
-
-       // console.log(students.id);
 
         // if (students) {
         //     return res.status(400)
@@ -78,30 +81,28 @@ module.exports = {
             genre_id: genre_id,
 
         });
-        console.log("AQUI 2");
-
 
         const city_id = await Cities.findOrCreate({
-            attributes: ['id'],
             where: { name: city }
         });
 
-        console.log(city_id[0].dataValues.id);
-        
-        console.log("AQUI");
+        const state_id = await States.findOrCreate({
+            where: { name: state, uf: uf_state }
+        });
 
         const student_id = students.id
 
         await Address.create({
             street: street,
             student_id: student_id,
-            city_id: 1,
+            city_id: city_id[0].dataValues.id,
+            state_id: state_id[0].dataValues.id,
             number: number,
             cep: cep,
             district: district,
             complement: complement,
         });
-    
+
         return res.json({ result: "Usuário gravado com sucesso" });
 
     }

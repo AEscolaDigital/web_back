@@ -28,7 +28,12 @@ class Students extends Model {
     }
 
     static associate(models) {
-        this.hasMany(models.Adresses, { foreignKey: 'student_id', as: 'addresses' });
+        //hasMany = tem muitos
+        // um usuário tem muitos endereços
+    
+        //hasOne = tem um
+        // um estudente tem um endereço
+        this.hasOne(models.Adresses, { foreignKey: 'student_id', as: 'address' });
     }
 
 }

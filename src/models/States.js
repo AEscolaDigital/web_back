@@ -1,11 +1,12 @@
 const { Model, DataTypes } = require("sequelize");
 
-class Cities extends Model {
+class States extends Model {
      
     static init(connection){
         super.init(
             {  
                 name: DataTypes.STRING,
+                uf: DataTypes.STRING
             },
             {
                sequelize: connection,
@@ -15,14 +16,14 @@ class Cities extends Model {
 
     static associate(models) {
         //hasMany = tem muitos
-        // um endereço tem muitos cidades
+        // um endereço tem muitos estados
 
         //hasOne = tem um
-        // um endereço tem um cidade
-        this.hasOne(models.Adresses , { foreignKey: 'city_id', as: 'address' })
+        // um endereço tem um estado
+        this.hasOne(models.Adresses , { foreignKey: 'state_id', as: 'address' })
         
     }
-    
+     
 }
 
-module.exports = Cities;
+module.exports = States;
