@@ -13,15 +13,15 @@ class Genres extends Model {
         );
     }
 
-    // static associate(models) {
-    //     //hasMany = tem muitos
-    //     // um estudente tem muitos generos
+    static associate(models) {
+        //hasMany = tem muitos
+        // um aluno tem muitos generos
 
-    //     //hasOne = tem um
-    //     // Um estudante tem um genero
-    //     this.hasOne(models.Adresses , { foreignKey: 'city_id', as: 'address' })
+        //hasOne = tem um
+        // Um aluno tem um genero
+        this.hasOne(models.Students , { foreignKey: 'genre_id', as: 'student' })
         
-    // }
+    }
     
 }
 

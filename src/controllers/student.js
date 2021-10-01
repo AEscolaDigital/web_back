@@ -2,7 +2,6 @@ const Students = require('../models/Students');
 const Address = require('../models/Adresses');
 const Cities = require('../models/Cities');
 const States = require('../models/States');
-const Genres = require('../models/Genre');
 
 module.exports = {
 
@@ -11,19 +10,25 @@ module.exports = {
 
         const student = await Students.findByPk(student_id, {
             include:
-            {
-                association: 'address',
-                attributes: ['street', 'number', 'cep', 'district', 'complement'],
-                include: [
+                [
                     {
-                        association: 'state',
-                        attributes: ['name', 'uf']
-                    }, {
-                        association: 'city',
-                        attributes: ['name']
+                        association: 'genre',
+                        attributes: ['name'],
+                    },
+                    {
+                        association: 'address',
+                        attributes: ['street', 'number', 'cep', 'district', 'complement'],
+                        include: [
+                            {
+                                association: 'state',
+                                attributes: ['name', 'uf']
+                            }, {
+                                association: 'city',
+                                attributes: ['name']
+                            }
+                        ],
                     }
-                ],
-            }
+                ]
         });
 
         return res.json(student);
@@ -52,17 +57,17 @@ module.exports = {
             }]
         } = req.body;
 
-        // let students = await Students.findOne({
-        //     where: {
-        //         email: email,
-        //         cpf: cpf,
-        //     }
-        // })
+        let students = await Students.findOne({
+            where: {
+                email: email,
+                cpf: cpf,
+            }
+        })
 
-        // if (students) {
-        //     return res.status(400)
-        //         .send({ error: "Este e-mail ou CPF já está sendo utilizado" })
-        // }
+        if (students) {
+            return res.status(400)
+                .send({ error: "Este e-mail ou CPF já está sendo utilizado" })
+        }
 
         students = await Students.create({
             name: name,

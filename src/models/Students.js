@@ -34,6 +34,14 @@ class Students extends Model {
         //hasOne = tem um
         // um estudente tem um endereço
         this.hasOne(models.Adresses, { foreignKey: 'student_id', as: 'address' });
+
+        // belongsTo = pertece a único registro
+        // o genero pertece a um único aluno
+
+        // belongsToMany pertence a muitos
+        // o genero pertece a muitos estudentes
+        
+        this.belongsTo(models.Genres, { foreignKey: 'genre_id', as: 'genre' });
     }
 
 }
