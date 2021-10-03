@@ -25,5 +25,6 @@ Adresses.associate(connection.models);
 Cities.associate(connection.models);
 States.associate(connection.models);
 Phones.associate(connection.models);
+Prefixes.associate(connection.models);
 
 module.exports = connection;

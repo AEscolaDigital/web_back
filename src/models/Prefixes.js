@@ -12,6 +12,18 @@ class Prefixes extends Model {
             }
         );
     }
+
+    
+    static associate(models) {
+        //hasMany = tem muitos
+        // um telefone tem muitos ddd 
+    
+        //hasOne = tem um
+        // um telefone tem um ddd
+    
+        this.hasOne(models.Phones, { foreignKey: 'ddd_id', as: 'phone' });
+    }
+
 }
 
 module.exports = Prefixes;

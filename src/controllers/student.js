@@ -15,6 +15,11 @@ module.exports = {
                 [
                     {
                         association: 'phone',
+                        attributes: ['number'],
+                        include: [{
+                            association: 'prefixes',
+                            attributes: ['ddd']
+                        }]
                     },
                     {
                         association: 'genre',
@@ -40,39 +45,22 @@ module.exports = {
     },
 
     async store(req, res) {
-        const { name,
-            email,
-            password,
-            phone,
-            birth_date,
-            rg, image_rg,
-            cpf, image_cpf,
-            cpf_responsible, image_cpf_responsible,
-            img_proof_of_residence,
-            genre_id,
-            addresses: [{
-                street,
-                number,
-                cep,
-                district,
-                complement,
-                city,
-                state,
-                uf_state,
-            }]
-        } = req.body;
+     
+        const firebaseUrl  = req.files;
 
-        // let students = await Students.findOne({
-        //     where: {
-        //         email: email,
-        //         cpf: cpf,
-        //     }
-        // })
+        const { name, email, password ,phone, birth_date, rg, cpf, cpf_responsible, street, number, cep, district, complement, city, state, uf_state, genre_id } = req.body
 
-        // if (students) {
-        //     return res.status(400)
-        //         .send({ error: "Este e-mail ou CPF já está sendo utilizado" })
-        // }
+        let students = await Students.findOne({
+            where: {
+                email: email,
+                cpf: cpf,
+            }
+        })
+
+        if (students) {
+            return res.status(400)
+                .send({ error: "Este e-mail e/ou CPF já está sendo utilizado" })
+        }
 
         students = await Students.create({
             name: name,
@@ -80,13 +68,13 @@ module.exports = {
             password: password,
             birth_date: birth_date,
             rg: rg,
-            image_rg: image_rg,
+            image_rg: firebaseUrl[0].firebaseUrl,
             cpf: cpf,
-            image_cpf: image_cpf,
+            image_cpf: firebaseUrl[1].firebaseUrl,
             cpf_responsible: cpf_responsible,
-            image_cpf_responsible: image_cpf_responsible,
+            image_cpf_responsible: "",
             valid: 0,
-            img_proof_of_residence: img_proof_of_residence,
+            img_proof_of_residence: "",
             genre_id: genre_id,
 
         });

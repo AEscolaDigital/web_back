@@ -23,6 +23,8 @@ class Phones extends Model {
         // o endereço pertece a muitos estudentes
 
         this.belongsTo(models.Students, { foreignKey: 'student_id', as: 'student' })
+
+        this.belongsTo(models.Prefixes, { foreignKey: 'ddd_id', as: 'prefixes' })
         
          
     }
