@@ -8,7 +8,6 @@ class Students extends Model {
                 name: DataTypes.STRING,
                 email: DataTypes.STRING,
                 password: DataTypes.STRING,
-                phone: DataTypes.STRING,
                 birth_date: DataTypes.DATE,
                 rg: DataTypes.STRING,
                 image_rg: DataTypes.STRING,
@@ -42,6 +41,8 @@ class Students extends Model {
         // o genero pertece a muitos estudentes
         
         this.belongsTo(models.Genres, { foreignKey: 'genre_id', as: 'genre' });
+        
+        this.hasOne(models.Phones, { foreignKey: 'student_id', as: 'phone' });
     }
 
 }
