@@ -7,10 +7,11 @@ const loginController = require("./controllers/login");
 //Rota de login
 routes.post('/login', loginController.store);
 
+routes.post('/student', StudentController.store);
+
 routes.use(authMiddleware);
 
 // Rota do aluno
-routes.post('/student', StudentController.store);
 routes.get('/student/:student_id', StudentController.index);
 
 
