@@ -1,5 +1,5 @@
 module.exports = {
-    url: "mysql://root:manolo@localhost:3306/school",
+    url: "mysql://root:bcd127@localhost:3306/school",
     config: {
         dialect: "mysql",
         define: {
