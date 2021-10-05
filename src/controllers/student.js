@@ -45,22 +45,39 @@ module.exports = {
     },
 
     async store(req, res) {
-     
-        const firebaseUrl  = req.files;
 
-        const { name, email, password ,phone, birth_date, rg, cpf, cpf_responsible, street, number, cep, district, complement, city, state, uf_state, genre_id } = req.body
+        const firebaseUrl = req.files;
 
-        let students = await Students.findOne({
-            where: {
-                email: email,
-                cpf: cpf,
-            }
-        })
+        const { name,
+            email,
+            password,
+            phone,
+            birth_date,
+            rg,
+            cpf,
+            cpf_responsible,
+            genre_id,
+            street,
+            number,
+            cep,
+            district,
+            complement,
+            city,
+            state,
+            uf_state,
+        } = req.body;
 
-        if (students) {
-            return res.status(400)
-                .send({ error: "Este e-mail e/ou CPF já está sendo utilizado" })
-        }
+        // let students = await Students.findOne({
+        //     where: {
+        //         email: email,
+        //         cpf: cpf,
+        //     }
+        // })
+
+        // if (students) {
+        //     return res.status(400)
+        //         .send({ error: "Este e-mail e/ou CPF já está sendo utilizado" })
+        // }
 
         students = await Students.create({
             name: name,
@@ -100,14 +117,14 @@ module.exports = {
             complement: complement,
         });
 
-        const ddd = phone.substr(1,2);
-    
+        const ddd = phone.substr(1, 2);
+
         const ddd_id = await Prefixes.findOrCreate({
             where: { ddd: ddd }
         });
 
         await Phones.create({
-            number: phone.substr(4,10),
+            number: phone.substr(4, 10),
             student_id: student_id,
             ddd_id: ddd_id[0].dataValues.id,
         });
