@@ -63,11 +63,7 @@ module.exports = {
             }]
         } = req.body;
 
-        console.log("XPTO"+password);
         const  passwordCript = bcrypt.hashSync(password, 10);
-        console.log("              ");
-        console.log("XPTO"+passwordCript);
-        console.log("              ");
         // let students = await Students.findOne({
         //     where: {
         //         email: email,
