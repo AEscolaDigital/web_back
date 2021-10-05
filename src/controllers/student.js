@@ -47,6 +47,8 @@ module.exports = {
     async store(req, res) {
 
         const firebaseUrl = req.files;
+          
+        return console.log(firebaseUrl)
 
         const { name,
             email,

@@ -1,10 +1,6 @@
 const routes = require('express').Router();
 
-// Controllers
 const StudentController = require('./controllers/student');
-
-// Validações
-const studentValidators = require("./validators/students");
 
 const multer = require("multer");
 
@@ -13,12 +9,14 @@ const Multer = multer({
     limits: 1024 * 1024, // 1MB
 });
 
+const uploadImage = require('./services/firebase');
+//const uploadImageRG = require('./services/firebaserg');
 
-// Firebase
-const uploadImages = require('./services/firebase');
+const uploadfields = Multer.fields([{name: 'imagen', maxCount: 1}, { name: 'rg', maxCount: 1 }]);
+
 
 // Rota do aluno
-routes.post("/student", studentValidators.create, Multer.array('images', 2), uploadImages, StudentController.store);
+routes.post("/student", uploadfields, uploadImage, StudentController.store);
 
 // routes.post("/student", Multer.single('imagem'), uploadImage, StudentController.store);
 

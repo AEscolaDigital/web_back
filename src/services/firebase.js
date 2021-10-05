@@ -11,43 +11,85 @@ admin.initializeApp({
 
 const bucket = admin.storage().bucket();
 
-const uploadImages = (req, res, next) => {
-    if (!req.files) return next();
 
-    const images = req.files;
 
-    const fileRG = Date.now() + "." + images[0].originalname.split(".").pop();
+const uploadImage = (req, res, next) => {
+    if (!req.files) return next(); 
 
-    const fileCPF = Date.now() + Math.random() + "." + images[1].originalname.split(".").pop();
+    const imagen = req.files.imagen[0];
+    const imagenCPF = req.files.rg[0];
+
+    uploadImageRG(imagen, next);
+
+    uploadImageCPF(imagenCPF, next);
     
+}
 
-    const files = bucket.file(fileRG, fileCPF);
 
-    const stream = files.createWriteStream({
+const uploadImageRG = (imagen, next) => {
+
+    const fileName = Date.now() + "." + imagen.originalname.split(".").pop();
+    
+    const file = bucket.file(fileName);
+
+    const stream = file.createWriteStream({
         metadata:{
-            contentType: images[0].mimeType,
-            contentType: images[1].mimeType
+            contentType: imagen.mimeType,
+
         },
     });
 
+
     stream.on("error", (error) => {
         console.error(error);
+
         res.status(500).send({ error: "Erro ao subir para o Firebase" });
     })
 
     stream.on("finish", async () => {
         //tornar o arquivo público
-        await files.makePublic();
+        await file.makePublic();
 
         //obter a url público
-        req.files[0].firebaseUrlRG = `https://storage.googleapis.com/${BUCKET}/${fileRG}`;
-        req.files[1].firebaseUrlCPF = `https://storage.googleapis.com/${BUCKET}/${fileCPF}`;
+        imagen.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/${fileName}`;
 
         next();
     })
 
-    stream.end(images.buffer);
+    stream.end(imagen.buffer);
+} 
 
+
+const uploadImageCPF = (imagenCPF, next) =>{
+    
+    const fileName = Date.now() + "555"+ "." + imagenCPF.originalname.split(".").pop();
+    
+    const file = bucket.file(fileName);
+
+    const stream = file.createWriteStream({
+        metadata:{
+            contentType: imagenCPF.mimeType,
+        },
+    });
+
+    stream.on("error", (error) => {
+        console.error(error);
+
+        res.status(500).send({ error: "Erro ao subir para o Firebase" });
+    })
+
+    stream.on("finish", async () => {
+        //tornar o arquivo público
+        await file.makePublic();
+
+        //obter a url público
+        imagenCPF.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/${fileName}`;
+
+        next();
+    })
+
+    stream.end(imagenCPF.buffer);
 }
 
-module.exports = uploadImages;
+
+module.exports = uploadImage;
