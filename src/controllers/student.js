@@ -47,8 +47,6 @@ module.exports = {
     async store(req, res) {
 
         const firebaseUrl = req.files;
-          
-        return console.log(firebaseUrl)
 
         const { name,
             email,
@@ -69,17 +67,51 @@ module.exports = {
             uf_state,
         } = req.body;
 
-        // let students = await Students.findOne({
-        //     where: {
-        //         email: email,
-        //         cpf: cpf,
-        //     }
-        // })
+        let students = await Students.findOne({
+            where: {
+                email: email,
+                cpf: cpf,
+            }
+        })
 
-        // if (students) {
-        //     return res.status(400)
-        //         .send({ error: "Este e-mail e/ou CPF já está sendo utilizado" })
-        // }
+        if (students) {
+            return res.status(400)
+                .send({ error: "Este e-mail e/ou CPF já está sendo utilizado" })
+        }
+
+        const getNameFile = () => {
+
+            const nameFileRG = firebaseUrl.image_rg[0].firebaseUrl;
+            const nameFileCPF = firebaseUrl.image_cpf[0].firebaseUrl;
+            const nameFileCpfResponsible = firebaseUrl.image_cpf_responsible[0].firebaseUrl;
+            const nameFileProofOfResidence = firebaseUrl.image_proof_of_residence[0].firebaseUrl;
+
+            if (nameFileRG == undefined) {
+
+                if (nameFileCPF == undefined) {
+                        
+                    if(nameFileCpfResponsible == undefined){
+                          return nameFileProofOfResidence;
+                    }else{
+                        return nameFileCpfResponsible
+                    }
+                } else {
+                    return nameFileCPF;
+                }
+
+            } else {
+                return nameFileRG;
+            }
+
+        }
+
+        const nameFile = getNameFile();
+
+        const BUCKET = "school-12606.appspot.com";
+        const fileRG = `https://storage.googleapis.com/${BUCKET}/students/rg/${nameFile}`
+        const fileCPF = `https://storage.googleapis.com/${BUCKET}/students/cpf/${nameFile}`
+        const fileCpfResponsible = `https://storage.googleapis.com/${BUCKET}/students/cpf_responsible/${nameFile}`
+        const fileCpfProofOfResidence = `https://storage.googleapis.com/${BUCKET}/students/proof_of_residence/${nameFile}`
 
         students = await Students.create({
             name: name,
@@ -87,13 +119,13 @@ module.exports = {
             password: password,
             birth_date: birth_date,
             rg: rg,
-            image_rg: firebaseUrl[0].firebaseUrl,
+            image_rg: fileRG,
             cpf: cpf,
-            image_cpf: firebaseUrl[1].firebaseUrl,
+            image_cpf: fileCPF,
             cpf_responsible: cpf_responsible,
-            image_cpf_responsible: "",
+            image_cpf_responsible: fileCpfResponsible,
             valid: 0,
-            img_proof_of_residence: "",
+            img_proof_of_residence: fileCpfProofOfResidence,
             genre_id: genre_id,
 
         });
@@ -131,7 +163,10 @@ module.exports = {
             ddd_id: ddd_id[0].dataValues.id,
         });
 
-        return res.json({ result: "Usuário gravado com sucesso" });
+        return res.status(201)
+            .send({
+                result: "Usuário gravado com sucesso"
+            });
 
     }
 

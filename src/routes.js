@@ -9,18 +9,17 @@ const Multer = multer({
     limits: 1024 * 1024, // 1MB
 });
 
-const uploadImage = require('./services/firebase');
-//const uploadImageRG = require('./services/firebaserg');
+const uploadImages = require('./services/firebase');
 
-const uploadfields = Multer.fields([{name: 'imagen', maxCount: 1}, { name: 'rg', maxCount: 1 }]);
-
+const uploadfields = Multer.fields([
+    { name: 'image_cpf', maxCount: 1 }, 
+    { name: 'image_rg', maxCount: 1},
+    { name: 'image_cpf_responsible', maxCount: 1},
+    { name: 'image_proof_of_residence', maxCount: 1},
+]);
 
 // Rota do aluno
-routes.post("/student", uploadfields, uploadImage, StudentController.store);
-
-// routes.post("/student", Multer.single('imagem'), uploadImage, StudentController.store);
-
-
+routes.post("/student", uploadfields, uploadImages, StudentController.store);
 routes.get('/student/:student_id', StudentController.index);
 
 module.exports = routes;
