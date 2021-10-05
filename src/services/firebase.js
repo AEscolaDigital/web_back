@@ -83,7 +83,7 @@ const uploadImageCPF = (imagenCPF, next) =>{
         await file.makePublic();
 
         //obter a url público
-        imagenCPF.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/${fileName}`;
+        imagenCPF.firebaseUrlCPF = `https://storage.googleapis.com/${BUCKET}/${fileName}`;
 
         next();
     })
