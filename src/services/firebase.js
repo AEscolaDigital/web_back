@@ -62,7 +62,7 @@ const uploadImageRG = (imagen, next) => {
 
 const uploadImageCPF = (imagenCPF, next) =>{
     
-    const fileName = Date.now() + "555"+ "." + imagenCPF.originalname.split(".").pop();
+    const fileName = Date.now() + "." + imagenCPF.originalname.split(".").pop();
     
     const file = bucket.file(fileName);
 
