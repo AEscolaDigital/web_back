@@ -4,6 +4,7 @@ const Cities = require('../models/Cities');
 const States = require('../models/States');
 const Phones = require('../models/Phones');
 const Prefixes = require('../models/Prefixes');
+const bcrypt = require("bcrypt");
 
 module.exports = {
 
@@ -62,6 +63,7 @@ module.exports = {
             }]
         } = req.body;
 
+        const  passwordCript = bcrypt.hashSync(password, 10);
         // let students = await Students.findOne({
         //     where: {
         //         email: email,
@@ -77,7 +79,7 @@ module.exports = {
         students = await Students.create({
             name: name,
             email: email,
-            password: password,
+            password: passwordCript,
             birth_date: birth_date,
             rg: rg,
             image_rg: image_rg,
