@@ -15,136 +15,151 @@ const uploadImages = async (req, res, next) => {
 
     if (!req.files) return next();
 
-    // const imagenCPF = req.files.image_cpf[0];
-    const imagenRG = req.files.image_rg[0];
-    // const imageCpfResponsible = req.files.image_cpf_responsible[0];
-    // const imageProofOfResidence = req.files.image_proof_of_residence[0];
+    const images = req.files;
 
-    const fileName = Date.now() + "." + imagenRG.originalname.split(".").pop();
+    console.log();
 
-    let resposta = await uploadImageRG(imagenRG, fileName).catch(e => res.status(500).send({ error: "Erro ao subir para o Firebase" }));
-    // uploadImageCPF(imagenCPF, next, fileName);
-    // uploadImageCpfResponsible(imageCpfResponsible, next, fileName);
-    // uploadImageProofOfResidence(imageProofOfResidence, next, fileName);
+    try {
+
+        await uploadImageRG(images);
+
+        await uploadImageCPF(images);
+
+        await uploadImageCpfResponsible(images);
+
+        await uploadImageProofOfResidence(images);
+
+    } catch (error) {
+        return res.status(500).send({ error: "Erro ao subir para o Firebase" });
+    }
 
     next();
 }
 
 
-const uploadImageRG = (imagem, fileName) => {
+const uploadImageRG = (images) => {
 
     return new Promise((resolve, reject) => {
+
+        const imageRG = images.image_rg[0];
+
+        const fileName = Date.now() + "." + imageRG.originalname.split(".").pop();
+
         const file = bucket.file("students/rg/" + fileName);
 
         const stream = file.createWriteStream({
-            metadata: {
-                contentType: imagem.mimeType,
-            },
+            metadata: { contentType: imageRG.mimeType, },
         });
-
 
         stream.on("error", (error) => {
             console.error(error);
-
             reject(error);
         })
 
         stream.on("finish", async () => {
-            //tornar o arquivo público
             await file.makePublic();
 
-            //obter a url público
-            imagem.firebaseUrl = `${fileName}`;
+            imageRG.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/students/rg/${fileName}`;
 
-            resolve(imagem)
+            resolve(imageRG)
         })
 
-        stream.end(imagem.buffer);
+        stream.end(imageRG.buffer);
     })
+}
 
+const uploadImageCPF = (images) => {
+
+    return new Promise((resolve, reject) => {
+
+        const imageCPF = images.image_cpf[0];
+
+        const fileName = Date.now() + "." + imageCPF.originalname.split(".").pop();
+
+        const file = bucket.file("students/cpf/" + fileName);
+
+        const stream = file.createWriteStream({
+            metadata: { contentType: imageCPF.mimeType, },
+        });
+
+        stream.on("error", (error) => {
+            console.error(error);
+            reject(error);
+        })
+
+        stream.on("finish", async () => {
+            await file.makePublic();
+
+            imageCPF.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/students/cpf/${fileName}`;
+            resolve(imageCPF)
+        })
+
+        stream.end(imageCPF.buffer);
+    })
 
 }
 
+const uploadImageCpfResponsible = (images) => {
 
-const uploadImageCPF = (imagenCPF, next, fileName) => {
+    return new Promise((resolve, reject) => {
+         
+        const imageCpfResponsible = images.image_cpf_responsible[0];
 
-    const file = bucket.file("students/cpf/" + fileName);
+        const fileName = Date.now() + "." + imageCpfResponsible.originalname.split(".").pop();
 
-    const stream = file.createWriteStream({
-        metadata: {
-            contentType: imagenCPF.mimeType,
-        },
-    });
+        const file = bucket.file("students/cpf_responsible/" + fileName);
 
-    stream.on("error", (error) => {
-        console.error(error);
+        const stream = file.createWriteStream({
+            metadata: { contentType: imageCpfResponsible.mimeType, },
+        });
 
-        res.status(500).send({ error: "Erro ao subir para o Firebase" });
+        stream.on("error", (error) => {
+            console.error(error);
+            reject(error);
+        })
+
+        stream.on("finish", async () => {
+            await file.makePublic();
+
+            imageCpfResponsible.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/students/cpf_responsible/${fileName}`;
+            resolve(imageCpfResponsible)
+
+        })
+
+        stream.end(imageCpfResponsible.buffer);
     })
 
-    stream.on("finish", async () => {
-        //tornar o arquivo público
-        await file.makePublic();
-
-        //obter a url público
-        imagenCPF.firebaseUrl = `${fileName}`;
-    })
-
-    stream.end(imagenCPF.buffer);
 }
 
-const uploadImageCpfResponsible = (imageCpfResponsible, next, fileName) => {
+const uploadImageProofOfResidence = (images) => {
 
-    const file = bucket.file("students/cpf_responsible/" + fileName);
+    return new Promise((resolve, reject) => {
+        
+        const imageProofOfResidence = images.image_proof_of_residence[0];
 
-    const stream = file.createWriteStream({
-        metadata: {
-            contentType: imageCpfResponsible.mimeType,
-        },
-    });
+        const fileName = Date.now() + "." + imageProofOfResidence.originalname.split(".").pop();
 
-    stream.on("error", (error) => {
-        console.error(error);
+        const file = bucket.file("students/proof_of_residence/" + fileName);
 
-        res.status(500).send({ error: "Erro ao subir para o Firebase" });
+        const stream = file.createWriteStream({
+            metadata: { contentType: imageProofOfResidence.mimeType,},
+        });
+
+        stream.on("error", (error) => {
+            console.error(error);
+            reject(error);
+        })
+
+        stream.on("finish", async () => {
+            await file.makePublic();
+
+            imageProofOfResidence.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/students/proof_of_residence/${fileName}`;
+            resolve(imageProofOfResidence);
+        })
+
+        stream.end(imageProofOfResidence.buffer);
     })
 
-    stream.on("finish", async () => {
-        //tornar o arquivo público
-        await file.makePublic();
-
-        //obter a url público
-        imageCpfResponsible.firebaseUrl = `${fileName}`;
-    })
-
-    stream.end(imageCpfResponsible.buffer);
-}
-
-const uploadImageProofOfResidence = (imageProofOfResidence, next, fileName) => {
-
-    const file = bucket.file("students/proof_of_residence/" + fileName);
-
-    const stream = file.createWriteStream({
-        metadata: {
-            contentType: imageProofOfResidence.mimeType,
-        },
-    });
-
-    stream.on("error", (error) => {
-        console.error(error);
-
-        res.status(500).send({ error: "Erro ao subir para o Firebase" });
-    })
-
-    stream.on("finish", async () => {
-        //tornar o arquivo público
-        await file.makePublic();
-
-        //obter a url público
-        imageProofOfResidence.firebaseUrl = `${fileName}`;
-    })
-
-    stream.end(imageProofOfResidence.buffer);
 }
 
 

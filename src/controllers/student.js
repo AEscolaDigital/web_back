@@ -48,8 +48,6 @@ module.exports = {
 
         const firebaseUrl = req.files;
 
-        
-
         const {
             name,
             email,
@@ -79,92 +77,37 @@ module.exports = {
                 }
             })
 
-            // if (students) {
-            //     return res.status(400)
-            //         .send({ error: "Este e-mail e/ou CPF já está sendo utilizado" })
-            // }
-
-            
-            const getNameFile = () => {
-                
-                const nameFileRG = firebaseUrl.image_rg[0].firebaseUrl;
-                const nameFileCPF = firebaseUrl.image_cpf[0].firebaseUrl;
-                const nameFileCpfResponsible = firebaseUrl.image_cpf_responsible[0].firebaseUrl;
-                const nameFileProofOfResidence = firebaseUrl.image_proof_of_residence[0].firebaseUrl;
-                
-                if (nameFileRG == undefined) {
-                    
-                    if (nameFileCPF == undefined) {
-                        
-                        if (nameFileCpfResponsible == undefined) {
-                            return nameFileProofOfResidence;
-                        } else {
-                            return nameFileCpfResponsible
-                        }
-                    } else {
-                        return nameFileCPF;
-                    }
-                    
-                } else {
-                    return nameFileRG;
-                }
-                
+            if (students) {
+                return res.status(400)
+                    .send({ error: "Este e-mail e/ou CPF já está sendo utilizado" })
             }
-            
-            const nameFile = getNameFile();
-            
-            
-            const BUCKET = "school-12606.appspot.com";
-            const fileRG = `https://storage.googleapis.com/${BUCKET}/students/rg/${nameFile}`
-            const fileCPF = `https://storage.googleapis.com/${BUCKET}/students/cpf/${nameFile}`
-            const fileCpfResponsible = `https://storage.googleapis.com/${BUCKET}/students/cpf_responsible/${nameFile}`
-            const fileCpfProofOfResidence = `https://storage.googleapis.com/${BUCKET}/students/proof_of_residence/${nameFile}`
-            
-            
+
             students = await Students.create({
-                name: name,
-                email: email,
-                password: password,
-                birth_date: birth_date,
+                name,
+                email,
+                password,
+                birth_date,
                 rg: rg,
-                image_rg: fileRG,
-                cpf: cpf,
-                image_cpf: fileCPF,
-                cpf_responsible: cpf_responsible,
-                image_cpf_responsible: fileCpfResponsible,
+                image_rg: firebaseUrl.image_rg[0].firebaseUrl,
+                cpf,
+                image_cpf: firebaseUrl.image_cpf[0].firebaseUrl,
+                cpf_responsible,
+                image_cpf_responsible: firebaseUrl.image_cpf_responsible[0].firebaseUrl,
                 valid: 0,
-                img_proof_of_residence: fileCpfProofOfResidence,
+                img_proof_of_residence: firebaseUrl.image_proof_of_residence[0].firebaseUrl,
                 genre_id: genre_id,
                 
             });
             
-            
-            students = await Students.create({
-                name: name,
-                email: email,
-                password: password,
-                birth_date: birth_date,
-                rg: rg,
-                image_rg: fileRG,
-                cpf: cpf,
-                image_cpf: fileCPF,
-                cpf_responsible: cpf_responsible,
-                image_cpf_responsible: fileCpfResponsible,
-                valid: 0,
-                img_proof_of_residence: fileCpfProofOfResidence,
-                genre_id: genre_id,
-                
-            });
-            
-            const city_id = await Cities.findOrCreate({
+            let city_id = await Cities.findOrCreate({
                 where: { name: city }
             });
             
-            const state_id = await States.findOrCreate({
+            let state_id = await States.findOrCreate({
                 where: { name: state, uf: uf_state }
             });
             
-            const student_id = students.id
+            let student_id = students.id
             
             await Address.create({
                 street: street,
@@ -177,10 +120,9 @@ module.exports = {
                 complement: complement,
             });
             
+            let ddd = phone.substr(1, 2);
             
-            const ddd = phone.substr(1, 2);
-            
-            const ddd_id = await Prefixes.findOrCreate({
+            let ddd_id = await Prefixes.findOrCreate({
                 where: { ddd: ddd }
             });
             
@@ -194,14 +136,9 @@ module.exports = {
             .send({
                 result: "Usuário gravado com sucesso"
             });
-            
-            return console.log(nameFile);
+                        
         } catch (error) {
             console.log('student: ' + error);
         }
-
-
     }
-
-
 }
