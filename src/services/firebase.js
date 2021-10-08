@@ -15,25 +15,19 @@ const uploadImages = async (req, res, next) => {
 
     if (!req.files) return next();
 
-  
     const images = req.files;
 
-    const have_profile_picture = Object.assign({image_profile: false}, images);
-
     try {
-        if(have_profile_picture.image_profile == false){
 
-            await uploadImageRG(images);
+        //await uploadImageRG(images);
 
-            await uploadImageCPF(images);
-    
-            await uploadImageCpfResponsible(images);
-    
-            await uploadImageProofOfResidence(images);
+        //await uploadImageCPF(images);
 
-        }else{
-            await uploadProfileImage(images);
-        }
+        //await uploadImageCpfResponsible(images);
+
+        //await uploadImageProofOfResidence(images);
+
+        await uploadProfileImage(images);
 
     } catch (error) {
         return res.status(500).send({ error: "Erro ao subir para o Firebase" });
@@ -108,7 +102,7 @@ const uploadImageCPF = (images) => {
 const uploadImageCpfResponsible = (images) => {
 
     return new Promise((resolve, reject) => {
-         
+
         const imageCpfResponsible = images.image_cpf_responsible[0];
 
         const fileName = Date.now() + "." + imageCpfResponsible.originalname.split(".").pop();
@@ -140,7 +134,7 @@ const uploadImageCpfResponsible = (images) => {
 const uploadImageProofOfResidence = (images) => {
 
     return new Promise((resolve, reject) => {
-        
+
         const imageProofOfResidence = images.image_proof_of_residence[0];
 
         const fileName = Date.now() + "." + imageProofOfResidence.originalname.split(".").pop();
@@ -148,7 +142,7 @@ const uploadImageProofOfResidence = (images) => {
         const file = bucket.file("students/proof_of_residence/" + fileName);
 
         const stream = file.createWriteStream({
-            metadata: { contentType: imageProofOfResidence.mimeType,},
+            metadata: { contentType: imageProofOfResidence.mimeType, },
         });
 
         stream.on("error", (error) => {
@@ -171,15 +165,15 @@ const uploadImageProofOfResidence = (images) => {
 const uploadProfileImage = (images) => {
 
     return new Promise((resolve, reject) => {
-        
-        const image_profile = images.image_profile[0];
+
+        const image_profile = images.profile_image[0];
 
         const fileName = Date.now() + "." + image_profile.originalname.split(".").pop();
 
         const file = bucket.file("students/profile_images/" + fileName);
 
         const stream = file.createWriteStream({
-            metadata: { contentType: image_profile.mimeType,},
+            metadata: { contentType: image_profile.mimeType, },
         });
 
         stream.on("error", (error) => {

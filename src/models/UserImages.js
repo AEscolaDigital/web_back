@@ -10,7 +10,7 @@ class UserImages extends Model {
                 image_cpf_responsible: DataTypes.STRING,
                 img_proof_of_residence: DataTypes.STRING,
                 profile_image: DataTypes.STRING,
-                student_id: DataTypes.INTEGER,
+                user_id: DataTypes.INTEGER,
             },
             {
                sequelize: connection,
