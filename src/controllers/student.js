@@ -14,6 +14,10 @@ module.exports = {
             include:
                 [
                     {
+                       association: 'images',
+                       attributes: ['image_rg', 'image_cpf', 'image_cpf_responsible', 'img_proof_of_residence', 'profile_image']
+                    },
+                    {
                         association: 'phone',
                         attributes: ['number'],
                         include: [{
@@ -46,8 +50,6 @@ module.exports = {
 
     async store(req, res) {
 
-        const firebaseUrl = req.files;
-
         const {
             name,
             email,
@@ -70,17 +72,17 @@ module.exports = {
 
         try {
 
-            let students = await Students.findOne({
-                where: {
-                    email: email,
-                    cpf: cpf,
-                }
-            })
+            // let students = await Students.findOne({
+            //     where: {
+            //         email: email,
+            //         cpf: cpf,
+            //     }
+            // })
 
-            if (students) {
-                return res.status(400)
-                    .send({ error: "Este e-mail e/ou CPF já está sendo utilizado" })
-            }
+            // if (students) {
+            //     return res.status(400)
+            //         .send({ error: "Este e-mail e/ou CPF já está sendo utilizado" })
+            // }
 
             students = await Students.create({
                 name,
@@ -88,15 +90,10 @@ module.exports = {
                 password,
                 birth_date,
                 rg: rg,
-                image_rg: firebaseUrl.image_rg[0].firebaseUrl,
                 cpf,
-                image_cpf: firebaseUrl.image_cpf[0].firebaseUrl,
                 cpf_responsible,
-                image_cpf_responsible: firebaseUrl.image_cpf_responsible[0].firebaseUrl,
                 valid: 0,
-                img_proof_of_residence: firebaseUrl.image_proof_of_residence[0].firebaseUrl,
                 genre_id: genre_id,
-                
             });
             
             let city_id = await Cities.findOrCreate({
@@ -134,6 +131,7 @@ module.exports = {
             
             return res.status(201)
             .send({
+                idUser: student_id,
                 result: "Usuário gravado com sucesso"
             });
                         

@@ -1,51 +1,41 @@
+
 'use strict';
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.createTable("students", {
+    queryInterface.createTable("user_images", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
+        allowNull: false,
       },
-      genre_id:{
+      image_rg:{
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      image_cpf:{
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      image_cpf_responsible: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      img_proof_of_residence:{
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      profile_image: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      user_id:{
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'genres', key: 'id' },
+        references: { model: 'students', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
-      },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      email:{
-        type: Sequelize.STRING,
-        allowNull: false
-      }, 
-      password: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      birth_date: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      rg: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      cpf: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      cpf_responsible: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      valid: {
-        type: Sequelize.INTEGER,
-        allowNull: false
       },
       created_at: {
         type: Sequelize.DATE,
@@ -54,12 +44,11 @@ module.exports = {
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false
-      },     
-    })
+      },
+    });
   },
 
   down: async (queryInterface, Sequelize) => {
-    queryInterface.dropTable("students");
+    queryInterface.dropTable("user_images");
   }
 };
-

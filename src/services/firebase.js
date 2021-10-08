@@ -15,19 +15,25 @@ const uploadImages = async (req, res, next) => {
 
     if (!req.files) return next();
 
+  
     const images = req.files;
 
-    console.log();
+    const have_profile_picture = Object.assign({image_profile: false}, images);
 
     try {
+        if(have_profile_picture.image_profile == false){
 
-        await uploadImageRG(images);
+            await uploadImageRG(images);
 
-        await uploadImageCPF(images);
+            await uploadImageCPF(images);
+    
+            await uploadImageCpfResponsible(images);
+    
+            await uploadImageProofOfResidence(images);
 
-        await uploadImageCpfResponsible(images);
-
-        await uploadImageProofOfResidence(images);
+        }else{
+            await uploadProfileImage(images);
+        }
 
     } catch (error) {
         return res.status(500).send({ error: "Erro ao subir para o Firebase" });
@@ -158,6 +164,37 @@ const uploadImageProofOfResidence = (images) => {
         })
 
         stream.end(imageProofOfResidence.buffer);
+    })
+
+}
+
+const uploadProfileImage = (images) => {
+
+    return new Promise((resolve, reject) => {
+        
+        const image_profile = images.image_profile[0];
+
+        const fileName = Date.now() + "." + image_profile.originalname.split(".").pop();
+
+        const file = bucket.file("students/profile_images/" + fileName);
+
+        const stream = file.createWriteStream({
+            metadata: { contentType: image_profile.mimeType,},
+        });
+
+        stream.on("error", (error) => {
+            console.error(error);
+            reject(error);
+        })
+
+        stream.on("finish", async () => {
+            await file.makePublic();
+
+            image_profile.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/students/profile_images/${fileName}`;
+            resolve(image_profile);
+        })
+
+        stream.end(image_profile.buffer);
     })
 
 }

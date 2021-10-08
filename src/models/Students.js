@@ -10,13 +10,9 @@ class Students extends Model {
                 password: DataTypes.STRING,
                 birth_date: DataTypes.DATE,
                 rg: DataTypes.STRING,
-                image_rg: DataTypes.STRING,
                 cpf: DataTypes.STRING,
-                image_cpf: DataTypes.STRING,
                 cpf_responsible: DataTypes.STRING,
-                image_cpf_responsible: DataTypes.STRING,
                 valid: DataTypes.INTEGER,
-                img_proof_of_residence: DataTypes.STRING,
                 genre_id: DataTypes.INTEGER,
             },
             {
@@ -43,6 +39,8 @@ class Students extends Model {
         this.belongsTo(models.Genres, { foreignKey: 'genre_id', as: 'genre' });
         
         this.hasOne(models.Phones, { foreignKey: 'student_id', as: 'phone' });
+        
+        this.hasOne(models.UserImages, { foreignKey: 'user_id', as: 'images' });
     }
 
 }
