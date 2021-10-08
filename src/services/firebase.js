@@ -17,17 +17,25 @@ const uploadImages = async (req, res, next) => {
 
     const images = req.files;
 
+    const have_profile_picture = Object.assign({profile_image: false}, images);
+ 
     try {
 
-        //await uploadImageRG(images);
+        if (have_profile_picture.profile_image == false) {
+             
+            await uploadImageRG(images);
 
-        //await uploadImageCPF(images);
+            await uploadImageCPF(images);
 
-        //await uploadImageCpfResponsible(images);
+            await uploadImageCpfResponsible(images);
 
-        //await uploadImageProofOfResidence(images);
+            await uploadImageProofOfResidence(images);
 
-        await uploadProfileImage(images);
+        } else {
+
+            await uploadProfileImage(images);
+            
+        }
 
     } catch (error) {
         return res.status(500).send({ error: "Erro ao subir para o Firebase" });
@@ -35,7 +43,6 @@ const uploadImages = async (req, res, next) => {
 
     next();
 }
-
 
 const uploadImageRG = (images) => {
 

@@ -15,7 +15,6 @@ const Multer = multer({
 
 // Firebase
 const uploadImages = require('./services/firebase');
-//const uploadFirebaseImageProfile = require('./services/firebaseImageProfile');
 
 const uploadfields = Multer.fields([
     { name: 'image_cpf', maxCount: 1 }, 

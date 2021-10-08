@@ -7,17 +7,17 @@ module.exports = {
 
         const firebaseUrl = req.files;
         const { user_id } = req.params;
-
+          
         try {
 
-            // let students = await Students.findOne({
-            //     where: {id: user_id}
-            // })
+            let students = await Students.findOne({
+                where: {id: user_id}
+            })
 
-            // if (!students) {
-            //     return res.status(400)
-            //         .send({ error: "Não tem nenhum usuário com esse id" })
-            // }
+            if (!students) {
+                return res.status(400)
+                    .send({ error: "Não tem nenhum usuário com esse id" })
+            }
 
             await UserImages.create({
                 image_rg: firebaseUrl.image_rg[0].firebaseUrl,
@@ -47,13 +47,12 @@ module.exports = {
 
         try {
             let userImage = await UserImages.findByPk(user_id);
-            console.log(userImage);
 
             userImage.profile_image = firebaseUrl.profile_image[0].firebaseUrl;
 
             userImage.save();
 
-            res.status(204).send({
+            res.status(201).send({
                 result: "Imagem gravado com sucesso"
             });
 

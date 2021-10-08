@@ -72,17 +72,17 @@ module.exports = {
 
         try {
 
-            // let students = await Students.findOne({
-            //     where: {
-            //         email: email,
-            //         cpf: cpf,
-            //     }
-            // })
+            let students = await Students.findOne({
+                where: {
+                    email: email,
+                    cpf: cpf,
+                }
+            })
 
-            // if (students) {
-            //     return res.status(400)
-            //         .send({ error: "Este e-mail e/ou CPF já está sendo utilizado" })
-            // }
+            if (students) {
+                return res.status(400)
+                    .send({ error: "Este e-mail e/ou CPF já está sendo utilizado" })
+            }
 
             students = await Students.create({
                 name,
