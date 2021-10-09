@@ -28,7 +28,7 @@ module.exports = {
         allowNull: false,
       },
       birth_date: {
-        type: Sequelize.STRING,
+        type: Sequelize.DATE,
         allowNull: false,
       },
       rg: {
@@ -39,9 +39,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      cpf_responsible: {
+      cpf_responsible:{
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true,
+        references: { model: 'responsibles', key: 'cpf' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       valid: {
         type: Sequelize.INTEGER,

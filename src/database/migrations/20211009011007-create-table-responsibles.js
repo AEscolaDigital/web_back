@@ -2,53 +2,47 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.createTable("adresses", {
+    queryInterface.createTable("responsibles", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
-        allowNull: false,
+        autoIncrement: true
       },
-      student_id:{
+      genre_id:{
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'students', key: 'id' },
+        references: { model: 'genres', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      city_id:{
-        type: Sequelize.INTEGER,
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      email:{
+        type: Sequelize.STRING,
+        allowNull: false
+      }, 
+      password: {
+        type: Sequelize.STRING,
         allowNull: false,
-        references: { model: 'cities', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
-      state_id:{
-        type: Sequelize.INTEGER,
+      birth_date: {
+        type: Sequelize.DATE,
         allowNull: false,
-        references: { model: 'states', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
-      street: {
+      rg: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      number: {
+      cpf: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
       },
-      cep: {
-        type: Sequelize.STRING,
+      valid: {
+        type: Sequelize.INTEGER,
         allowNull: false
-      },
-      district:{
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      complement:{
-        type: Sequelize.STRING,
-        allowNull: true
       },
       created_at: {
         type: Sequelize.DATE,
@@ -57,11 +51,12 @@ module.exports = {
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false
-      },
-    });
+      },     
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
-    queryInterface.dropTable("adresses");
+    queryInterface.dropTable("responsibles");
   }
 };
+

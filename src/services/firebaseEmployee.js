@@ -1,17 +1,10 @@
 const admin = require("firebase-admin");
 
-const serviceAccount = require("../config/firebase-key");
-
 const BUCKET = "school-12606.appspot.com";
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    storageBucket: BUCKET,
-});
 
 const bucket = admin.storage().bucket();
 
-const uploadImages = async (req, res, next) => {
+const uploadImagesEmployee = async (req, res, next) => {
 
     if (!req.files) return next();
 
@@ -26,8 +19,6 @@ const uploadImages = async (req, res, next) => {
             await uploadImageRG(images);
 
             await uploadImageCPF(images);
-
-            await uploadImageCpfResponsible(images);
 
             await uploadImageProofOfResidence(images);
 
@@ -52,7 +43,7 @@ const uploadImageRG = (images) => {
 
         const fileName = Date.now() + "." + imageRG.originalname.split(".").pop();
 
-        const file = bucket.file("students/rg/" + fileName);
+        const file = bucket.file("employees/rg/" + fileName);
 
         const stream = file.createWriteStream({
             metadata: { contentType: imageRG.mimeType, },
@@ -66,7 +57,7 @@ const uploadImageRG = (images) => {
         stream.on("finish", async () => {
             await file.makePublic();
 
-            imageRG.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/students/rg/${fileName}`;
+            imageRG.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/employees/rg/${fileName}`;
 
             resolve(imageRG)
         })
@@ -83,7 +74,7 @@ const uploadImageCPF = (images) => {
 
         const fileName = Date.now() + "." + imageCPF.originalname.split(".").pop();
 
-        const file = bucket.file("students/cpf/" + fileName);
+        const file = bucket.file("employees/cpf/" + fileName);
 
         const stream = file.createWriteStream({
             metadata: { contentType: imageCPF.mimeType, },
@@ -97,43 +88,11 @@ const uploadImageCPF = (images) => {
         stream.on("finish", async () => {
             await file.makePublic();
 
-            imageCPF.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/students/cpf/${fileName}`;
+            imageCPF.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/employees/cpf/${fileName}`;
             resolve(imageCPF)
         })
 
         stream.end(imageCPF.buffer);
-    })
-
-}
-
-const uploadImageCpfResponsible = (images) => {
-
-    return new Promise((resolve, reject) => {
-
-        const imageCpfResponsible = images.image_cpf_responsible[0];
-
-        const fileName = Date.now() + "." + imageCpfResponsible.originalname.split(".").pop();
-
-        const file = bucket.file("students/cpf_responsible/" + fileName);
-
-        const stream = file.createWriteStream({
-            metadata: { contentType: imageCpfResponsible.mimeType, },
-        });
-
-        stream.on("error", (error) => {
-            console.error(error);
-            reject(error);
-        })
-
-        stream.on("finish", async () => {
-            await file.makePublic();
-
-            imageCpfResponsible.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/students/cpf_responsible/${fileName}`;
-            resolve(imageCpfResponsible)
-
-        })
-
-        stream.end(imageCpfResponsible.buffer);
     })
 
 }
@@ -146,7 +105,7 @@ const uploadImageProofOfResidence = (images) => {
 
         const fileName = Date.now() + "." + imageProofOfResidence.originalname.split(".").pop();
 
-        const file = bucket.file("students/proof_of_residence/" + fileName);
+        const file = bucket.file("employees/proof_of_residence/" + fileName);
 
         const stream = file.createWriteStream({
             metadata: { contentType: imageProofOfResidence.mimeType, },
@@ -160,7 +119,7 @@ const uploadImageProofOfResidence = (images) => {
         stream.on("finish", async () => {
             await file.makePublic();
 
-            imageProofOfResidence.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/students/proof_of_residence/${fileName}`;
+            imageProofOfResidence.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/employees/proof_of_residence/${fileName}`;
             resolve(imageProofOfResidence);
         })
 
@@ -177,7 +136,7 @@ const uploadProfileImage = (images) => {
 
         const fileName = Date.now() + "." + image_profile.originalname.split(".").pop();
 
-        const file = bucket.file("students/profile_images/" + fileName);
+        const file = bucket.file("employees/profile_images/" + fileName);
 
         const stream = file.createWriteStream({
             metadata: { contentType: image_profile.mimeType, },
@@ -191,7 +150,7 @@ const uploadProfileImage = (images) => {
         stream.on("finish", async () => {
             await file.makePublic();
 
-            image_profile.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/students/profile_images/${fileName}`;
+            image_profile.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/employees/profile_images/${fileName}`;
             resolve(image_profile);
         })
 
@@ -201,4 +160,4 @@ const uploadProfileImage = (images) => {
 }
 
 
-module.exports = uploadImages;
+module.exports = uploadImagesEmployee;

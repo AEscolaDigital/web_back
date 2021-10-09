@@ -1,4 +1,4 @@
-const Students = require('../models/Students');
+const Employees = require('../models/Employees');
 const Address = require('../models/Adresses');
 const Cities = require('../models/Cities');
 const States = require('../models/States');
@@ -8,14 +8,14 @@ const Prefixes = require('../models/Prefixes');
 module.exports = {
 
     async index(req, res) {
-        const { student_id } = req.params;
+        const { employee_id } = req.params;
 
-        const student = await Students.findByPk(student_id, {
+        const student = await Employees.findByPk(employee_id, {
             include:
                 [
                     {
                        association: 'images',
-                       attributes: ['image_rg', 'image_cpf', 'image_cpf_responsible', 'img_proof_of_residence', 'profile_image']
+                       attributes: ['image_rg', 'image_cpf','img_proof_of_residence', 'profile_image']
                     },
                     {
                         association: 'phone',
@@ -58,7 +58,6 @@ module.exports = {
             birth_date,
             rg,
             cpf,
-            cpf_responsible,
             genre_id,
             street,
             number,
@@ -72,26 +71,25 @@ module.exports = {
 
         try {
 
-            let students = await Students.findOne({
+            let employee = await Employees.findOne({
                 where: {
                     email: email,
                     cpf: cpf,
                 }
             })
 
-            if (students) {
+            if (employee) {
                 return res.status(400)
                     .send({ error: "Este e-mail e/ou CPF já está sendo utilizado" })
             }
 
-            students = await Students.create({
+            employee = await Employees.create({
                 name,
                 email,
                 password,
                 birth_date,
                 rg,
                 cpf,
-                cpf_responsible,
                 valid: 0,
                 genre_id: genre_id,
             });
@@ -104,11 +102,11 @@ module.exports = {
                 where: { name: state, uf: uf_state }
             });
             
-            let student_id = students.id
+            let employee_id = employee.id
             
             await Address.create({
                 street: street,
-                student_id: student_id,
+                employee_id: employee_id,
                 city_id: city_id[0].dataValues.id,
                 state_id: state_id[0].dataValues.id,
                 number: number,
@@ -125,18 +123,18 @@ module.exports = {
             
             await Phones.create({
                 number: phone.substr(4, 10),
-                student_id: student_id,
+                employee_id: employee_id,
                 ddd_id: ddd_id[0].dataValues.id,
             });
             
             return res.status(201)
             .send({
-                idUser: student_id,
+                idUser: employee_id,
                 result: "Usuário gravado com sucesso"
             });
                         
         } catch (error) {
-            console.log('student: ' + error);
+            console.log('Employee: ' + error);
         }
     }
 }

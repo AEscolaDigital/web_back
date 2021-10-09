@@ -6,17 +6,17 @@ module.exports = {
     async store(req, res) {
 
         const firebaseUrl = req.files;
-        const { user_id } = req.params;
+        const { student_id } = req.params;
           
         try {
 
             let students = await Students.findOne({
-                where: {id: user_id}
+                where: {id: student_id}
             })
 
             if (!students) {
                 return res.status(400)
-                    .send({ error: "Não tem nenhum usuário com esse id" })
+                    .send({ error: "Não tem nenhum aluno com esse id" })
             }
 
             await UserImages.create({
@@ -24,7 +24,7 @@ module.exports = {
                 image_cpf: firebaseUrl.image_cpf[0].firebaseUrl,
                 image_cpf_responsible: firebaseUrl.image_cpf_responsible[0].firebaseUrl,
                 img_proof_of_residence: firebaseUrl.image_proof_of_residence[0].firebaseUrl,
-                user_id,
+                student_id,
             });
 
             return res.status(201)
@@ -43,12 +43,17 @@ module.exports = {
 
         const firebaseUrl = req.files;
 
-        const { user_id } = req.params;
+        const { student_id } = req.params;
+
+        const urlImage = firebaseUrl.profile_image[0].firebaseUrl
 
         try {
-            let userImage = await UserImages.findByPk(user_id);
 
-            userImage.profile_image = firebaseUrl.profile_image[0].firebaseUrl;
+           let userImage = await UserImages.findOne({
+                where: {student_id}
+           });
+    
+            userImage.profile_image = urlImage;
 
             userImage.save();
 

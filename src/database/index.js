@@ -2,6 +2,7 @@ const Sequelize = require("sequelize");
 const dbConfig = require("../config/database");
 
 const Students = require("../models/Students");
+const Employees = require("../models/Employees")
 const Adresses = require("../models/Adresses");
 const Cities = require("../models/Cities");
 const States = require("../models/States");
@@ -13,6 +14,7 @@ const connection = new Sequelize(dbConfig.url, dbConfig.config);
 
 //inicializando os models
 Students.init(connection);
+Employees.init(connection);
 Adresses.init(connection);
 Cities.init(connection);
 States.init(connection);
@@ -22,6 +24,7 @@ Prefixes.init(connection);
 UserImages.init(connection);
 
 Students.associate(connection.models);
+Employees.associate(connection.models);
 Adresses.associate(connection.models);
 Cities.associate(connection.models);
 States.associate(connection.models);

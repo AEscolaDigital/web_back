@@ -16,8 +16,22 @@ module.exports = {
       },
       student_id:{
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: { model: 'students', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      employee_id:{
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: { model: 'employees', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      responsible_id:{
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: { model: 'responsibles', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
