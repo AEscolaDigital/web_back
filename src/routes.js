@@ -1,5 +1,7 @@
 const routes = require('express').Router();
 
+const authMiddleware = require("./middleware/autorization")
+
 const StudentController = require('./controllers/student');
 const StudentImagesController = require('./controllers/StudentImage');
 const EmployeeController = require('./controllers/employee');
@@ -27,8 +29,13 @@ const uploadfields = Multer.fields([
     { name: 'profile_image', maxCount: 1},
 ]);
 
+//Rota de login
+routes.post('/login', loginController.store);
+
 // Rota do aluno
 routes.post("/students", StudentController.store);
+
+routes.use(authMiddleware);
 
 routes.post("/students/:student_id/imagens/", uploadfields, uploadImagesStudent, StudentImagesController.store);
 

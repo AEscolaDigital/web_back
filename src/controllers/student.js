@@ -4,6 +4,7 @@ const Cities = require('../models/Cities');
 const States = require('../models/States');
 const Phones = require('../models/Phones');
 const Prefixes = require('../models/Prefixes');
+const bcrypt = require("bcrypt");
 
 module.exports = {
 
@@ -84,10 +85,12 @@ module.exports = {
                     .send({ error: "Este e-mail e/ou CPF já está sendo utilizado" })
             }
 
+            const  passwordCript = bcrypt.hashSync(password, 10);
+
             students = await Students.create({
                 name,
                 email,
-                password,
+                password: passwordCript,
                 birth_date,
                 rg,
                 cpf,
@@ -137,6 +140,9 @@ module.exports = {
                         
         } catch (error) {
             console.log('student: ' + error);
-        }
+        }        
+        
+        return res.json({ result: "Usuário gravado com sucesso" });
+
     }
 }
