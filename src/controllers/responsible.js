@@ -4,6 +4,7 @@ const Cities = require('../models/Cities');
 const States = require('../models/States');
 const Phones = require('../models/Phones');
 const Prefixes = require('../models/Prefixes');
+const bcrypt = require("bcrypt");
 
 module.exports = {
 
@@ -71,22 +72,25 @@ module.exports = {
 
         try {
 
-            let employee = await Responsibles.findOne({
+            let responsible = await Responsibles.findOne({
                 where: {
                     email: email,
                     cpf: cpf,
                 }
             })
 
-            if (employee) {
+            if (responsible) {
                 return res.status(400)
                     .send({ error: "Este e-mail e/ou CPF já está sendo utilizado" })
             }
 
-            employee = await Responsibles.create({
+            const  passwordCript = bcrypt.hashSync(password, 10);
+
+
+            responsible = await Responsibles.create({
                 name,
                 email,
-                password,
+                password: passwordCript,
                 birth_date,
                 rg,
                 cpf,
@@ -102,7 +106,7 @@ module.exports = {
                 where: { name: state, uf: uf_state }
             });
             
-            let responsible_id = employee.id
+            let responsible_id = responsible.id
             
             await Address.create({
                 street: street,

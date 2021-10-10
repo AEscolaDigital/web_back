@@ -85,7 +85,7 @@ module.exports = {
                     .send({ error: "Este e-mail e/ou CPF já está sendo utilizado" })
             }
 
-            const  passwordCript = bcrypt.hashSync(password, 10);
+            const passwordCript = bcrypt.hashSync(password, 10);
 
             students = await Students.create({
                 name,

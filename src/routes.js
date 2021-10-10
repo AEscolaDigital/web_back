@@ -2,6 +2,7 @@ const routes = require('express').Router();
 
 const authMiddleware = require("./middleware/autorization")
 
+const SessionController = require('./controllers/sessions');
 const StudentController = require('./controllers/student');
 const StudentImagesController = require('./controllers/StudentImage');
 const EmployeeController = require('./controllers/employee');
@@ -29,36 +30,44 @@ const uploadfields = Multer.fields([
     { name: 'profile_image', maxCount: 1},
 ]);
 
-//Rota de login
-routes.post('/login', loginController.store);
+
+//Rotas públicas
+
+//Rota da seção
+routes.post('/sessions', SessionController.store);
 
 // Rota do aluno
 routes.post("/students", StudentController.store);
 
-routes.use(authMiddleware);
-
 routes.post("/students/:student_id/imagens/", uploadfields, uploadImagesStudent, StudentImagesController.store);
-
-routes.get('/students/:student_id', StudentController.index);
-
-routes.put("/students/:student_id/imagens/", uploadfields, uploadImagesStudent, StudentImagesController.update);
-
 
 // Rota do funcionário
 routes.post("/employees", EmployeeController.store);
 
-routes.get("/employees/:employee_id", EmployeeController.index);
-
 routes.post("/employees/:employee_id/imagens/", uploadfields, uploadImagesEmployee, EmployeeImageController.store);
-
-routes.put("/employees/:employee_id/imagens/", uploadfields, uploadImagesEmployee, EmployeeImageController.update);
 
 // Rota do Responsável
 routes.post("/responsibles", ResponsibleController.store);
 
-routes.get("/responsibles/:responsible_id", ResponsibleController.index);
-
 routes.post("/responsibles/:responsible_id/imagens/", uploadfields, uploadImagesResponsible, ResponsibleImageController.store);
+
+routes.use(authMiddleware);
+
+
+//Rotas privadas
+
+// Rota de alunos
+routes.get('/students/:student_id', StudentController.index);
+
+routes.put("/students/:student_id/imagens/", uploadfields, uploadImagesStudent, StudentImagesController.update);
+
+// Rota do funcionário
+routes.get("/employees/:employee_id", EmployeeController.index);
+
+routes.put("/employees/:employee_id/imagens/", uploadfields, uploadImagesEmployee, EmployeeImageController.update);
+
+// Rota do Responsável
+routes.get("/responsibles/:responsible_id", ResponsibleController.index);
 
 routes.put("/responsibles/:responsible_id/imagens/", uploadfields, uploadImagesResponsible, ResponsibleImageController.update);
 
