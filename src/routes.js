@@ -3,10 +3,11 @@ const routes = require('express').Router();
 const StudentController = require('./controllers/student');
 const StudentImagesController = require('./controllers/StudentImage');
 const EmployeeController = require('./controllers/employee');
-const EmployeeImageController = require('./controllers/EmployeeImage')
+const EmployeeImageController = require('./controllers/EmployeeImage');
+const ResponsibleController = require('./controllers/responsible');
+const ResponsibleImageController = require('./controllers/ResponsibleImage');
 
-
-const multer = require("multer");
+const multer = require('multer');
 
 const Multer = multer({
     storange: multer.memoryStorage(),
@@ -16,6 +17,7 @@ const Multer = multer({
 // Firebase
 const uploadImagesStudent = require('./services/firebaseStudent');
 const uploadImagesEmployee = require('./services/firebaseEmployee');
+const uploadImagesResponsible = require('./services/firebaseResponsible')
 
 const uploadfields = Multer.fields([
     { name: 'image_cpf', maxCount: 1 }, 
@@ -44,6 +46,14 @@ routes.post("/employees/:employee_id/imagens/", uploadfields, uploadImagesEmploy
 
 routes.put("/employees/:employee_id/imagens/", uploadfields, uploadImagesEmployee, EmployeeImageController.update);
 
+// Rota do Responsável
+routes.post("/responsibles", ResponsibleController.store);
+
+routes.get("/responsibles/:responsible_id", ResponsibleController.index);
+
+routes.post("/responsibles/:responsible_id/imagens/", uploadfields, uploadImagesResponsible, ResponsibleImageController.store);
+
+routes.put("/responsibles/:responsible_id/imagens/", uploadfields, uploadImagesResponsible, ResponsibleImageController.update);
 
 
 module.exports = routes;

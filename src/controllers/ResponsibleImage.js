@@ -1,4 +1,4 @@
-const Employees = require('../models/Employees');
+const Responsibles = require('../models/Responsibles');
 const UserImages = require('../models/UserImages');
 
 module.exports = {
@@ -6,24 +6,24 @@ module.exports = {
     async store(req, res) {
 
         const firebaseUrl = req.files;
-        const { employee_id } = req.params;
+        const { responsible_id } = req.params;
           
         try {
 
-            let employee = await Employees.findOne({
-                where: {id: employee_id}
+            let responsible = await Responsibles.findOne({
+                where: {id: responsible_id}
             })
 
-            if (!employee) {
+            if (!responsible) {
                 return res.status(400)
-                    .send({ error: "Não tem nenhum funcionário com esse id" })
+                    .send({ error: "Não tem nenhum reponsável com esse id" })
             }
 
             await UserImages.create({
                 image_rg: firebaseUrl.image_rg[0].firebaseUrl,
                 image_cpf: firebaseUrl.image_cpf[0].firebaseUrl,
                 img_proof_of_residence: firebaseUrl.image_proof_of_residence[0].firebaseUrl,
-                employee_id,
+                responsible_id,
             });
 
             return res.status(201)
@@ -45,14 +45,15 @@ module.exports = {
 
         console.log(firebaseUrl);
 
-        const { employee_id } = req.params;
+        const { responsible_id } = req.params;
 
         const urlImage = firebaseUrl.profile_image[0].firebaseUrl
+        console.log(urlImage);
 
         try {
 
            let userImage = await UserImages.findOne({
-                where: {employee_id}
+                where: {responsible_id}
            });
     
             userImage.profile_image = urlImage;

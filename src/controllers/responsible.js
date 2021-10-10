@@ -1,4 +1,4 @@
-const Employees = require('../models/Employees');
+const Responsibles = require('../models/Responsibles');
 const Address = require('../models/Adresses');
 const Cities = require('../models/Cities');
 const States = require('../models/States');
@@ -8,14 +8,14 @@ const Prefixes = require('../models/Prefixes');
 module.exports = {
 
     async index(req, res) {
-        const { employee_id } = req.params;
+        const { responsible_id } = req.params;
 
-        const student = await Employees.findByPk(employee_id, {
+        const student = await Responsibles.findByPk(responsible_id, {
             include:
                 [
                     {
                        association: 'images',
-                       attributes: ['image_rg', 'image_cpf', 'img_proof_of_residence', 'profile_image']
+                       attributes: ['image_rg', 'image_cpf','img_proof_of_residence', 'profile_image']
                     },
                     {
                         association: 'phone',
@@ -71,7 +71,7 @@ module.exports = {
 
         try {
 
-            let employee = await Employees.findOne({
+            let employee = await Responsibles.findOne({
                 where: {
                     email: email,
                     cpf: cpf,
@@ -83,7 +83,7 @@ module.exports = {
                     .send({ error: "Este e-mail e/ou CPF já está sendo utilizado" })
             }
 
-            employee = await Employees.create({
+            employee = await Responsibles.create({
                 name,
                 email,
                 password,
@@ -102,11 +102,11 @@ module.exports = {
                 where: { name: state, uf: uf_state }
             });
             
-            let employee_id = employee.id
+            let responsible_id = employee.id
             
             await Address.create({
                 street: street,
-                employee_id: employee_id,
+                responsible_id: responsible_id,
                 city_id: city_id[0].dataValues.id,
                 state_id: state_id[0].dataValues.id,
                 number: number,
@@ -123,13 +123,13 @@ module.exports = {
             
             await Phones.create({
                 number: phone.substr(4, 10),
-                employee_id: employee_id,
+                responsible_id: responsible_id,
                 ddd_id: ddd_id[0].dataValues.id,
             });
             
             return res.status(201)
             .send({
-                idUser: employee_id,
+                idUser: responsible_id,
                 result: "Usuário gravado com sucesso"
             });
                         
