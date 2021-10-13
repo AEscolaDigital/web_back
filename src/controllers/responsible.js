@@ -11,7 +11,7 @@ module.exports = {
     async index(req, res) {
         const { responsible_id } = req.params;
 
-        const student = await Responsibles.findByPk(responsible_id, {
+        const responsible = await Responsibles.findByPk(responsible_id, {
             include:
                 [
                     {
@@ -46,7 +46,7 @@ module.exports = {
                 ]
         });
 
-        return res.json(student);
+        return res.json(responsible);
     },
 
     async store(req, res) {

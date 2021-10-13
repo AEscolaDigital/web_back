@@ -7,6 +7,9 @@ module.exports = {
 
         const firebaseUrl = req.files;
         const { responsible_id } = req.params;
+
+        console.log(firebaseUrl);
+
           
         try {
 
