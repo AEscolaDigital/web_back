@@ -20,8 +20,7 @@ class States extends Model {
 
         //hasOne = tem um
         // um endereço tem um estado
-        this.hasOne(models.Adresses , { foreignKey: 'state_id', as: 'address' })
-        
+        this.hasOne(models.Address , { foreignKey: 'state_id', as: 'address' })
     }
      
 }

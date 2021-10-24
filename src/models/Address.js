@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
 
-class Adresses extends Model {
+class Address extends Model {
 
     static init(connection) {
         super.init(
@@ -27,21 +27,14 @@ class Adresses extends Model {
         // o endereço pertece a muitos estudentes
 
         // Relacionamento dos Alunos
-        this.belongsTo(models.Students, { foreignKey: 'student_id', as: 'student' })
-
-        // Relacionamento dos Funcionários
-        this.belongsTo(models.Employees, { foreignKey: 'employee_id', as: 'employee' })
+        this.belongsTo(models.School, { foreignKey: 'school_id', as: 'school' })
 
         // Relacionamento da tabela de endereço com cidades e estados
         this.belongsTo(models.Cities, { foreignKey: 'city_id', as: 'city' });
 
         this.belongsTo(models.States, { foreignKey: 'state_id', as: 'state' });
-
-
-
-
     }
 
 }
 
-module.exports = Adresses;
+module.exports = Address;

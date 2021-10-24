@@ -1,19 +1,16 @@
 const { Model, DataTypes } = require("sequelize");
 
-class Students extends Model {
+class School extends Model {
      
     static init(connection){
         super.init(
             {  
                 name: DataTypes.STRING,
+                name_school: DataTypes.STRING,
+                cnpj: DataTypes.STRING,
+                school_size: DataTypes.STRING,
                 email: DataTypes.STRING,
                 password: DataTypes.STRING,
-                birth_date: DataTypes.DATE,
-                rg: DataTypes.STRING,
-                cpf: DataTypes.STRING,
-                cpf_responsible: DataTypes.STRING,
-                valid: DataTypes.INTEGER,
-                genre_id: DataTypes.INTEGER,
             },
             {
                sequelize: connection,
@@ -28,7 +25,7 @@ class Students extends Model {
     
         //hasOne = tem um
         // um estudente tem um endereço
-        this.hasOne(models.Adresses, { foreignKey: 'student_id', as: 'address' });
+        this.hasOne(models.Address, { foreignKey: 'school_id', as: 'address' });
 
         // belongsTo = pertece a único registro
         // o genero pertece a um único aluno
@@ -36,13 +33,10 @@ class Students extends Model {
         // belongsToMany pertence a muitos
         // o genero pertece a muitos estudentes
         
-        this.belongsTo(models.Genres, { foreignKey: 'genre_id', as: 'genre' });
+        this.hasOne(models.Phone, { foreignKey: 'school_id', as: 'phone' });
         
-        this.hasOne(models.Phones, { foreignKey: 'student_id', as: 'phone' });
-        
-        this.hasOne(models.UserImages, { foreignKey: 'student_id', as: 'images' });
     }
 
 }
 
-module.exports = Students;
+module.exports = School;

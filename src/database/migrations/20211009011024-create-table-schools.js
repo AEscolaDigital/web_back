@@ -2,46 +2,34 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.createTable("responsibles", {
+    queryInterface.createTable("schools", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      genre_id:{
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: { model: 'genres', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
       name: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      email:{
+      name_school:{
         type: Sequelize.STRING,
         allowNull: false
       }, 
-      password: {
+      cnpj: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      birth_date: {
-        type: Sequelize.DATE,
+      school_size: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
-      rg: {
+      email: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      cpf: {
+      password: {
         type: Sequelize.STRING,
-        allowNull: false,
-        unique: true
-      },
-      valid: {
-        type: Sequelize.INTEGER,
         allowNull: false
       },
       created_at: {
@@ -56,7 +44,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    queryInterface.dropTable("responsibles");
+    queryInterface.dropTable("schools");
   }
 };
 

@@ -1,6 +1,4 @@
-const Students = require("../models/Students");
-const Responsibles = require("../models/Responsibles");
-const Employees = require("../models/Employees")
+const School = require("../models/School");
 const jwt = require("jsonwebtoken");
 const auth = require("../config/auth");
 const bcrypt = require("bcrypt");
@@ -17,16 +15,17 @@ module.exports = {
 				const user =  await Students.findOne({ where: { email: email } });
 				return user;
 
-			}else if (typeUser == 'responsible'){
+			}else if (typeUser == 'school'){
 
-			   const user = await Responsibles.findOne({ where: { email: email } });
+			   const user = await School.findOne({ where: { email: email } });
 			   return user;
 
-			}else if(typeUser == 'employee') {
-				const user = await Employees.findOne({ where: { email: email } });
-				return user;
+			}else if (typeUser == 'teacher'){
 
-			}else{
+				const user = await Responsibles.findOne({ where: { email: email } });
+				return user;
+			}
+			else{
                 return res.send({
                       error: 'Tipo de usuário inválido'
 				});
