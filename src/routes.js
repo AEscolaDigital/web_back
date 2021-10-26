@@ -4,7 +4,7 @@ const authMiddleware = require("./middleware/autorization")
 
 const SessionController = require('./controllers/sessions');
 const SchooolController = require('./controllers/schools');
-
+const UserController = require('./controllers/users');
 //Rotas públicas
 
 //Rota da seção
@@ -17,6 +17,8 @@ routes.use(authMiddleware);
 
 // Rota de escola
 routes.get('/schools/:school_id/', SchooolController.index);
+
+routes.post('/users', UserController.store);
 
 
 

@@ -7,6 +7,9 @@ const Phone = require("../models/Phone");
 const Prefixe = require("../models/Prefixe");
 const Citie = require("../models/Citie");
 const State = require("../models/State");
+const Role = require("../models/Role");
+const User = require("../models/User");
+const { upsert } = require("../models/School");
 
 const connection = new Sequelize(dbConfig.url, dbConfig.config);
 
@@ -17,6 +20,8 @@ Phone.init(connection);
 Prefixe.init(connection);
 Citie.init(connection);
 State.init(connection);
+Role.init(connection);
+User.init(connection);
 
 School.associate(connection.models);
 Address.associate(connection.models);
@@ -24,5 +29,7 @@ Citie.associate(connection.models);
 State.associate(connection.models);
 Phone.associate(connection.models);
 Prefixe.associate(connection.models);
+User.associate(connection.models);
+
 
 module.exports = connection;
