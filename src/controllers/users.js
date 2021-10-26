@@ -54,5 +54,33 @@ module.exports = {
             console.log('user: ' + error);
         }        
     
+    },
+
+    async update(req, res) {
+
+        const firebaseUrl = req.files;
+
+        const { user_id } = req.params;
+
+        try {
+
+            let user = await User.findOne({
+                 where: {user_id}
+            });
+     
+             user.profile_picture = firebaseUrl;
+ 
+             user.save();
+ 
+             res.status(201).send({
+                 result: "Imagem gravado com sucesso"
+             });
+ 
+         } catch (error) {
+ 
+             console.log(error);
+             res.status(500).send(error);
+         }
+
     }
 }
