@@ -44,7 +44,7 @@ module.exports = {
 			{ userId: user.id },
 			auth.secret,
 			{
-				expiresIn: "1h"
+				expiresIn: "2h"
 			});
 
 		res.send({

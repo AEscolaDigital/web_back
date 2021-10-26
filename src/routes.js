@@ -18,6 +18,7 @@ routes.use(authMiddleware);
 // Rota de escola
 routes.get('/schools/:school_id/', SchooolController.index);
 
+routes.get('/users', UserController.index);
 routes.post('/users', UserController.store);
 
 

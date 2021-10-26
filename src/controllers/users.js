@@ -5,11 +5,7 @@ const bcrypt = require("bcrypt");
 module.exports = {
 
     async index(req, res) {
-        const { user_id } = req.params;
-
-        const user = await User.findByPk(user_id, {
-           
-        });
+        const user = await User.findAll();
 
         return res.json(user);
     },
