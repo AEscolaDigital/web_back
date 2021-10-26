@@ -25,18 +25,18 @@ module.exports = {
 
         try {
 
-            let user = await User.findOne({ where: { email: email }})
+           // let user = await User.findOne({ where: { email: email }})
 
-            if (user) {
-                return res.status(400)
-                    .send({ error: "Este e-mail já está sendo utilizado" })
-            }
+            // if (user) {
+            //     return res.status(400)
+            //         .send({ error: "Este e-mail já está sendo utilizado" })
+            // }
 
             const password = Math.random().toString(36).slice(-8);
             
             const passwordCript = bcrypt.hashSync(password, 10);
 
-            sendingEmail(email, password)
+            sendingEmail(email, password, name)
 
             user = await User.create({
                 name,
