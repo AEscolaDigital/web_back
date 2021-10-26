@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
 
-class Phones extends Model {
+class Phone extends Model {
      
     static init(connection){
         super.init(
@@ -22,13 +22,13 @@ class Phones extends Model {
         // belongsToMany pertence a muitos
         // o endereço pertece a muitos estudentes
 
-        this.belongsTo(models.Students, { foreignKey: 'student_id', as: 'student' })
+        this.belongsTo(models.School, { foreignKey: 'school_id', as: 'school' })
 
-        this.belongsTo(models.Prefixes, { foreignKey: 'ddd_id', as: 'prefixes' })
+        this.belongsTo(models.Prefixe, { foreignKey: 'ddd_id', as: 'prefixes' })
         
          
     }
 
 }
 
-module.exports = Phones;
+module.exports = Phone;

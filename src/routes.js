@@ -1,25 +1,25 @@
 const routes = require('express').Router();
 
-const StudentController = require('./controllers/student');
+const authMiddleware = require("./middleware/autorization")
 
-const multer = require("multer");
+const SessionController = require('./controllers/sessions');
+const SchooolController = require('./controllers/schools');
+const UserController = require('./controllers/users');
+//Rotas públicas
 
-const Multer = multer({
-    storange: multer.memoryStorage(),
-    limits: 1024 * 1024, // 1MB
-});
+//Rota da seção
+routes.post('/sessions', SessionController.store);
 
-const uploadImages = require('./services/firebase');
+// Rota da escola
+routes.post("/schools", SchooolController.store);
 
-const uploadfields = Multer.fields([
-    { name: 'image_cpf', maxCount: 1 }, 
-    { name: 'image_rg', maxCount: 1},
-    { name: 'image_cpf_responsible', maxCount: 1},
-    { name: 'image_proof_of_residence', maxCount: 1},
-]);
+routes.use(authMiddleware);
 
-// Rota do aluno
-routes.post("/student", uploadfields, uploadImages, StudentController.store);
-routes.get('/student/:student_id', StudentController.index);
+// Rota de escola
+routes.get('/schools/:school_id/', SchooolController.index);
+
+routes.post('/users', UserController.store);
+
+
 
 module.exports = routes;

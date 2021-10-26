@@ -1,11 +1,11 @@
 const { Model, DataTypes } = require("sequelize");
 
-class Genres extends Model {
+class Prefixe extends Model {
      
     static init(connection){
         super.init(
             {  
-                name: DataTypes.STRING,
+                ddd: DataTypes.INTEGER,
             },
             {
                sequelize: connection,
@@ -13,16 +13,17 @@ class Genres extends Model {
         );
     }
 
+    
     static associate(models) {
         //hasMany = tem muitos
-        // um aluno tem muitos generos
-
-        //hasOne = tem um
-        // Um aluno tem um genero
-        this.hasOne(models.Students , { foreignKey: 'genre_id', as: 'student' })
-        
-    }
+        // um telefone tem muitos ddd 
     
+        //hasOne = tem um
+        // um telefone tem um ddd
+    
+        this.hasOne(models.Phone, { foreignKey: 'ddd_id', as: 'phone' });
+    }
+
 }
 
-module.exports = Genres;
+module.exports = Prefixe;

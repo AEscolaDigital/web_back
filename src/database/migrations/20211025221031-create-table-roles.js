@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.createTable("genres", {
+    queryInterface.createTable("roles", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -10,6 +10,10 @@ module.exports = {
         allowNull: false,
       },
       name: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      description: {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -25,7 +29,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    queryInterface.dropTable("genres");
+    queryInterface.dropTable("roles");
   }
 };
-
