@@ -1,6 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 #Chave do firebase
+src/config/stmp.js
 src/config/firebase-key.json
 
 # dependencies
