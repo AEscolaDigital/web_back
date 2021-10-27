@@ -6,11 +6,21 @@ module.exports = {
 
     async index(req, res) {
         const user = await User.findAll({
+            raw:true,
             attributes: ['name', 'email', 'created_at'],
             order: [["id", "DESC"]]
 
         });
 
+        // console.log(user);
+
+        // user.forEach(teste =>{
+        //     console.log(teste.name);
+        // });
+
+        const date = user[0].dataValues.created_at
+
+        console.log(date);
 
         return res.json(user);
     },
@@ -37,7 +47,7 @@ module.exports = {
             
             const passwordCript = bcrypt.hashSync(password, 10);
 
-            sendingEmail(email, password, name)
+          //  sendingEmail(email, password, name)
 
             user = await User.create({
                 name,

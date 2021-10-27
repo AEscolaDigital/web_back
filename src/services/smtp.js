@@ -32,7 +32,7 @@ const sendingEmail = async (email, senha, name) => {
             <img style="width: 500px; height: 450px; margin-left: 150px; " src="https://firebasestorage.googleapis.com/v0/b/school-12606.appspot.com/o/imageEmail%2Fundraw_Celebration_re_kc9k.png?alt=media&token=61ebeb50-f15b-43bf-9b35-f49f790e52f9" />
             <br><br>
             <strong style="font-size: 20px;" >Sua senha é: <span style="background-color: #a3a3a3; color: white; padding: 7px 15px 7px 15px; " > ${senha}</span> </strong>
-            <h2> <a href="http://localhost:3000/login">Clique aqui para ir até a plataforma </h2>
+            <h2> <a href="http://localhost:3000">Clique aqui para ir até a plataforma </h2>
         </body>
     </html> 
     `,

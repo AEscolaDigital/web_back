@@ -68,16 +68,16 @@ module.exports = {
 
         try {
 
-            let school = await School.findOne({
-                where: {
-                    email: email,
-                }
-            })
+            // let school = await School.findOne({
+            //     where: {
+            //         email: email,
+            //     }
+            // })
 
-            if (school) {
-                return res.status(400)
-                    .send({ error: "Este e-mail já está sendo utilizado" })
-            }
+            // if (school) {
+            //     return res.status(400)
+            //         .send({ error: "Este e-mail já está sendo utilizado" })
+            // }
 
             const passwordCript = bcrypt.hashSync(password, 10);
 
