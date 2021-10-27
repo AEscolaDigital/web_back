@@ -5,7 +5,12 @@ const bcrypt = require("bcrypt");
 module.exports = {
 
     async index(req, res) {
-        const user = await User.findAll();
+        const user = await User.findAll({
+            attributes: ['name', 'email', 'created_at'],
+            order: [["id", "DESC"]]
+
+        });
+
 
         return res.json(user);
     },
