@@ -5,7 +5,12 @@ const bcrypt = require("bcrypt");
 module.exports = {
 
     async index(req, res) {
-        const user = await User.findAll();
+        const user = await User.findAll({
+            attributes: ['name', 'email', 'created_at'],
+            order: [["id", "DESC"]]
+
+        });
+
 
         return res.json(user);
     },
@@ -54,5 +59,33 @@ module.exports = {
             console.log('user: ' + error);
         }        
     
+    },
+
+    async update(req, res) {
+
+        const firebaseUrl = req.files;
+
+        const { user_id } = req.params;
+
+        try {
+
+            let user = await User.findOne({
+                 where: {user_id}
+            });
+     
+             user.profile_picture = firebaseUrl;
+ 
+             user.save();
+ 
+             res.status(201).send({
+                 result: "Imagem gravado com sucesso"
+             });
+ 
+         } catch (error) {
+ 
+             console.log(error);
+             res.status(500).send(error);
+         }
+
     }
 }

@@ -5,21 +5,31 @@ const authMiddleware = require("./middleware/autorization")
 const SessionController = require('./controllers/sessions');
 const SchooolController = require('./controllers/schools');
 const UserController = require('./controllers/users');
+
+const multer = require('multer');
+
+const Multer = multer({
+    storange: multer.memoryStorage(),
+    limits: 1024 * 1024, // 1MB
+});
+
+
 //Rotas públicas
 
-//Rota da seção
 routes.post('/sessions', SessionController.store);
 
-// Rota da escola
 routes.post("/schools", SchooolController.store);
+routes.post('/users', UserController.store);
+routes.get('/users', UserController.index);
 
 routes.use(authMiddleware);
 
-// Rota de escola
+// Rotas privadas
+
 routes.get('/schools/:school_id/', SchooolController.index);
 
-routes.get('/users', UserController.index);
-routes.post('/users', UserController.store);
+routes.put('/users', Multer.single("imagem"), UserController.update);
+
 
 
 
