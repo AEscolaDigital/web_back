@@ -29,7 +29,6 @@ async function sendingEmail(email, senha) {
     `,
   });
 
-  console.log(mailSent);
 }
 
 module.exports = sendingEmail;

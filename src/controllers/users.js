@@ -36,7 +36,7 @@ module.exports = {
             
             const passwordCript = bcrypt.hashSync(password, 10);
 
-            sendingEmail(email, password)
+            //sendingEmail(email, password)
 
             user = await User.create({
                 name,
