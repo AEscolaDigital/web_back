@@ -10,9 +10,6 @@ module.exports = {
 
 		const { email, password, role } = req.body;
 
-		console.log(role);
-		console.log(email);
-		console.log(password);
 		const getUser = async () => {
 
 			let user = 'Tipo de usuário inválido';

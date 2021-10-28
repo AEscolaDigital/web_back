@@ -18,9 +18,9 @@ module.exports = {
         //     console.log(teste.name);
         // });
 
-        const date = user[0].dataValues.created_at
+        // const date = user[0].dataValues.created_at
 
-        console.log(date);
+        // console.log(date);
 
         return res.json(user);
     },
