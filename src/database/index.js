@@ -9,7 +9,6 @@ const Citie = require("../models/Citie");
 const State = require("../models/State");
 const Role = require("../models/Role");
 const User = require("../models/User");
-const { upsert } = require("../models/School");
 
 const connection = new Sequelize(dbConfig.url, dbConfig.config);
 

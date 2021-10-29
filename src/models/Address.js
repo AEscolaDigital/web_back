@@ -27,7 +27,7 @@ class Address extends Model {
         // o endereço pertece a muitos estudentes
 
         // Relacionamento dos Alunos
-        this.belongsTo(models.School, { foreignKey: 'school_id', as: 'school' })
+        this.belongsTo(models.School, { foreignKey: 'school_id', as: 'FK_schools_addresses' })
 
         // Relacionamento da tabela de endereço com cidades e estados
         this.belongsTo(models.Cities, { foreignKey: 'city_id', as: 'city' });

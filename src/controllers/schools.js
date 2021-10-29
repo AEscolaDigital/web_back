@@ -68,20 +68,20 @@ module.exports = {
 
         try {
 
-            // let school = await School.findOne({
-            //     where: {
-            //         email: email,
-            //     }
-            // })
+            let school = await School.findOne({
+                where: {
+                    email: email,
+                }
+            })
 
-            // if (school) {
-            //     return res.status(400)
-            //         .send({ error: "Este e-mail já está sendo utilizado" })
-            // }
+            if (school) {
+                return res.status(400)
+                    .send({ error: "Este e-mail já está sendo utilizado" })
+            }
 
             const passwordCript = bcrypt.hashSync(password, 10);
 
-             school = await School.create({
+            school = await School.create({
                 name,
                 name_school,
                 cnpj,
@@ -90,21 +90,25 @@ module.exports = {
                 password: passwordCript,
             });
             
-            let city_id = await Citie.findOrCreate({
+            let school_id = school.id
+
+            const [city_id] = await Citie.findOrCreate({
+                raw: true,
+                attributes: ['id'],
                 where: { name: city }
             });
             
-            let state_id = await State.findOrCreate({
+            let [state_id] = await State.findOrCreate({
+                raw: true,
+                attributes: ['id'],
                 where: { name: state, uf: uf_state }
             });
-            
-            let school_id = school.id
             
             await Address.create({
                 street,
                 school_id,
-                city_id: city_id[0].dataValues.id,
-                state_id: state_id[0].dataValues.id,
+                city_id: city_id.id,
+                state_id: state_id.id,
                 number,
                 cep,
                 district,
@@ -113,14 +117,16 @@ module.exports = {
             
             let ddd = phone.substr(1, 2);
             
-            let ddd_id = await Prefixe.findOrCreate({
+            let [ddd_id] = await Prefixe.findOrCreate({
+                raw: true,
+                attributes: ['id'],
                 where: { ddd: ddd }
             });
-            
+
             await Phone.create({
                 number: phone.substr(4, 10),
                 school_id,
-                ddd_id: ddd_id[0].dataValues.id,
+                ddd_id: ddd_id.id,
             });
 
             const token = jwt.sign({ school_id: school.id }, auth.secret, {

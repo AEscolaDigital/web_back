@@ -1,9 +1,8 @@
-
 'use strict';
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.createTable("phones", {
+    queryInterface.createTable("users_school", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -12,19 +11,15 @@ module.exports = {
       },
       school_id:{
         type: Sequelize.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: { model: 'schools', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      number: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      ddd_id:{
+      user_id:{
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'prefixes', key: 'id' },
+        references: { model: 'users', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
@@ -40,6 +35,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    queryInterface.dropTable("phones");
+    queryInterface.dropTable("users_school");
   }
 };
