@@ -17,11 +17,8 @@ class User extends Model {
     }
 
     static associate(models) {
-        // belongsTo = pertece a único registro
-        // o endereço pertece a um único estudente
-
-        // belongsToMany pertence a muitos
-        // o endereço pertece a muitos estudentes
+        
+        this.belongsToMany(models.School, { foreignKey: 'user_id', through: 'users_schools', as: 'school' });
 
         this.belongsTo(models.Role, { foreignKey: 'role_id', as: 'role' })
 

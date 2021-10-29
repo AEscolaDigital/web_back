@@ -129,7 +129,7 @@ module.exports = {
                 ddd_id: ddd_id.id,
             });
 
-            const token = jwt.sign({ school_id: school.id }, auth.secret, {
+            const token = jwt.sign({ user_id: school.id }, auth.secret, {
                 expiresIn: "1h"
             });
             

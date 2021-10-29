@@ -13,21 +13,19 @@ const Multer = multer({
     limits: 1024 * 1024, // 1MB
 });
 
-
 //Rotas públicas
-
 routes.post('/sessions', SessionController.store);
 
 routes.post("/schools", SchooolController.store);
-routes.post('/users', UserController.store);
-routes.get('/users', UserController.index);
+
 
 routes.use(authMiddleware);
-
 // Rotas privadas
 
 routes.get('/schools/:school_id/', SchooolController.index);
 
+routes.post('/users', UserController.store);
+routes.get('/users', UserController.index);
 routes.put('/users', Multer.single("imagem"), UserController.update);
 
 

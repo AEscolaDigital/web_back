@@ -9,7 +9,7 @@ module.exports = {
             raw: true,
             attributes: ['name', 'email', 'created_at'],
             order: [["id", "DESC"]]
-
+            
         });
 
 
@@ -54,8 +54,6 @@ module.exports = {
             return data;
         }
    
-        console.log(getPayload(authorization));
-
         try {
 
             let user = await User.findOne({ where: { email: email } })
@@ -77,6 +75,8 @@ module.exports = {
                 password: passwordCript,
                 role_id
             });
+            
+            await user.addSchool(getPayload(authorization).userId);
 
             res.status(201).send({
                 user: {

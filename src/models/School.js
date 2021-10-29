@@ -20,19 +20,11 @@ class School extends Model {
     }
 
     static associate(models) {
-        //hasMany = tem muitos
-        // um usuário tem muitos endereços
-    
-        //hasOne = tem um
-        // um estudente tem um endereço
+   
+        this.belongsToMany(models.User, { foreignKey: 'school_id', through: 'users_schools', as: 'user' });
+
         this.hasOne(models.Address, { foreignKey: 'school_id', as: 'address' });
 
-        // belongsTo = pertece a único registro
-        // o genero pertece a um único aluno
-
-        // belongsToMany pertence a muitos
-        // o genero pertece a muitos estudentes
-        
         this.hasOne(models.Phone, { foreignKey: 'school_id', as: 'phone' });
         
     }
