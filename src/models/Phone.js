@@ -6,7 +6,6 @@ class Phone extends Model {
         super.init(
             {  
                 number: DataTypes.INTEGER,
-                ddd_id: DataTypes.INTEGER
             },
             {
                sequelize: connection,
@@ -15,17 +14,11 @@ class Phone extends Model {
     }
 
     static associate(models) {
-        // belongsTo = pertece a único registro
-        // o telefone pertece a um único estudente
-
-        // belongsToMany pertence a muitos
-        // o endereço pertece a muitos estudentes
-
-        this.belongsTo(models.School, { foreignKey: 'school_id', as: 'FK_schools_phones' })
+    
+        this.belongsTo(models.School, { foreignKey: 'school_id', as: 'school' })
 
         this.belongsTo(models.Prefixe, { foreignKey: 'ddd_id', as: 'prefixes' })
-        
-         
+   
     }
 
 }

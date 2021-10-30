@@ -68,16 +68,16 @@ module.exports = {
 
         try {
 
-            let school = await School.findOne({
-                where: {
-                    email: email,
-                }
-            })
+            // let school = await School.findOne({
+            //     where: {
+            //         email: email,
+            //     }
+            // })
 
-            if (school) {
-                return res.status(400)
-                    .send({ error: "Este e-mail já está sendo utilizado" })
-            }
+            // if (school) {
+            //     return res.status(400)
+            //         .send({ error: "Este e-mail já está sendo utilizado" })
+            // }
 
             const passwordCript = bcrypt.hashSync(password, 10);
 
@@ -88,19 +88,16 @@ module.exports = {
                 school_size,
                 email,
                 password: passwordCript,
+                role_id: 1
             });
             
             let school_id = school.id
 
             const [city_id] = await Citie.findOrCreate({
-                raw: true,
-                attributes: ['id'],
                 where: { name: city }
             });
             
             let [state_id] = await State.findOrCreate({
-                raw: true,
-                attributes: ['id'],
                 where: { name: state, uf: uf_state }
             });
             
@@ -118,8 +115,6 @@ module.exports = {
             let ddd = phone.substr(1, 2);
             
             let [ddd_id] = await Prefixe.findOrCreate({
-                raw: true,
-                attributes: ['id'],
                 where: { ddd: ddd }
             });
 
@@ -129,7 +124,10 @@ module.exports = {
                 ddd_id: ddd_id.id,
             });
 
-            const token = jwt.sign({ user_id: school.id }, auth.secret, {
+            const token = jwt.sign(
+                { user_id: school.id,
+                  role: "ROLE_ADMIN" }, 
+                auth.secret, {
                 expiresIn: "1h"
             });
             

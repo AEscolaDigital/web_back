@@ -40,7 +40,7 @@ module.exports = {
 		}
 
 		const token = jwt.sign(
-			{ userId: user.id },
+			{ user_id: user.id },
 			auth.secret,
 			{
 				expiresIn: "1h"

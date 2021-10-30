@@ -11,6 +11,7 @@ class School extends Model {
                 school_size: DataTypes.STRING,
                 email: DataTypes.STRING,
                 password: DataTypes.STRING,
+                role_id: DataTypes.INTEGER
             },
             {
                sequelize: connection,
@@ -21,8 +22,6 @@ class School extends Model {
 
     static associate(models) {
    
-        this.belongsToMany(models.User, { foreignKey: 'school_id', through: 'users_schools', as: 'user' });
-
         this.hasOne(models.Address, { foreignKey: 'school_id', as: 'address' });
 
         this.hasOne(models.Phone, { foreignKey: 'school_id', as: 'phone' });

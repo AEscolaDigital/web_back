@@ -8,6 +8,8 @@ const UserController = require('./controllers/users');
 
 const multer = require('multer');
 
+const MulterCSV = multer();
+
 const Multer = multer({
     storange: multer.memoryStorage(),
     limits: 1024 * 1024, // 1MB
@@ -24,7 +26,7 @@ routes.use(authMiddleware);
 
 routes.get('/schools/:school_id/', SchooolController.index);
 
-routes.post('/users', UserController.store);
+routes.post('/users', MulterCSV.single("fileCSV"), UserController.store);
 routes.get('/users', UserController.index);
 routes.put('/users', Multer.single("imagem"), UserController.update);
 

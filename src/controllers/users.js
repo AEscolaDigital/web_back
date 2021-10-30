@@ -1,15 +1,26 @@
 const User = require('../models/User');
 const sendingEmail = require('../services/smtp');
 const bcrypt = require("bcrypt");
+const getPayloadJWT = require('../utils/getPayloadJWT');
+const { Readable } = require('stream');
+const  readline  = require('readline');
+
 
 module.exports = {
 
     async index(req, res) {
+
+        const { authorization } = req.headers;
+
+        const school_id = getPayloadJWT(authorization).user_id
+
         const user = await User.findAll({
             raw: true,
-            attributes: ['name', 'email', 'created_at'],
-            order: [["id", "DESC"]]
-            
+            attributes: ['id', 'name', 'email', 'created_at'],
+            order: [["id", "DESC"]],
+            where:{
+                school_id: school_id
+            }
         });
 
 
@@ -38,22 +49,57 @@ module.exports = {
             name,
             email,
             role_id,
-
         } = req.body;
 
         const { authorization } = req.headers;
 
-        const getPayload = (authorization) => {
-            const [Bearer, token] = authorization.split(" ");
+        // if (req.file) {
 
-            let payload = token.split('.').slice(1, 2);
-            let buff = Buffer.from(payload[0], 'base64');
-            let dataString = buff.toString('utf-8');
-            let data = JSON.parse(dataString);
+            
+        // } 
 
-            return data;
+
+        const { file } = req;
+        const { buffer } = file;
+
+        const readableFile = new Readable();
+        readableFile.push(buffer);
+        readableFile.push(null);
+
+        const productsLine = readline.createInterface({
+            input: readableFile,
+        });
+
+        const products = [];
+
+        const password = Math.random().toString(36).slice(-8);
+        const passwordCript = bcrypt.hashSync(password, 10);
+
+
+        for await (let line of productsLine){
+            const productLineSplit =  line.split(";")
+
+            products.push({
+                name: productLineSplit[0],
+                email: productLineSplit[1],
+                role_id: productLineSplit[2]
+            })
         }
-   
+
+        for await (let {name, email, role_id} of products){
+            await User.create({
+                name,
+                email,
+                password: passwordCript,
+                role_id,
+                school_id: getPayloadJWT(authorization).user_id
+            });
+        }
+        
+
+        return res.send(products);
+        exit();
+
         try {
 
             let user = await User.findOne({ where: { email: email } })
@@ -67,17 +113,16 @@ module.exports = {
 
             const passwordCript = bcrypt.hashSync(password, 10);
 
-            //  sendingEmail(email, password, name)
+            sendingEmail(email, password, name)
 
             user = await User.create({
                 name,
                 email,
                 password: passwordCript,
-                role_id
+                role_id,
+                school_id: getPayloadJWT(authorization).user_id
             });
             
-            await user.addSchool(getPayload(authorization).userId);
-
             res.status(201).send({
                 user: {
                     id: user.id,

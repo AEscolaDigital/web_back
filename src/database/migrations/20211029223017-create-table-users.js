@@ -2,24 +2,40 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.createTable("users_schools", {
+    queryInterface.createTable("users", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       },
-      school_id:{
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      email:{
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      password:{
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      profile_picture:{
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      role_id:{
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'schools', key: 'id' },
+        references: { model: 'roles', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      user_id:{
+      school_id:{
         type: Sequelize.INTEGER,
-        allowNull: false,
-        references: { model: 'users', key: 'id' },
+        allowNull: true,
+        references: { model: 'schools', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
@@ -35,6 +51,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    queryInterface.dropTable("users_school");
+    queryInterface.dropTable("users");
   }
 };

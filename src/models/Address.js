@@ -10,8 +10,6 @@ class Address extends Model {
                 cep: DataTypes.STRING,
                 district: DataTypes.STRING,
                 complement: DataTypes.STRING,
-                city_id: DataTypes.INTEGER,
-                state_id: DataTypes.INTEGER,
             },
             {
                 sequelize: connection,
@@ -20,16 +18,9 @@ class Address extends Model {
     }
 
     static associate(models) {
-        // belongsTo = pertece a único registro
-        // o endereço pertece a um único estudente
 
-        // belongsToMany pertence a muitos
-        // o endereço pertece a muitos estudentes
+        this.belongsTo(models.School, { foreignKey: 'school_id', as: 'school' })
 
-        // Relacionamento dos Alunos
-        this.belongsTo(models.School, { foreignKey: 'school_id', as: 'FK_schools_addresses' })
-
-        // Relacionamento da tabela de endereço com cidades e estados
         this.belongsTo(models.Cities, { foreignKey: 'city_id', as: 'city' });
 
         this.belongsTo(models.States, { foreignKey: 'state_id', as: 'state' });
