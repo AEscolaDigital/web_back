@@ -3,8 +3,7 @@ const sendingEmail = require('../services/smtp');
 const bcrypt = require("bcrypt");
 const getPayloadJWT = require('../utils/getPayloadJWT');
 const { Readable } = require('stream');
-const  readline  = require('readline');
-
+const readline = require('readline');
 
 module.exports = {
 
@@ -18,7 +17,7 @@ module.exports = {
             raw: true,
             attributes: ['id', 'name', 'email', 'created_at'],
             order: [["id", "DESC"]],
-            where:{
+            where: {
                 school_id: school_id
             }
         });
@@ -53,84 +52,90 @@ module.exports = {
 
         const { authorization } = req.headers;
 
-        // if (req.file) {
-
-            
-        // } 
-
-
-        const { file } = req;
-        const { buffer } = file;
-
-        const readableFile = new Readable();
-        readableFile.push(buffer);
-        readableFile.push(null);
-
-        const productsLine = readline.createInterface({
-            input: readableFile,
-        });
-
-        const products = [];
-
-        const password = Math.random().toString(36).slice(-8);
-        const passwordCript = bcrypt.hashSync(password, 10);
-
-
-        for await (let line of productsLine){
-            const productLineSplit =  line.split(";")
-
-            products.push({
-                name: productLineSplit[0],
-                email: productLineSplit[1],
-                role_id: productLineSplit[2]
-            })
-        }
-
-        for await (let {name, email, role_id} of products){
-            await User.create({
-                name,
-                email,
-                password: passwordCript,
-                role_id,
-                school_id: getPayloadJWT(authorization).user_id
-            });
-        }
-        
-
-        return res.send(products);
-        exit();
-
         try {
 
-            let user = await User.findOne({ where: { email: email } })
+            if (req.file === undefined) {
 
-            if (user) {
-                return res.status(400)
-                    .send({ error: "Este e-mail já está sendo utilizado" })
-            }
+                let user = await User.findOne({ where: { email: email } })
 
-            const password = Math.random().toString(36).slice(-8);
+                if (user) {
+                    return res.status(400)
+                        .send({ error: "Este e-mail já está sendo utilizado" })
+                }
 
-            const passwordCript = bcrypt.hashSync(password, 10);
+                const password = Math.random().toString(36).slice(-8);
 
-            sendingEmail(email, password, name)
+                const passwordCript = bcrypt.hashSync(password, 10);
 
-            user = await User.create({
-                name,
-                email,
-                password: passwordCript,
-                role_id,
-                school_id: getPayloadJWT(authorization).user_id
-            });
-            
-            res.status(201).send({
-                user: {
+                sendingEmail(email, password, name)
+
+                user = await User.create({
+                    name,
+                    email,
+                    password: passwordCript,
+                    role_id,
+                    school_id: getPayloadJWT(authorization).user_id
+                });
+
+                res.status(201).send({
                     id: user.id,
                     email: user.name,
                     name: user.profile_picture,
-                },
-            });
+                    role_id: user.role_id,
+                    school_id: user.school_id,
+                    updatedAt: user.updatedAt,
+                    createdAt: user.createdAt
+                });
+            }
 
+            if (req.file) {
+
+                console.log("Upload pelo file");
+
+
+                const { file } = req;
+                const { buffer } = file;
+
+                const readableFile = new Readable();
+                readableFile.push(buffer);
+                readableFile.push(null);
+
+                const usersLine = readline.createInterface({
+                    input: readableFile,
+                });
+
+                const users = [];
+
+                for await (let line of usersLine) {
+                    const userLineSplit = line.split(";")
+
+                    users.push({
+                        name: userLineSplit[0],
+                        email: userLineSplit[1],
+                        role_id: userLineSplit[2]
+                    })
+                }
+
+                for await (let { name, email, role_id } of users) {
+
+                    const password = Math.random().toString(36).slice(-8);
+
+                    const passwordCript = bcrypt.hashSync(password, 10);
+
+                    await User.create({
+                        name,
+                        email,
+                        password: passwordCript,
+                        role_id,
+                        school_id: getPayloadJWT(authorization).user_id,
+                    });
+                    
+                    sendingEmail(email, password, name)
+                }
+
+                res.status(201).send(users);
+
+            }
 
         } catch (error) {
             console.log('user: ' + error);
