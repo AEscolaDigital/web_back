@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 const getPayloadJWT = require('../utils/getPayloadJWT');
 const { Readable } = require('stream');
 const readline = require('readline');
-const { exit } = require('process');
 
 module.exports = {
 
@@ -18,7 +17,8 @@ module.exports = {
 
         const school_id = getPayloadJWT(authorization).user_id
 
-        const user = await User.findAndCountAll({
+        const users = await User.findAndCountAll({
+            raw: true,
             attributes: ['id', 'name', 'email', 'role_id', 'created_at'],
             order: [["id", "DESC"]],
             limit: 10,
@@ -27,26 +27,23 @@ module.exports = {
                 school_id: school_id
             }
         })
-      //   console.log(user.count);
 
+        users.rows.forEach(users =>{
+            let data = users.created_at;
 
+            let date = String(data.getDate()).padStart(2, '0');
+            let month  = String((data.getMonth() + 1)).padStart(2, '0');
+            let fullYear = data.getFullYear();
 
-        // user.forEach(teste => {
-        //     console.log(teste.created_at.toString());
-        // });
+            var hours = String(data.getHours()).padStart(2, '0');
+            let minutes = String(data.getMinutes()).padStart(2, '0');
 
-        // const date = user[0].dataValues.created_at
-        // const created_at = user[0].created_at
-        // const month = created_at.toString().substr(3, 5);
-        // const day = created_at.toString().substr(7, 7);
-        // const ano = created_at.toString().substr(10, 11);
+            users.created_at = `${date}.${month}.${fullYear} 
+                                ${hours}:${minutes}`
 
-        // console.log(created_at.toString().substr(3, 19));
-        // console.log(month);
-        // console.log(day);
-        // console.log(ano);
-        res.json(user);
+        });
 
+        res.json(users);
     },
 
     async store(req, res) {
@@ -136,7 +133,7 @@ module.exports = {
                         school_id: getPayloadJWT(authorization).user_id,
                     });
                     
-                   // sendingEmail(email, password, name)
+                    //sendingEmail(email, password, name)
                 }
 
                 res.status(201).send({
