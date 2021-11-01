@@ -68,16 +68,16 @@ module.exports = {
 
         try {
 
-            // let school = await School.findOne({
-            //     where: {
-            //         email: email,
-            //     }
-            // })
+            let school = await School.findOne({
+                where: {
+                    email: email,
+                }
+            })
 
-            // if (school) {
-            //     return res.status(400)
-            //         .send({ error: "Este e-mail já está sendo utilizado" })
-            // }
+            if (school) {
+                return res.status(400)
+                    .send({ error: "Este e-mail já está sendo utilizado" })
+            }
 
             const passwordCript = bcrypt.hashSync(password, 10);
 
@@ -90,17 +90,17 @@ module.exports = {
                 password: passwordCript,
                 role_id: 1
             });
-            
+
             let school_id = school.id
 
             const [city_id] = await Citie.findOrCreate({
                 where: { name: city }
             });
-            
+
             let [state_id] = await State.findOrCreate({
                 where: { name: state, uf: uf_state }
             });
-            
+
             await Address.create({
                 street,
                 school_id,
@@ -111,9 +111,9 @@ module.exports = {
                 district,
                 complement,
             });
-            
+
             let ddd = phone.substr(1, 2);
-            
+
             let [ddd_id] = await Prefixe.findOrCreate({
                 where: { ddd: ddd }
             });
@@ -125,25 +125,25 @@ module.exports = {
             });
 
             const token = jwt.sign(
-                { user_id: school.id,
-                  role: "ROLE_ADMIN" }, 
+                {
+                    user_id: school.id,
+                    role: "ROLE_ADMIN"
+                },
                 auth.secret, {
                 expiresIn: "1h"
             });
-            
+
             res.status(201).send({
-                school: {
-                    id: school.id,
-                    name: school.name,
-                    name: school.name_school,
-                    email: school.email
-                },
+                id: school.id,
+                name: school.name,
+                name: school.name_school,
+                email: school.email,
                 token
             });
-                        
+
         } catch (error) {
             console.log('school: ' + error);
-        }        
-    
+        }
+
     }
 }

@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const getPayloadJWT = require('../utils/getPayloadJWT');
 const { Readable } = require('stream');
 const readline = require('readline');
+const { exit } = require('process');
 
 module.exports = {
 
@@ -11,16 +12,23 @@ module.exports = {
 
         const { authorization } = req.headers;
 
+        const { page_number } = req.params;
+
+        const offset = page_number * 10 - 10;
+
         const school_id = getPayloadJWT(authorization).user_id
 
-        const user = await User.findAll({
-            raw: true,
-            attributes: ['id', 'name', 'email', 'created_at'],
+        const user = await User.findAndCountAll({
+            attributes: ['id', 'name', 'email', 'role_id', 'created_at'],
             order: [["id", "DESC"]],
+            limit: 10,
+            offset: parseInt(offset),
             where: {
                 school_id: school_id
             }
-        });
+        })
+      //   console.log(user.count);
+
 
 
         // user.forEach(teste => {
@@ -37,9 +45,8 @@ module.exports = {
         // console.log(month);
         // console.log(day);
         // console.log(ano);
+        res.json(user);
 
-
-        return res.json(user);
     },
 
     async store(req, res) {
@@ -69,6 +76,8 @@ module.exports = {
 
                 sendingEmail(email, password, name)
 
+                console.log(role_id);
+
                 user = await User.create({
                     name,
                     email,
@@ -89,9 +98,6 @@ module.exports = {
             }
 
             if (req.file) {
-
-                console.log("Upload pelo file");
-
 
                 const { file } = req;
                 const { buffer } = file;
@@ -130,10 +136,12 @@ module.exports = {
                         school_id: getPayloadJWT(authorization).user_id,
                     });
                     
-                    sendingEmail(email, password, name)
+                   // sendingEmail(email, password, name)
                 }
 
-                res.status(201).send(users);
+                res.status(201).send({
+                    sucess: true
+                });
 
             }
 

@@ -27,7 +27,7 @@ routes.use(authMiddleware);
 routes.get('/schools/:school_id/', SchooolController.index);
 
 routes.post('/users', MulterCSV.single("fileCSV"), UserController.store);
-routes.get('/users', UserController.index);
+routes.get('/users/page/:page_number', UserController.index);
 routes.put('/users', Multer.single("imagem"), UserController.update);
 
 
