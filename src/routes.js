@@ -11,6 +11,8 @@ const multer = require('multer');
 
 const MulterCSV = multer();
 
+const MulterCSVClass = multer();
+
 const Multer = multer({
     storange: multer.memoryStorage(),
     limits: 1024 * 1024, // 1MB
@@ -26,14 +28,18 @@ routes.use(authMiddleware);
 // Rotas privadas
 routes.get('/schools/:school_id/', SchooolController.index);
 
-routes.post('/users', MulterCSV.single("fileCSV"), UserController.store);
+routes.post('/users', UserController.store);
+routes.post('/users/excelFile', MulterCSV.single("fileCSV"), UserController.storeExcelFile);
 routes.get('/users/page/:page_number', UserController.index);
 routes.put('/users', Multer.single("imagem"), UserController.update);
 
 routes.get('/classes', ClassesController.index);
 routes.get('/classes/:class_id', ClassesController.indexUsers);
 routes.post('/classes', ClassesController.store);
-routes.post('/classes/addMember', ClassesController.storeAddMember);
+routes.post('/classes/addMember/:class_id', ClassesController.storeMember);
+routes.post('/classes/addMember',  Multer.single("fileCSV"), ClassesController.storeExcelFile);
+routes.delete('/classes/:class_id', ClassesController.delete);
+routes.delete('/classes/deleteMember/:class_id', ClassesController.deleteClassMember);
 
 
 module.exports = routes;

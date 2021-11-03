@@ -28,11 +28,11 @@ module.exports = {
             }
         })
 
-        users.rows.forEach(users =>{
+        users.rows.forEach(users => {
             let data = users.created_at;
 
             let date = String(data.getDate()).padStart(2, '0');
-            let month  = String((data.getMonth() + 1)).padStart(2, '0');
+            let month = String((data.getMonth() + 1)).padStart(2, '0');
             let fullYear = data.getFullYear();
 
             var hours = String(data.getHours()).padStart(2, '0');
@@ -96,50 +96,6 @@ module.exports = {
 
             if (req.file) {
 
-                const { file } = req;
-                const { buffer } = file;
-
-                const readableFile = new Readable();
-                readableFile.push(buffer);
-                readableFile.push(null);
-
-                const usersLine = readline.createInterface({
-                    input: readableFile,
-                });
-
-                const users = [];
-
-                for await (let line of usersLine) {
-                    const userLineSplit = line.split(";")
-
-                    users.push({
-                        name: userLineSplit[0],
-                        email: userLineSplit[1],
-                        role_id: userLineSplit[2]
-                    })
-                }
-
-                for await (let { name, email, role_id } of users) {
-
-                    const password = Math.random().toString(36).slice(-8);
-
-                    const passwordCript = bcrypt.hashSync(password, 10);
-
-                    await User.create({
-                        name,
-                        email,
-                        password: passwordCript,
-                        role_id,
-                        school_id: getPayloadJWT(authorization).user_id,
-                    });
-                    
-                    //sendingEmail(email, password, name)
-                }
-
-                res.status(201).send({
-                    sucess: true
-                });
-
             }
 
         } catch (error) {
@@ -147,6 +103,64 @@ module.exports = {
         }
 
     },
+
+    async storeExcelFile(req, res) {
+
+        const { authorization } = req.headers;
+
+        const { file } = req;
+        const { buffer } = file;
+
+        try {
+
+            const readableFile = new Readable();
+            readableFile.push(buffer);
+            readableFile.push(null);
+
+            const usersLine = readline.createInterface({
+                input: readableFile,
+            });
+
+            const users = [];
+
+            for await (let line of usersLine) {
+                const userLineSplit = line.split(";")
+
+                users.push({
+                    name: userLineSplit[0],
+                    email: userLineSplit[1],
+                    role_id: userLineSplit[2]
+                })
+            }
+
+            for await (let { name, email, role_id } of users) {
+
+                const password = Math.random().toString(36).slice(-8);
+
+                const passwordCript = bcrypt.hashSync(password, 10);
+
+                await User.create({
+                    name,
+                    email,
+                    password: passwordCript,
+                    role_id,
+                    school_id: getPayloadJWT(authorization).user_id,
+                });
+
+                //sendingEmail(email, password, name)
+            }
+
+            res.status(201).send({
+                sucess: true
+            });
+
+
+        } catch (error) {
+            console.log('Excel user: ' + error);
+        }
+
+    },
+
 
     async update(req, res) {
 

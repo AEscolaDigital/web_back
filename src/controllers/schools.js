@@ -52,7 +52,7 @@ module.exports = {
             name_school,
             cnpj,
             school_size,
-            address: [{
+            address: {
                 cep,
                 street,
                 district,
@@ -61,10 +61,18 @@ module.exports = {
                 uf_state,
                 state,
                 complement,
-            }],
+            },
             email,
             password,
         } = req.body;
+
+        console.log(city);
+        console.log(street);
+
+
+        console.log(req.body)
+
+
 
         try {
 
@@ -78,6 +86,7 @@ module.exports = {
                 return res.status(400)
                     .send({ error: "Este e-mail já está sendo utilizado" })
             }
+                
 
             const passwordCript = bcrypt.hashSync(password, 10);
 
@@ -92,10 +101,13 @@ module.exports = {
             });
 
             let school_id = school.id
+            console.log(city);
 
             const [city_id] = await Citie.findOrCreate({
                 where: { name: city }
             });
+            console.log(city_id);
+            console.log("AQUI2");
 
             let [state_id] = await State.findOrCreate({
                 where: { name: state, uf: uf_state }
