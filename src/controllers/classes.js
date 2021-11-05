@@ -12,7 +12,9 @@ module.exports = {
 
         const { authorization } = req.headers;
 
-        const school_id = getPayloadJWT(authorization).user_id;
+      //  const school_id = getPayloadJWT(authorization).user_id;
+      
+        const school_id = 1
 
         const classes = await Class.findAll({
             attributes: ['id', 'name'],
@@ -26,41 +28,52 @@ module.exports = {
 
     async indexUsers(req, res) {
 
-        const { class_id } = req.params;
-        const { authorization } = req.headers;
+        const { page_number  } = req.params;
+        const { authorization} = req.headers;
+        const { class_id } = req.body
 
         const school_id = getPayloadJWT(authorization).user_id
 
-        const classe = await Class.findOne({
-            attributes: ['name', 'id'],
+        const offset = page_number * 10 - 10;
+
+        const { count, ...rows} = await Class.findAndCountAll({
+            attributes: [],
             where: {
                 id: class_id,
                 school_id
             },
-            include: [{
-                attributes: ['id', 'name', 'email', 'profile_picture'],
+            include:[{
                 association: 'users',
-                through: {
+                limit: 1,
+                offset: 1,
+                through:{
                     attributes: []
-                },
-            }]
+                }
+            }],
         });
 
+        // const teste1 = await rows.rows({limit: 10 })
+        // console.log(teste1);
 
-        if (classe === null)
-            res.json({ error: "Essa turma não existe" });
+        // const teste = await classe({ limit: 1})
+
+        // console.log(classe);
+        // if (classe === null)
+        //     res.json({ error: "Essa turma não existe" });
 
 
-        res.json(classe);
+        res.json(rows);
     },
 
     async store(req, res) {
 
         const { name } = req.body;
 
-        const { authorization } = req.headers;
+        // const { authorization } = req.headers;
 
-        const school_id = getPayloadJWT(authorization).user_id
+        // const school_id = getPayloadJWT(authorization).user_id
+       
+        const school_id = 1
 
         try {
 
@@ -84,6 +97,7 @@ module.exports = {
             res.status(201).send({
                 id: classe.id,
                 name: classe.name,
+                
             });
 
         } catch (error) {
