@@ -66,14 +66,6 @@ module.exports = {
             password,
         } = req.body;
 
-        console.log(city);
-        console.log(street);
-
-
-        console.log(req.body)
-
-
-
         try {
 
             let school = await School.findOne({

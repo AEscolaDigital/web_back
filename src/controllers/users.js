@@ -1,21 +1,18 @@
 const User = require('../models/User');
 const sendingEmail = require('../services/smtp');
 const bcrypt = require("bcrypt");
-const getPayloadJWT = require('../utils/getPayloadJWT');
 const { Readable } = require('stream');
 const readline = require('readline');
 
 module.exports = {
 
     async index(req, res) {
-
         const { authorization } = req.headers;
-
+        const [Bearer, token] = authorization.split(" ");
         const { page_number } = req.params;
 
         const offset = page_number * 10 - 10;
-
-        const school_id = getPayloadJWT(authorization).user_id
+        const school_id = jwt.decode(token).user_id;
 
         const users = await User.findAndCountAll({
             raw: true,
@@ -56,6 +53,10 @@ module.exports = {
 
         const { authorization } = req.headers;
 
+
+        const [Bearer, token] = authorization.split(" ");
+        const school_id = jwt.decode(token).user_id;
+
         try {
 
             if (req.file === undefined) {
@@ -80,7 +81,7 @@ module.exports = {
                     email,
                     password: passwordCript,
                     role_id,
-                    school_id: getPayloadJWT(authorization).user_id
+                    school_id,
                 });
 
                 res.status(201).send({
@@ -106,10 +107,12 @@ module.exports = {
 
     async storeExcelFile(req, res) {
 
-        const { authorization } = req.headers;
-
         const { file } = req;
         const { buffer } = file;
+        const { authorization } = req.headers;
+
+        const [Bearer, token] = authorization.split(" ");
+        const school_id = jwt.decode(token).user_id;
 
         try {
 
@@ -144,7 +147,7 @@ module.exports = {
                     email,
                     password: passwordCript,
                     role_id,
-                    school_id: getPayloadJWT(authorization).user_id,
+                    school_id,
                 });
 
                 //sendingEmail(email, password, name)
