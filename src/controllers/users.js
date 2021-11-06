@@ -1,11 +1,11 @@
 const User = require('../models/User');
 
-const sendingEmail = require('../services/smtp');
 
 const bcrypt = require("bcrypt");
 const { Readable } = require('stream');
 const readline = require('readline');
-const jwt = require("jsonwebtoken");
+
+const sendingEmail = require('../services/smtp');
 const payloadjtw = require("../utils/payloadjtw");
 
 module.exports = {
