@@ -1,8 +1,11 @@
 const User = require('../models/User');
+
 const sendingEmail = require('../services/smtp');
+
 const bcrypt = require("bcrypt");
 const { Readable } = require('stream');
 const readline = require('readline');
+const jwt = require("jsonwebtoken");
 
 module.exports = {
 
@@ -59,45 +62,40 @@ module.exports = {
 
         try {
 
-            if (req.file === undefined) {
 
-                let user = await User.findOne({ where: { email: email } })
+            let user = await User.findOne({ where: { email: email } })
 
-                if (user) {
-                    return res.status(400)
-                        .send({ error: "Este e-mail já está sendo utilizado" })
-                }
-
-                const password = Math.random().toString(36).slice(-8);
-
-                const passwordCript = bcrypt.hashSync(password, 10);
-
-                sendingEmail(email, password, name)
-
-                console.log(role_id);
-
-                user = await User.create({
-                    name,
-                    email,
-                    password: passwordCript,
-                    role_id,
-                    school_id,
-                });
-
-                res.status(201).send({
-                    id: user.id,
-                    email: user.name,
-                    name: user.profile_picture,
-                    role_id: user.role_id,
-                    school_id: user.school_id,
-                    updatedAt: user.updatedAt,
-                    createdAt: user.createdAt
-                });
+            if (user) {
+                return res.status(400)
+                    .send({ error: "Este e-mail já está sendo utilizado" })
             }
 
-            if (req.file) {
+            const password = Math.random().toString(36).slice(-8);
 
-            }
+            const passwordCript = bcrypt.hashSync(password, 10);
+
+            sendingEmail(email, password, name)
+
+            console.log(role_id);
+
+            user = await User.create({
+                name,
+                email,
+                password: passwordCript,
+                role_id,
+                school_id,
+            });
+
+            res.status(201).send({
+                id: user.id,
+                email: user.name,
+                name: user.profile_picture,
+                role_id: user.role_id,
+                school_id: user.school_id,
+                updatedAt: user.updatedAt,
+                createdAt: user.createdAt
+            });
+
 
         } catch (error) {
             console.log('user: ' + error);
@@ -113,6 +111,8 @@ module.exports = {
 
         const [Bearer, token] = authorization.split(" ");
         const school_id = jwt.decode(token).user_id;
+
+        console.log(school_id);
 
         try {
 
@@ -138,7 +138,7 @@ module.exports = {
 
             for await (let { name, email, role_id } of users) {
 
-                const password = Math.random().toString(36).slice(-8);
+                const password = "123456"
 
                 const passwordCript = bcrypt.hashSync(password, 10);
 

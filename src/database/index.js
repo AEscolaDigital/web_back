@@ -10,6 +10,7 @@ const State = require("../models/State");
 const Role = require("../models/Role");
 const User = require("../models/User");
 const Classe = require("../models/Class");
+const Discipline = require("../models/Discipline");
 
 
 const connection = new Sequelize(dbConfig.url, dbConfig.config);
@@ -24,6 +25,7 @@ State.init(connection);
 Role.init(connection);
 User.init(connection);
 Classe.init(connection);
+Discipline.init(connection);
 
 School.associate(connection.models);
 Address.associate(connection.models);
@@ -33,6 +35,7 @@ Phone.associate(connection.models);
 Prefixe.associate(connection.models);
 User.associate(connection.models);
 Classe.associate(connection.models);
+Discipline.associate(connection.models);
 
 
 

@@ -200,8 +200,6 @@ module.exports = {
             for await (let line of usersLine) {
                 const userLineSplit = line.split(";")
 
-                console.log(line);
-
                 users.push({
                     email: userLineSplit[0],
                     class_id: userLineSplit[1]

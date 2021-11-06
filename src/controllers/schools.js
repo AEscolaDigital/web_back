@@ -93,13 +93,10 @@ module.exports = {
             });
 
             let school_id = school.id
-            console.log(city);
 
             const [city_id] = await Citie.findOrCreate({
                 where: { name: city }
             });
-            console.log(city_id);
-            console.log("AQUI2");
 
             let [state_id] = await State.findOrCreate({
                 where: { name: state, uf: uf_state }

@@ -6,6 +6,7 @@ const SessionController = require('./controllers/sessions');
 const SchooolController = require('./controllers/schools');
 const UserController = require('./controllers/users');
 const ClassesController = require('./controllers/classes');
+const DisciplineController = require('./controllers/disciplines');
 
 const multer = require('multer');
 
@@ -35,7 +36,6 @@ routes.post('/users/excelFile', MulterCSV.single("fileCSV"), UserController.stor
 routes.get('/users/page/:page_number', UserController.index);
 routes.put('/users', Multer.single("imagem"), UserController.update);
 
-
 routes.get('/classes/:page_number', ClassesController.index);
 routes.get('/classes/:search', ClassesController.indexSearch);
 routes.get('/classes/page/:page_number', ClassesController.indexUsers);
@@ -44,6 +44,11 @@ routes.post('/classes/addMember/:class_id', ClassesController.storeMember);
 routes.post('/classes/addMember',  Multer.single("fileCSV"), ClassesController.storeExcelFile);
 routes.delete('/classes/:class_id', ClassesController.delete);
 routes.delete('/classes/deleteMember/:class_id', ClassesController.deleteClassMember);
+
+routes.get('/disciplines', DisciplineController.index);
+routes.post('/disciplines', DisciplineController.store);
+routes.delete('/disciplines/:id', DisciplineController.delete);
+
 
 
 

@@ -16,13 +16,28 @@ module.exports = {
 
 			if (role == 'ROLE_USER' || role == "ROLE_TEACHER") {
 
-				user = await User.findOne({ where: { email: email } });
+				user = await User.findOne({
+					where: { 
+						email: email 
+					},
+					include: [{
+						association: 'role',
+					}]
+				});
 				return user;
 			}
 
 			if (role == 'ROLE_ADMIN') {
 
-				user = await School.findOne({ where: { email: email } });
+				user = await School.findOne({
+					where: {
+						email: email,
+					},
+					include: [{
+						association: 'role',
+					}]
+				});
+
 				return user;
 			}
 
@@ -39,18 +54,18 @@ module.exports = {
 				.send({ error: "Usuário e/ou senha inválidos" });
 		}
 
-		const token = jwt.sign(
-			{ user_id: user.id },
+		const token = jwt.sign({
+			user_id: user.id,
+			role: user.role.name
+		},
 			auth.secret,
 			{
 				expiresIn: "1h"
 			});
 
 		res.send({
-			user: {
-				email: user.email,
-				name: user.name
-			},
+			email: user.email,
+			name: user.name,
 			token
 		})
 	}

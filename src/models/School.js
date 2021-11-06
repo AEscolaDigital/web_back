@@ -25,7 +25,9 @@ class School extends Model {
         this.hasOne(models.Address, { foreignKey: 'school_id', as: 'address' });
 
         this.hasOne(models.Phone, { foreignKey: 'school_id', as: 'phone' });
-        
+
+        this.hasOne(models.Role, { foreignKey: 'id', as: 'role' });
+ 
     }
 
 }
