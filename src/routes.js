@@ -37,7 +37,7 @@ routes.get('/users/page/:page_number', UserController.index);
 routes.put('/users', Multer.single("imagem"), UserController.update);
 
 routes.get('/classes/:page_number', ClassesController.index);
-routes.get('/classes/:search', ClassesController.indexSearch);
+routes.get('/classes/search/:search', ClassesController.indexSearch);
 routes.get('/classes/page/:page_number', ClassesController.indexUsers);
 routes.post('/classes', ClassesController.store);
 routes.post('/classes/addMember/:class_id', ClassesController.storeMember);

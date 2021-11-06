@@ -7,7 +7,6 @@ const payload = (req, res, next) => {
     const [Bearer, token] = authorization.split(" ");
 
     const payload = jwt.decode(token);
-     console.log(payload);
     return payload;
 };
 

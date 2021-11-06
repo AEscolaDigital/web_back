@@ -6,16 +6,15 @@ const bcrypt = require("bcrypt");
 const { Readable } = require('stream');
 const readline = require('readline');
 const jwt = require("jsonwebtoken");
+const payloadjtw = require("../utils/payloadjtw");
 
 module.exports = {
 
     async index(req, res) {
-        const { authorization } = req.headers;
-        const [Bearer, token] = authorization.split(" ");
         const { page_number } = req.params;
 
         const offset = page_number * 10 - 10;
-        const school_id = jwt.decode(token).user_id;
+        const school_id = payloadjtw(req).user_id;
 
         const users = await User.findAndCountAll({
             raw: true,
@@ -54,11 +53,7 @@ module.exports = {
             role_id,
         } = req.body;
 
-        const { authorization } = req.headers;
-
-
-        const [Bearer, token] = authorization.split(" ");
-        const school_id = jwt.decode(token).user_id;
+        const school_id = payloadjtw(req).user_id;
 
         try {
 
@@ -107,12 +102,8 @@ module.exports = {
 
         const { file } = req;
         const { buffer } = file;
-        const { authorization } = req.headers;
 
-        const [Bearer, token] = authorization.split(" ");
-        const school_id = jwt.decode(token).user_id;
-
-        console.log(school_id);
+        const school_id = payloadjtw(req).user_id;
 
         try {
 

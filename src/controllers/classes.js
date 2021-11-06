@@ -4,19 +4,16 @@ const User = require('../models/User');
 const { Readable } = require('stream');
 const readline = require('readline');
 const { Op } = require('sequelize');
-const jwt = require("jsonwebtoken");
+const payloadjtw = require("../utils/payloadjtw");
 
 module.exports = {
 
     async index(req, res) {
 
-        const { authorization } = req.headers;
         const { page_number } = req.params;
 
         const offset = page_number * 10 - 10;
-
-        const [Bearer, token] = authorization.split(" ");
-        const school_id = jwt.decode(token).user_id;
+        const school_id = payloadjtw(req).user_id;
 
         const classes = await Class.findAndCountAll({
             attributes: ['id', 'name'],
@@ -33,11 +30,9 @@ module.exports = {
     async indexSearch(req, res) {
 
         const { search } = req.params;
-        const { authorization } = req.headers;
 
-        const [Bearer, token] = authorization.split(" ");
-        const school_id = jwt.decode(token).user_id;
-      
+        const school_id = payloadjtw(req).user_id;
+
         const classes = await Class.findAll({
             attributes: ['id', 'name'],
             where: {
@@ -54,12 +49,10 @@ module.exports = {
     async indexUsers(req, res) {
 
        // const { page_number  } = req.params;
-        const { authorization} = req.headers;
         const { class_id } = req.body
-        const [Bearer, token] = authorization.split(" ");
 
-        const school_id = jwt.decode(token).user_id;
-        // const offset = page_number * 10 - 10;
+        const school_id = payloadjtw(req).user_id;
+     // const offset = page_number * 10 - 10;
 
         const classe = await Class.findAndCountAll({
             attributes: [],
@@ -92,11 +85,9 @@ module.exports = {
     async store(req, res) {
 
         const { name } = req.body;
-        const { authorization } = req.headers;
-        const [Bearer, token] = authorization.split(" ");
 
-        const school_id = jwt.decode(token).user_id;
-       
+        const school_id = payloadjtw(req).user_id;
+
         try {
 
             let classe = await Class.findOne({
@@ -132,11 +123,8 @@ module.exports = {
 
         const { email } = req.body;
         const { class_id } = req.params;
-        const { authorization } = req.headers;
 
-        const [Bearer, token] = authorization.split(" ");
-
-        const school_id = jwt.decode(token).user_id;
+        const school_id = payloadjtw(req).user_id;
 
         try {
 
@@ -180,10 +168,8 @@ module.exports = {
 
         const { file } = req;
         const { buffer } = file;
-        const { authorization } = req.headers;
 
-        const [Bearer, token] = authorization.split(" ");
-        const school_id = jwt.decode(token).user_id;
+        const school_id = payloadjtw(req).user_id;
 
         try {
 
@@ -238,10 +224,8 @@ module.exports = {
 
     async delete(req, res) {
         const { class_id } = req.params;
-        const { authorization } = req.headers;
 
-        const [Bearer, token] = authorization.split(" ");
-        const school_id = jwt.decode(token).user_id;
+        const school_id = payloadjtw(req).user_id;
 
         const classe = await Class.findOne({
             where: {
@@ -269,11 +253,8 @@ module.exports = {
 
         const { class_id } = req.params;
         const { id_user } = req.body;
-        const { authorization } = req.headers;
 
-        const [Bearer, token] = authorization.split(" ");
-
-        const school_id = jwt.decode(token).user_id;
+        const school_id = payloadjtw(req).user_id;
 
         let user = await User.findOne({
             where: {

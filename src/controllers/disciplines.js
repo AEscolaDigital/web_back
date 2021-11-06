@@ -1,18 +1,12 @@
 const Discipline = require("../models/Discipline");
 const Class = require("../models/Class");
 
-const jwt = require("jsonwebtoken");
-
 const payloadjtw = require("../utils/payloadjtw");
 
 module.exports = {
     async index(req, res) {
 
-        const { authorization } = req.headers;
-
-        const [Bearer, token] = authorization.split(" ");
-        const { user_id, role } = jwt.decode(token);
-
+        const { user_id, role } = payloadjtw(req);
         const id = role === 'ROLE_ADMIN' ? [user_id,] : [, user_id];
 
         let disciplines
@@ -34,10 +28,7 @@ module.exports = {
     async store(req, res) {
 
         const { name, class_id } = req.body
-        const { authorization } = req.headers;
-
-        const [Bearer, token] = authorization.split(" ");
-        const { user_id, role } = jwt.decode(token);
+        const { user_id, role } = payloadjtw(req);
 
         const id = role === 'ROLE_ADMIN' ? [user_id,] : [, user_id];
 
@@ -97,18 +88,24 @@ module.exports = {
 
         const { id } = req.params;
 
-        console.log(payloadjtw(req));
-        
+        let { user_id, role } = payloadjtw(req)
+        user_id = role === 'ROLE_ADMIN' ? [user_id, ''] : [ '', user_id];
 
-        // const { authorization } = req.headers;
+        let discipline
 
-        // const [Bearer, token] = authorization.split(" ");
-        // const { user_id, role } = jwt.decode(token);
+        if (!user_id[1]) {
+            discipline = await Discipline.findOne({
+                where: {  school_id: user_id[0], id }
+            })
 
-        // user_id = role === 'ROLE_ADMIN' ? [user_id,] : [, user_id];
+        } else {
+            discipline = await Discipline.findOne({
+                where: { user_id: user_id[1], id }
+            })
 
-        let discipline = await Discipline.findOne({ where: { id, school_id } })
+        }
 
+        console.log(discipline);
         if (!discipline)
             return res.status(400)
                 .send({ error: "Esta disciplina não existe" })
