@@ -18,7 +18,7 @@ const uploadImage = (req, res, next) => {
 
     const nomeArquivo = Date.now() + "." + imagem.originalname.split(".").pop();
 
-    const file = bucket.file("profile_picture/"+ nomeArquivo);
+    const file = bucket.file(nomeArquivo);
 
     const stream = file.createWriteStream({
         metadata:{
@@ -34,11 +34,9 @@ const uploadImage = (req, res, next) => {
     })
 
     stream.on("finish", async () => {
-        //tornar o arquivo público
         await file.makePublic();
 
-        //obter a url público
-        req.file.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/profile_picture/${nomeArquivo}`;
+        req.file.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/${nomeArquivo}`;
 
         next();
     })

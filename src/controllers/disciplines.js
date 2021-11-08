@@ -11,15 +11,28 @@ module.exports = {
 
         let disciplines
 
+        console.log(role);
+
         if (!id[1]) {
             disciplines = await Discipline.findAll({
-                where: { school_id: 1 }
+                attributes:['id', 'name', 'image'],
+                where: { school_id: id[0] },
+                include:{
+                    association: "school",
+                    attributes: ['name']
+                }
             })
         } else {
             disciplines = await Discipline.findOne({
-                where: { user_id: id[1] }
+                where: { user_id: id[1] },
+                include:{
+                    association: "users",
+                    attributes: ['name']
+                }
             })
         }
+
+      
 
         res.json(disciplines);
 
@@ -28,6 +41,8 @@ module.exports = {
     async store(req, res) {
 
         const { name, class_id } = req.body
+        const { firebaseUrl } = req.file ? req.file : "";
+
         const { user_id, role } = payloadjtw(req);
 
         const id = role === 'ROLE_ADMIN' ? [user_id,] : [, user_id];
@@ -67,6 +82,7 @@ module.exports = {
             discipline = await Discipline.create({
                 name,
                 class_id,
+                image: firebaseUrl,
                 user_id: id[1],
                 school_id: id[0]
             });

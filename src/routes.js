@@ -8,11 +8,9 @@ const UserController = require('./controllers/users');
 const ClassesController = require('./controllers/classes');
 const DisciplineController = require('./controllers/disciplines');
 
+const uploadImage = require('./services/firebase');
+
 const multer = require('multer');
-
-const MulterCSV = multer();
-
-const MulterCSVClass = multer();
 
 const Multer = multer({
     storange: multer.memoryStorage(),
@@ -32,21 +30,27 @@ routes.use(authMiddleware);
 routes.get('/schools/:school_id/', SchooolController.index);
 
 routes.post('/users', UserController.store);
-routes.post('/users/excelFile', MulterCSV.single("fileCSV"), UserController.storeExcelFile);
+routes.post('/users/excelFile', Multer.single("fileCSV"), UserController.storeExcelFile);
 routes.get('/users/page/:page_number', UserController.index);
-routes.put('/users', Multer.single("imagem"), UserController.update);
+routes.put('/users', 
+            Multer.single("image"), 
+            uploadImage,
+            UserController.update);
 
 routes.get('/classes/:page_number', ClassesController.index);
 routes.get('/classes/search/:search', ClassesController.indexSearch);
-routes.get('/classes/page/:page_number', ClassesController.indexUsers);
+routes.get('/classes/:class_id/page/:page_number', ClassesController.indexUsers);
 routes.post('/classes', ClassesController.store);
 routes.post('/classes/addMember/:class_id', ClassesController.storeMember);
-routes.post('/classes/addMember',  Multer.single("fileCSV"), ClassesController.storeExcelFile);
+routes.post('/classes/addMembers/excelFile',  Multer.single("fileCSV"), ClassesController.storeExcelFile);
 routes.delete('/classes/:class_id', ClassesController.delete);
-routes.delete('/classes/deleteMember/:class_id', ClassesController.deleteClassMember);
+routes.post('/classes/deleteMember/:class_id', ClassesController.deleteClassMember);
 
 routes.get('/disciplines', DisciplineController.index);
-routes.post('/disciplines', DisciplineController.store);
+routes.post('/disciplines', 
+             Multer.single("image"),
+             uploadImage,
+             DisciplineController.store);
 routes.delete('/disciplines/:id', DisciplineController.delete);
 
 

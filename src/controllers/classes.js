@@ -48,23 +48,22 @@ module.exports = {
 
     async indexUsers(req, res) {
 
-       // const { page_number  } = req.params;
-        const { class_id } = req.body
+        const { class_id, page_number } = req.params;
 
         const school_id = payloadjtw(req).user_id;
-     // const offset = page_number * 10 - 10;
+        // const offset = page_number * 10 - 10;
 
         const classe = await Class.findAndCountAll({
-            attributes: [],
+            attributes: ['id', 'name'],
             where: {
                 id: class_id,
                 school_id,
             },
-            include:[{
+            include: [{
                 association: 'users',
                 // limit: 1,
                 // offset: parseInt(offset),
-                through:{
+                through: {
                     attributes: []
                 }
             }],
@@ -110,7 +109,7 @@ module.exports = {
             res.status(201).send({
                 id: classe.id,
                 name: classe.name,
-                
+
             });
 
         } catch (error) {
@@ -166,6 +165,10 @@ module.exports = {
 
     async storeExcelFile(req, res) {
 
+        const { class_id } = req.body
+
+        console.log(class_id);
+
         const { file } = req;
         const { buffer } = file;
 
@@ -188,11 +191,11 @@ module.exports = {
 
                 users.push({
                     email: userLineSplit[0],
-                    class_id: userLineSplit[1]
+                    class_id
                 })
             }
 
-            for await (let { email, class_id} of users) {
+            for await (let { email, class_id } of users) {
 
                 let user = await User.findOne({
                     where: {
@@ -207,7 +210,7 @@ module.exports = {
                         id: class_id
                     },
                 })
-    
+
                 await user.addClass(classe);
             }
 
@@ -252,33 +255,36 @@ module.exports = {
     async deleteClassMember(req, res) {
 
         const { class_id } = req.params;
-        const { id_user } = req.body;
+        const { id_users } = req.body;
 
         const school_id = payloadjtw(req).user_id;
 
-        let user = await User.findOne({
-            where: {
-                id: id_user,
-                school_id
-            }
-        })
+        for await (let id_user of id_users) {
 
-        if (!user)
-            return res.status(400)
-                .json({ error: "Este usuário não existe" })
+            let user = await User.findOne({
+                where: {
+                    id: id_user,
+                    school_id
+                }
+            })
 
-        let classe = await Class.findOne({
-            where: {
-                id: class_id,
-                school_id
-            },
-        });
+            if (!user)
+                return res.status(400)
+                    .json({ error: "Este usuário não existe" })
 
-        if (!classe)
-            return res.status(400)
-                .json({ error: 'Turma inexistente' });
+            let classe = await Class.findOne({
+                where: {
+                    id: class_id,
+                    school_id
+                },
+            });
 
-        await user.removeClass(classe);
+            if (!classe)
+                return res.status(400)
+                    .json({ error: 'Turma inexistente' });
+
+            await user.removeClass(classe);
+        }
 
         res.json({
             sucess: "Aluno excluído com sucesso"

@@ -129,6 +129,8 @@ module.exports = {
 
             for await (let { name, email, role_id } of users) {
 
+                //const password = Math.random().toString(36).slice(-8);
+
                 const password = "123456"
 
                 const passwordCript = bcrypt.hashSync(password, 10);
@@ -158,15 +160,23 @@ module.exports = {
 
     async update(req, res) {
 
-        const firebaseUrl = req.files;
+        const { firebaseUrl } = req.file;
 
-        const { user_id } = req.params;
+        const user_id = payloadjtw(req).user_id;
+
+        console.log(firebaseUrl);
 
         try {
 
+            if (!req.file) {
+                return res.json({error: "Envie uma imagem"})
+            }
+
             let user = await User.findOne({
-                where: { user_id }
+                where: { id: user_id }
             });
+
+            console.log(user);
 
             user.profile_picture = firebaseUrl;
 

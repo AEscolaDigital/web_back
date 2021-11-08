@@ -22,7 +22,7 @@ module.exports = {
         allowNull: false,
       },
       profile_picture:{
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: true,
       },
       role_id:{
