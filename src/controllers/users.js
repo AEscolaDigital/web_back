@@ -125,7 +125,7 @@ module.exports = {
 
             for await (let line of usersLine) {
                 const userLineSplit = line.split(";")
-
+                
                 users.push({
                     name: userLineSplit[0],
                     email: userLineSplit[1],
