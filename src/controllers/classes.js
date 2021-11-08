@@ -3,21 +3,48 @@ const User = require('../models/User');
 
 const { Readable } = require('stream');
 const readline = require('readline');
-
-const getPayloadJWT = require('../utils/getPayloadJWT');
+const { Op } = require('sequelize');
+const jwt = require("jsonwebtoken");
 
 module.exports = {
 
     async index(req, res) {
 
         const { authorization } = req.headers;
+        const { page_number } = req.params;
 
-        const school_id = getPayloadJWT(authorization).user_id;
+        const offset = page_number * 10 - 10;
 
+        const [Bearer, token] = authorization.split(" ");
+        const school_id = jwt.decode(token).user_id;
+
+        const classes = await Class.findAndCountAll({
+            attributes: ['id', 'name'],
+            where: {
+                school_id,
+            },
+            limit: 7,
+            offset: parseInt(offset)
+        });
+
+        return res.json(classes);
+    },
+
+    async indexSearch(req, res) {
+
+        const { search } = req.params;
+        const { authorization } = req.headers;
+
+        const [Bearer, token] = authorization.split(" ");
+        const school_id = jwt.decode(token).user_id;
+      
         const classes = await Class.findAll({
             attributes: ['id', 'name'],
             where: {
-                school_id
+                school_id,
+                name: {
+                    [Op.like]: `%${search}%`
+                },
             }
         });
 
@@ -26,30 +53,38 @@ module.exports = {
 
     async indexUsers(req, res) {
 
-        const { class_id } = req.params;
-        const { authorization } = req.headers;
+       // const { page_number  } = req.params;
+        const { authorization} = req.headers;
+        const { class_id } = req.body
+        const [Bearer, token] = authorization.split(" ");
 
-        const school_id = getPayloadJWT(authorization).user_id
+        const school_id = jwt.decode(token).user_id;
+        // const offset = page_number * 10 - 10;
 
-        const classe = await Class.findOne({
-            attributes: ['name', 'id'],
+        const classe = await Class.findAndCountAll({
+            attributes: [],
             where: {
                 id: class_id,
-                school_id
+                school_id,
             },
-            include: [{
-                attributes: ['id', 'name', 'email', 'profile_picture'],
+            include:[{
                 association: 'users',
-                through: {
+                // limit: 1,
+                // offset: parseInt(offset),
+                through:{
                     attributes: []
-                },
-            }]
+                }
+            }],
         });
 
+        // const teste1 = await rows.rows({limit: 10 })
+        // console.log(teste1);
 
+        // const teste = await classe({ limit: 1})
+
+        // console.log(classe);
         if (classe === null)
             res.json({ error: "Essa turma não existe" });
-
 
         res.json(classe);
     },
@@ -57,11 +92,11 @@ module.exports = {
     async store(req, res) {
 
         const { name } = req.body;
-
         const { authorization } = req.headers;
+        const [Bearer, token] = authorization.split(" ");
 
-        const school_id = getPayloadJWT(authorization).user_id
-
+        const school_id = jwt.decode(token).user_id;
+       
         try {
 
             let classe = await Class.findOne({
@@ -84,6 +119,7 @@ module.exports = {
             res.status(201).send({
                 id: classe.id,
                 name: classe.name,
+                
             });
 
         } catch (error) {
@@ -95,10 +131,12 @@ module.exports = {
     async storeMember(req, res) {
 
         const { email } = req.body;
-        const { authorization } = req.headers;
         const { class_id } = req.params;
+        const { authorization } = req.headers;
 
-        const school_id = getPayloadJWT(authorization).user_id
+        const [Bearer, token] = authorization.split(" ");
+
+        const school_id = jwt.decode(token).user_id;
 
         try {
 
@@ -139,12 +177,13 @@ module.exports = {
     },
 
     async storeExcelFile(req, res) {
-        const { authorization } = req.headers;
 
         const { file } = req;
         const { buffer } = file;
+        const { authorization } = req.headers;
 
-        const school_id = getPayloadJWT(authorization).user_id
+        const [Bearer, token] = authorization.split(" ");
+        const school_id = jwt.decode(token).user_id;
 
         try {
 
@@ -201,9 +240,10 @@ module.exports = {
 
     async delete(req, res) {
         const { class_id } = req.params;
-
         const { authorization } = req.headers;
-        const school_id = getPayloadJWT(authorization).user_id
+
+        const [Bearer, token] = authorization.split(" ");
+        const school_id = jwt.decode(token).user_id;
 
         const classe = await Class.findOne({
             where: {
@@ -233,7 +273,9 @@ module.exports = {
         const { id_user } = req.body;
         const { authorization } = req.headers;
 
-        const school_id = getPayloadJWT(authorization).user_id
+        const [Bearer, token] = authorization.split(" ");
+
+        const school_id = jwt.decode(token).user_id;
 
         let user = await User.findOne({
             where: {

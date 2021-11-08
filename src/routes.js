@@ -23,6 +23,8 @@ routes.post('/sessions', SessionController.store);
 
 routes.post("/schools", SchooolController.store);
 
+
+
 routes.use(authMiddleware);
 
 // Rotas privadas
@@ -33,13 +35,17 @@ routes.post('/users/excelFile', MulterCSV.single("fileCSV"), UserController.stor
 routes.get('/users/page/:page_number', UserController.index);
 routes.put('/users', Multer.single("imagem"), UserController.update);
 
-routes.get('/classes', ClassesController.index);
-routes.get('/classes/:class_id', ClassesController.indexUsers);
+
+routes.get('/classes/:page_number', ClassesController.index);
+routes.get('/classes/:search', ClassesController.indexSearch);
+routes.get('/classes/page/:page_number', ClassesController.indexUsers);
 routes.post('/classes', ClassesController.store);
 routes.post('/classes/addMember/:class_id', ClassesController.storeMember);
 routes.post('/classes/addMember',  Multer.single("fileCSV"), ClassesController.storeExcelFile);
 routes.delete('/classes/:class_id', ClassesController.delete);
 routes.delete('/classes/deleteMember/:class_id', ClassesController.deleteClassMember);
+
+
 
 
 module.exports = routes;
