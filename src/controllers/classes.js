@@ -252,37 +252,33 @@ module.exports = {
 
     async deleteClassMember(req, res) {
 
-        const { class_id } = req.params;
-        const { id_users } = req.body;
+        const { class_id, user_id } = req.params;
 
         const school_id = payloadjtw(req).user_id;
 
-        for await (let id_user of id_users) {
+        let user = await User.findOne({
+            where: {
+                id: user_id,
+                school_id
+            }
+        })
 
-            let user = await User.findOne({
-                where: {
-                    id: id_user,
-                    school_id
-                }
-            })
+        if (!user)
+            return res.status(400)
+                .json({ error: "Este usuário não existe" })
 
-            if (!user)
-                return res.status(400)
-                    .json({ error: "Este usuário não existe" })
+        let classe = await Class.findOne({
+            where: {
+                id: class_id,
+                school_id
+            },
+        });
 
-            let classe = await Class.findOne({
-                where: {
-                    id: class_id,
-                    school_id
-                },
-            });
+        if (!classe)
+            return res.status(400)
+                .json({ error: 'Turma inexistente' });
 
-            if (!classe)
-                return res.status(400)
-                    .json({ error: 'Turma inexistente' });
-
-            await user.removeClass(classe);
-        }
+        await user.removeClass(classe);
 
         res.json({
             sucess: "Aluno excluído com sucesso"

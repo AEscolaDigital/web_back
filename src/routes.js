@@ -44,7 +44,7 @@ routes.post('/classes', ClassesController.store);
 routes.post('/classes/addMember/:class_id', ClassesController.storeMember);
 routes.post('/classes/addMembers/excelFile',  Multer.single("fileCSV"), ClassesController.storeExcelFile);
 routes.delete('/classes/:class_id', ClassesController.delete);
-routes.post('/classes/deleteMember/:class_id', ClassesController.deleteClassMember);
+routes.delete('/classes/deleteMember/:class_id/:user_id', ClassesController.deleteClassMember);
 
 routes.get('/disciplines', DisciplineController.index);
 routes.post('/disciplines', 

@@ -42,8 +42,6 @@ module.exports = {
         const { name, class_id } = req.body
         const { firebaseUrl } = req.file ? req.file : "";
 
-        console.log(req.file);
-
         const { user_id, role } = payloadjtw(req);
 
         const id = role === 'ROLE_ADMIN' ? [user_id,] : [, user_id];
