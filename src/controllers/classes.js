@@ -167,8 +167,6 @@ module.exports = {
 
         const { class_id } = req.body
 
-        console.log(class_id);
-
         const { file } = req;
         const { buffer } = file;
 

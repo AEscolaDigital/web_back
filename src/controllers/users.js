@@ -71,8 +71,6 @@ module.exports = {
 
             sendingEmail(email, password, name)
 
-            console.log(role_id);
-
             user = await User.create({
                 name,
                 email,
@@ -164,8 +162,6 @@ module.exports = {
 
         const user_id = payloadjtw(req).user_id;
 
-        console.log(firebaseUrl);
-
         try {
 
             if (!req.file) {
@@ -175,8 +171,6 @@ module.exports = {
             let user = await User.findOne({
                 where: { id: user_id }
             });
-
-            console.log(user);
 
             user.profile_picture = firebaseUrl;
 
@@ -188,7 +182,6 @@ module.exports = {
 
         } catch (error) {
 
-            console.log(error);
             res.status(500).send(error);
         }
 

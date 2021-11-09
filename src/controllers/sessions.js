@@ -38,7 +38,6 @@ module.exports = {
 					}]
 				});
 
-				console.log(user);
 				return user;
 			}
 
@@ -54,8 +53,6 @@ module.exports = {
 			return res.status(403)
 				.send({ error: "Usuário e/ou senha inválidos" });
 		}
-
-		console.log(user.role.name);
 
 		const token = jwt.sign({
 			user_id: user.id,

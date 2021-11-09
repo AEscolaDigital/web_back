@@ -11,12 +11,11 @@ module.exports = {
 
         let disciplines
 
-        console.log(role);
-
         if (!id[1]) {
             disciplines = await Discipline.findAll({
                 attributes:['id', 'name', 'image'],
                 where: { school_id: id[0] },
+                order: [["id", "DESC"]],
                 include:{
                     association: "school",
                     attributes: ['name']
@@ -42,6 +41,8 @@ module.exports = {
 
         const { name, class_id } = req.body
         const { firebaseUrl } = req.file ? req.file : "";
+
+        console.log(req.file);
 
         const { user_id, role } = payloadjtw(req);
 
@@ -121,7 +122,6 @@ module.exports = {
 
         }
 
-        console.log(discipline);
         if (!discipline)
             return res.status(400)
                 .send({ error: "Esta disciplina não existe" })
