@@ -17,6 +17,7 @@ module.exports = {
 
         const classes = await Class.findAndCountAll({
             attributes: ['id', 'name'],
+            order: [["id", "DESC"]],
             where: {
                 school_id,
             },
@@ -61,6 +62,8 @@ module.exports = {
             },
             include: [{
                 association: 'users',
+                order: [["id", "DESC"]],
+
                 // limit: 1,
                 // offset: parseInt(offset),
                 through: {

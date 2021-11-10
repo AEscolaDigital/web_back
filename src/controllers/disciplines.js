@@ -31,8 +31,6 @@ module.exports = {
             })
         }
 
-      
-
         res.json(disciplines);
 
     },
@@ -72,7 +70,6 @@ module.exports = {
                 })
 
             }
-
 
             if (discipline)
                 return res.status(400)
