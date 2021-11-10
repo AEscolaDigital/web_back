@@ -52,7 +52,7 @@ module.exports = {
         const { class_id, page_number } = req.params;
 
         const school_id = payloadjtw(req).user_id;
-        // const offset = page_number * 10 - 10;
+        const offset = page_number * 10 - 10;
 
         const classe = await Class.findAndCountAll({
             attributes: ['id', 'name'],
@@ -66,9 +66,9 @@ module.exports = {
 
                 // limit: 1,
                 // offset: parseInt(offset),
-                through: {
-                    attributes: []
-                }
+                // through: {
+                //     attributes: []
+                // }
             }],
         });
 

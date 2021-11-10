@@ -60,7 +60,7 @@ module.exports = {
 		},
 			auth.secret,
 			{
-				expiresIn: "1h"
+				expiresIn: "4h"
 			});
 
 		res.send({

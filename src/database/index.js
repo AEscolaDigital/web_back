@@ -11,6 +11,8 @@ const Role = require("../models/Role");
 const User = require("../models/User");
 const Classe = require("../models/Class");
 const Discipline = require("../models/Discipline");
+const Task = require("../models/Task");
+const Tasks_attachments = require("../models/Tasks_attachments");
 
 
 const connection = new Sequelize(dbConfig.url, dbConfig.config);
@@ -26,6 +28,8 @@ Role.init(connection);
 User.init(connection);
 Classe.init(connection);
 Discipline.init(connection);
+Task.init(connection);
+Tasks_attachments.init(connection);
 
 School.associate(connection.models);
 Address.associate(connection.models);
@@ -36,7 +40,8 @@ Prefixe.associate(connection.models);
 User.associate(connection.models);
 Classe.associate(connection.models);
 Discipline.associate(connection.models);
-
+Task.associate(connection.models);
+Tasks_attachments.associate(connection.models);
 
 
 module.exports = connection;
