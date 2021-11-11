@@ -13,13 +13,15 @@ module.exports = {
         const { page_number } = req.params;
 
         const offset = page_number * 10 - 10;
-        const school_id = payloadjtw(req).user_id;
+        const {school_id, user_id, role} = payloadjtw(req);
+
+        const schoolId = role === "ROLE_ADMIN" ? user_id : school_id
 
         const classes = await Class.findAndCountAll({
             attributes: ['id', 'name'],
             order: [["id", "DESC"]],
             where: {
-                school_id,
+                school_id: schoolId,
             },
             limit: 7,
             offset: parseInt(offset)

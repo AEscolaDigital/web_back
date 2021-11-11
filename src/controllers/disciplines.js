@@ -1,5 +1,6 @@
 const Discipline = require("../models/Discipline");
 const Class = require("../models/Class");
+const User = require("../models/User");
 
 const payloadjtw = require("../utils/payloadjtw");
 
@@ -7,25 +8,44 @@ module.exports = {
     async index(req, res) {
 
         const { user_id, role } = payloadjtw(req);
-        const id = role === 'ROLE_ADMIN' ? [user_id,] : [, user_id];
+        console.log(role);
 
+        const id = role === 'ROLE_ADMIN' ? [user_id,] : [, user_id];
+        const idTeacher = role === 'ROLE_TEACHER' ? true : false;
+        
         let disciplines
 
         if (!id[1]) {
             disciplines = await Discipline.findAll({
-                attributes:['id', 'name', 'image'],
+                attributes: ['id', 'name', 'image'],
                 where: { school_id: id[0] },
                 order: [["id", "DESC"]],
-                include:{
+                include: {
                     association: "school",
                     attributes: ['name']
                 }
             })
-        } else {
-            disciplines = await Discipline.findOne({
-                where: { user_id: id[1] },
-                include:{
-                    association: "users",
+        }
+
+        if (!id[0]) {
+            disciplines = await Discipline.findAll({
+                include: {
+                    association: 'users',
+                    attributes: ['id'],
+                    where: {
+                        id: id[1]
+                    }
+                }
+            })
+        }
+
+        if (idTeacher) {
+            disciplines = await Discipline.findAll({
+                attributes: ['id', 'name', 'image'],
+                where: { user_id },
+                order: [["id", "DESC"]],
+                include: {
+                    association: "school",
                     attributes: ['name']
                 }
             })
@@ -42,23 +62,28 @@ module.exports = {
 
         const { user_id, role } = payloadjtw(req);
 
-        const id = role === 'ROLE_ADMIN' ? [user_id,] : [, user_id];
+        const id = role === 'ROLE_ADMIN' ? [user_id, null] : [null, user_id];
 
         try {
 
             let classe = await Class.findOne({
-                where: { id: class_id }
+                where: { id: class_id },
+                include: {
+                    attributes: ["id"],
+                    association: "users",
+                    through: {
+                        attributes: [],
+                    }
+                }
             })
 
             if (!classe)
                 return res.status(400)
                     .send({ error: "Esta turma não existe" })
 
-
             let discipline
 
             if (!id[1]) {
-
                 discipline = await Discipline.findOne({
                     where: { name, school_id: id[0] }
                 })
@@ -83,6 +108,27 @@ module.exports = {
                 school_id: id[0]
             });
 
+            const users_id = []
+
+            await classe.users.forEach(user => {
+                const user_id = user.id;
+
+                users_id.push({
+                    user_id
+                })
+            })
+
+            for await (let { user_id } of users_id) {
+
+                let user = await User.findOne({
+                    where: {
+                        id: user_id
+                    }
+                })
+
+                await user.addDiscipline(discipline);
+            }
+
             res.status(201).send({
                 id: discipline.id,
                 name: discipline.name,
@@ -101,13 +147,13 @@ module.exports = {
         const { id } = req.params;
 
         let { user_id, role } = payloadjtw(req)
-        user_id = role === 'ROLE_ADMIN' ? [user_id, ''] : [ '', user_id];
+        user_id = role === 'ROLE_ADMIN' ? [user_id, ''] : ['', user_id];
 
         let discipline
 
         if (!user_id[1]) {
             discipline = await Discipline.findOne({
-                where: {  school_id: user_id[0], id }
+                where: { school_id: user_id[0], id }
             })
 
         } else {

@@ -7,6 +7,7 @@ class Discipline extends Model {
             {  
                 name: DataTypes.STRING,
                 image: DataTypes.STRING,
+                user_id: DataTypes.INTEGER
             },
             {
                sequelize: connection,
@@ -19,6 +20,9 @@ class Discipline extends Model {
         this.belongsTo(models.School, { foreignKey: 'school_id', as: 'school' })
 
         this.belongsTo(models.Class, { foreignKey: 'class_id', as: 'class' })
+
+        this.belongsToMany(models.User, { foreignKey: 'discipline_id', through: 'disciplines_users', as: 'users' });
+
 
     }
 }

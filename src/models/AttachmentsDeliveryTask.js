@@ -1,16 +1,15 @@
 const { Model, DataTypes } = require("sequelize");
 
-class Tasks_attachments extends Model {
+class AttachmentsDeliveryTask extends Model {
      
     static init(connection){
         super.init(
             {  
+                delivery_date: DataTypes.DATE,
                 link: DataTypes.STRING,
                 link1: DataTypes.STRING,
-                link2: DataTypes.STRING,
                 file: DataTypes.STRING,
                 file1: DataTypes.STRING,
-                file2: DataTypes.STRING,
             },
             {
                sequelize: connection,
@@ -20,8 +19,11 @@ class Tasks_attachments extends Model {
 
     static associate(models) {
         this.belongsTo(models.Task, { foreignKey: 'task_id', as: 'task' })
+
+        this.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' })
+
     }
      
 }
 
-module.exports = Tasks_attachments;
+module.exports = AttachmentsDeliveryTask;

@@ -7,7 +7,7 @@ const SchooolController = require('./controllers/schools');
 const UserController = require('./controllers/users');
 const ClassesController = require('./controllers/classes');
 const DisciplineController = require('./controllers/disciplines');
-const TakController = require('./controllers/Tasks');
+const TakController = require('./controllers/tasks');
 
 
 const uploadImage = require('./services/firebase');

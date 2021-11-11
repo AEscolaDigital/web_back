@@ -23,7 +23,8 @@ module.exports = {
 					include: [{
 						association: 'role',
 					}]
-				});
+				});				
+
 				return user;
 			}
 
@@ -55,6 +56,7 @@ module.exports = {
 		}
 
 		const token = jwt.sign({
+			school_id: user.school_id,
 			user_id: user.id,
 			role: user.role.name
 		},

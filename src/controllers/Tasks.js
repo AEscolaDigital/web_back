@@ -1,5 +1,5 @@
 const Task = require('../models/Task');
-const TaskAttachments = require('../models/Tasks_attachments');
+const TaskAttachments = require('../models/TasksAttachments');
 
 
 module.exports = {
@@ -7,7 +7,11 @@ module.exports = {
 
         const { discipline_id } = req.params;
 
-        task =  await Task.findAll()
+        task =  await Task.findAll({
+            where: {
+                discipline_id
+            }
+        })
 
         // const { user_id, role } = payloadjtw(req);
         // const id = role === 'ROLE_ADMIN' ? [user_id,] : [, user_id];
