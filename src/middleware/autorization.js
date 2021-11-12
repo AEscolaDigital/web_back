@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization)
-        return res.status(401).send({ error: "Token não informado" });
+    return res.status(401).send({ error: "Token não informado" });
 
   const [Bearer, token] = authorization.split(" ");
 
@@ -15,7 +15,10 @@ module.exports = (req, res, next) => {
   try {
 
     const payload = jwt.verify(token, auth.secret);
-    req.studentId = payload.studentId;
+    req.user_id = payload.user_id;
+    req.role = payload.role;
+    req.school_id = payload.school_id;
+
     return next();
 
   } catch (error) {

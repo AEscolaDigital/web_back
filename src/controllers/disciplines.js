@@ -2,12 +2,10 @@ const Discipline = require("../models/Discipline");
 const Class = require("../models/Class");
 const User = require("../models/User");
 
-const payloadjtw = require("../utils/payloadjtw");
-
 module.exports = {
     async index(req, res) {
 
-        const { user_id, role } = payloadjtw(req);
+        const { user_id, role } = req
 
         const id = role === 'ROLE_ADMIN' ? [user_id,] : [, user_id];
         const idTeacher = role === 'ROLE_TEACHER' ? true : false;
@@ -58,8 +56,7 @@ module.exports = {
 
         const { name, class_id } = req.body
         const { firebaseUrl } = req.file ? req.file : "";
-
-        const { user_id, role } = payloadjtw(req);
+        const { user_id, role } = req
 
         const id = role === 'ROLE_ADMIN' ? [user_id, null] : [null, user_id];
 
@@ -144,8 +141,8 @@ module.exports = {
     async delete(req, res) {
 
         const { id } = req.params;
+        const { user_id, role } = req
 
-        let { user_id, role } = payloadjtw(req)
         user_id = role === 'ROLE_ADMIN' ? [user_id, ''] : ['', user_id];
 
         let discipline

@@ -12,7 +12,7 @@ module.exports = {
 
         const { user_id } = payloadjtw(req);
 
-        const task = await Task.findAll({
+        const tasks = await Task.findAll({
             where:{
                 discipline_id 
             },
@@ -25,7 +25,19 @@ module.exports = {
             },
         })
 
-        res.json(task);
+        tasks.forEach(task => {
+           let data = task.createdAt;
+
+            let date = String(data.getDate()).padStart(2, '0');
+            let month = String((data.getMonth() + 1)).padStart(2, '0');
+            let fullYear = data.getFullYear();
+            
+            task.createdAt = `${date}.${month}.${fullYear}`
+
+        })
+
+
+        res.json(tasks);
 
     },
 
