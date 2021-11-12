@@ -23,7 +23,6 @@ class Discipline extends Model {
 
         this.belongsToMany(models.User, { foreignKey: 'discipline_id', through: 'disciplines_users', as: 'users' });
 
-
     }
 }
 

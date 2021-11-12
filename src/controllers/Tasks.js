@@ -1,42 +1,29 @@
+const Discipline = require('../models/Discipline');
 const Task = require('../models/Task');
 const TaskAttachments = require('../models/TasksAttachments');
+const User = require('../models/User');
 
+const payloadjtw = require("../utils/payloadjtw");
 
 module.exports = {
     async index(req, res) {
 
         const { discipline_id } = req.params;
 
-        task =  await Task.findAll({
-            where: {
-                discipline_id
-            }
+        const { user_id } = payloadjtw(req);
+
+        const task = await Task.findAll({
+            where:{
+                discipline_id 
+            },
+            include: {
+                association: 'users',
+                attributes: ['id'],
+                where:{
+                    id: user_id,
+                },
+            },
         })
-
-        // const { user_id, role } = payloadjtw(req);
-        // const id = role === 'ROLE_ADMIN' ? [user_id,] : [, user_id];
-
-        // let disciplines
-
-        // if (!id[1]) {
-        //     disciplines = await Discipline.findAll({
-        //         attributes:['id', 'name', 'image'],
-        //         where: { school_id: id[0] },
-        //         order: [["id", "DESC"]],
-        //         include:{
-        //             association: "school",
-        //             attributes: ['name']
-        //         }
-        //     })
-        // } else {
-        //     disciplines = await Discipline.findOne({
-        //         where: { user_id: id[1] },
-        //         include:{
-        //             association: "users",
-        //             attributes: ['name']
-        //         }
-        //     })
-        // }
 
         res.json(task);
 
@@ -59,12 +46,29 @@ module.exports = {
             file2
 
         } = req.body;
-        
+
 
         try {
 
+            let discipline = await Discipline.findOne({
+                where: { id: discipline_id },
+                attributes: ['id'],
+                include: {
+                    association: 'users',
+                    attributes: ["id"],
+                    through: {
+                        attributes: [],
+                    }
+                }
+            })
+
+            if (!discipline) {
+                return res.status(400)
+                    .send({ error: "Esta disciplina, não existe" })
+            }
+
             let task = await Task.findOne({
-                where: { 
+                where: {
                     name,
                     discipline_id
                 }
@@ -74,7 +78,15 @@ module.exports = {
                 return res.status(400)
                     .send({ error: "Esta tarefa já foi criado, para essa disciplina" })
             }
-                
+
+            const users_id = []
+
+            await discipline.users.forEach(user => {
+                const user_id = user.id;
+                users_id.push({
+                    user_id
+                })
+            })
 
             task = await Task.create({
                 name,
@@ -84,7 +96,6 @@ module.exports = {
                 discipline_id
             });
 
-            
             await TaskAttachments.create({
                 link,
                 link1,
@@ -94,14 +105,20 @@ module.exports = {
                 file2,
             })
 
+            for await (let { user_id } of users_id) {
+
+                let user = await User.findOne({
+                    where: {
+                        id: user_id
+                    }
+                })
+
+                await user.addTask(task);
+            }
+
             res.status(201).send({
                 sucess: "Tarefa criada com sucesso"
             });
-
-            return task
-
-
-
 
         } catch (error) {
             console.log('Tasks: ' + error);

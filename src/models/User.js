@@ -26,7 +26,8 @@ class User extends Model {
 
         this.belongsToMany(models.Discipline, { foreignKey: 'user_id', through: 'disciplines_users', as: 'discipline'});
 
-        // this.hasOne(models.Discipline, { foreignKey: 'user_id', as: 'discipline' });
+        this.belongsToMany(models.Task, { foreignKey: 'user_id', through: 'tasks_users', as: 'task'});
+
     }
 }
 

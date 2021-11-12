@@ -8,7 +8,6 @@ module.exports = {
     async index(req, res) {
 
         const { user_id, role } = payloadjtw(req);
-        console.log(role);
 
         const id = role === 'ROLE_ADMIN' ? [user_id,] : [, user_id];
         const idTeacher = role === 'ROLE_TEACHER' ? true : false;
@@ -44,10 +43,10 @@ module.exports = {
                 attributes: ['id', 'name', 'image'],
                 where: { user_id },
                 order: [["id", "DESC"]],
-                include: {
-                    association: "school",
-                    attributes: ['name']
-                }
+                //include: {
+                    //association: "users",
+                    // attributes: ['name']
+                //}
             })
         }
 
