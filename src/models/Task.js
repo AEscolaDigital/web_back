@@ -9,7 +9,6 @@ class Task extends Model {
                 description: DataTypes.STRING,
                 date_delivery: DataTypes.DATE,
                 spots: DataTypes.INTEGER,
-
             },
             {
                sequelize: connection,

@@ -68,6 +68,7 @@ module.exports = {
 		res.send({
 			email: user.email,
 			name: user.name,
+			role: user.role.name,
 			token
 		})
 	}

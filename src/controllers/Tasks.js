@@ -10,34 +10,51 @@ module.exports = {
 
         const { discipline_id } = req.params;
 
-        const { user_id } = payloadjtw(req);
-
         const tasks = await Task.findAll({
-            where:{
-                discipline_id 
+            attributes: ['id', 'name', 'date_delivery'],
+            where: {
+                discipline_id
             },
-            include: {
-                association: 'users',
-                attributes: ['id'],
-                where:{
-                    id: user_id,
-                },
-            },
+            order: [["id", "DESC"]],
         })
 
         tasks.forEach(task => {
-           let data = task.createdAt;
+
+            let data = task.date_delivery;
 
             let date = String(data.getDate()).padStart(2, '0');
             let month = String((data.getMonth() + 1)).padStart(2, '0');
             let fullYear = data.getFullYear();
-            
-            task.createdAt = `${date}.${month}.${fullYear}`
 
-        })
+            console.log(`${date}.${month}.${fullYear}`);
+            task.dataValues.date_delivery = 
+            `${date}.${month}.${fullYear}`
 
+        });
 
         res.json(tasks);
+
+    },
+
+    async indexListUserTask(req, res) {
+
+        const { task_id } = req.params;
+
+        const tasks = await Task.findAll({
+            attributes: [],
+            where: {
+                id: task_id,
+            },
+            include: {
+                association: 'users',
+                attributes: ['id', 'profile_picture', 'name'],
+                through:{
+                    attributes: []
+                }
+            },
+        });
+
+        res.json(tasks[0].users);
 
     },
 
@@ -91,14 +108,6 @@ module.exports = {
                     .send({ error: "Esta tarefa já foi criado, para essa disciplina" })
             }
 
-            const users_id = []
-
-            await discipline.users.forEach(user => {
-                const user_id = user.id;
-                users_id.push({
-                    user_id
-                })
-            })
 
             task = await Task.create({
                 name,
@@ -115,6 +124,15 @@ module.exports = {
                 file,
                 file1,
                 file2,
+            })
+
+            const users_id = []
+
+            await discipline.users.forEach(user => {
+                const user_id = user.id;
+                users_id.push({
+                    user_id
+                })
             })
 
             for await (let { user_id } of users_id) {
