@@ -12,19 +12,26 @@ const TakController = require('./controllers/tasks');
 
 
 const uploadImage = require('./services/firebase');
+const uploadTask = require('./services/firebaseTask');
 
 const multer = require('multer');
+const Taskdelivery = require('./controllers/Taskdelivery');
 
 const Multer = multer({
     storange: multer.memoryStorage(),
     limits: 1024 * 1024, // 1MB
 });
 
+const uploadfields = Multer.fields([
+    { name: 'file', maxCount: 1 },
+    { name: 'file1', maxCount: 1 },
+    { name: 'file2', maxCount: 1 },
+]);
+
 //Rotas públicas
 routes.post('/sessions', SessionController.store);
 
 routes.post("/schools", SchooolController.store);
-
 
 
 routes.use(authMiddleware);
@@ -41,10 +48,10 @@ routes.put('/users',
     UserController.update);
 
 routes.get('/classes/:page_number',
-    is(["ROLE_ADMIN"]),
+    is(["ROLE_ADMIN", "ROLE_TEACHER"]),
     ClassesController.index);
 routes.get('/classes/search/:search',
-    is(["ROLE_ADMIN"]),
+    is(["ROLE_ADMIN", "ROLE_TEACHER"]),
     ClassesController.indexSearch);
 routes.get('/classes/:class_id/page/:page_number',
     is(["ROLE_ADMIN"]),
@@ -67,7 +74,6 @@ routes.delete('/classes/deleteMember/:class_id/:user_id',
     ClassesController.deleteClassMember);
 
 routes.get('/disciplines',
-    is(["ROLE_ADMIN", "ROLE_TEACHER"]),
     DisciplineController.index);
 routes.post('/disciplines',
     Multer.single("image"),
@@ -79,16 +85,28 @@ routes.delete('/disciplines/:id',
     DisciplineController.delete);
 
 
-routes.get('/tasks/:discipline_id',
-    is(["ROLE_ADMIN", "ROLE_TEACHER"]),
+routes.get('/tasks/list/:discipline_id',
     TakController.index);
+routes.get('/tasks/:task_id',
+    TakController.indexListTask);
 routes.get('/tasks/users/:task_id',
     is(["ROLE_ADMIN", "ROLE_TEACHER"]),
     TakController.indexListUserTask);
 routes.post('/tasks/:discipline_id',
-    Multer.single("image"),
-    is(["ROLE_ADMIN"]),
+    is(["ROLE_ADMIN", "ROLE_TEACHER"]),
+    uploadfields,
+    uploadTask,
     TakController.store);
+
+routes.get('/taskdelivery',
+    is(["ROLE_ADMIN", "ROLE_TEACHER"]),
+    Taskdelivery.index);
+routes.post('/taskdelivery',
+    uploadfields,
+    Taskdelivery.store);
+// routes.put('/taskdelivery',
+//     uploadfields,
+//     Taskdelivery.update);
 
 
 

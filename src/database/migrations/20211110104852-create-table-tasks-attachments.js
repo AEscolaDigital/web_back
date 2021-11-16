@@ -3,22 +3,22 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.createTable("attachments_delivery_task", {
+    queryInterface.createTable("tasks_attachments", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       },
-      delivery_date: {
-        type: Sequelize.DATE,
-        allowNull: true,
-      },
       link: {
         type: Sequelize.STRING,
         allowNull: true,
       },
       link1: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      link2: {
         type: Sequelize.STRING,
         allowNull: true,
       },
@@ -30,19 +30,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      task_id:{
-        type: Sequelize.INTEGER,
+      file2: {
+        type: Sequelize.STRING,
         allowNull: true,
-        references: { model: 'tasks', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
-      user_id:{
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: { model: 'users', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
       created_at: {
         type: Sequelize.DATE,
@@ -56,6 +46,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    queryInterface.dropTable("attachments_delivery_task");
+    queryInterface.dropTable("tasks_attachments");
   }
 };

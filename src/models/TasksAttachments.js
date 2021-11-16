@@ -17,11 +17,7 @@ class TasksAttachments extends Model {
             }
         );
     }
-
-    static associate(models) {
-        this.belongsTo(models.Task, { foreignKey: 'task_id', as: 'task' })
-    }
-     
+ 
 }
 
 module.exports = TasksAttachments;

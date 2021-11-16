@@ -1,18 +1,22 @@
 const { Model, DataTypes } = require("sequelize");
 
-class AttachmentsDeliveryTask extends Model {
+class TaskDelivery extends Model {
      
     static init(connection){
         super.init(
             {  
                 delivery_date: DataTypes.DATE,
+                status: DataTypes.INTEGER,
                 link: DataTypes.STRING,
                 link1: DataTypes.STRING,
                 file: DataTypes.STRING,
                 file1: DataTypes.STRING,
+                spots: DataTypes.INTEGER,
+                comment: DataTypes.STRING
             },
             {
                sequelize: connection,
+               tableName: 'task_delivery',
             }
         );
     }
@@ -26,4 +30,4 @@ class AttachmentsDeliveryTask extends Model {
      
 }
 
-module.exports = AttachmentsDeliveryTask;
+module.exports = TaskDelivery;

@@ -33,6 +33,13 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
+      task_attachments_id:{
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: { model: 'tasks_attachments', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false

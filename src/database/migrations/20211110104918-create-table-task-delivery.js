@@ -3,11 +3,19 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.createTable("tasks_attachments", {
+    queryInterface.createTable("task_delivery", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+        allowNull: false,
+      },
+      delivery_date: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      status: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       link: {
@@ -15,10 +23,6 @@ module.exports = {
         allowNull: true,
       },
       link1: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      link2: {
         type: Sequelize.STRING,
         allowNull: true,
       },
@@ -30,14 +34,25 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      file2: {
+      spots: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      comment: {
         type: Sequelize.STRING,
         allowNull: true,
       },
       task_id:{
         type: Sequelize.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: { model: 'tasks', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      user_id:{
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: 'users', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
@@ -53,6 +68,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    queryInterface.dropTable("tasks_attachments");
+    queryInterface.dropTable("task_delivery");
   }
 };

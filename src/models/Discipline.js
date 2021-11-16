@@ -21,6 +21,8 @@ class Discipline extends Model {
 
         this.belongsTo(models.Class, { foreignKey: 'class_id', as: 'class' })
 
+        this.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' })
+
         this.belongsToMany(models.User, { foreignKey: 'discipline_id', through: 'disciplines_users', as: 'users' });
 
     }

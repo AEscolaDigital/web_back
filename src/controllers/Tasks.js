@@ -26,9 +26,55 @@ module.exports = {
             let month = String((data.getMonth() + 1)).padStart(2, '0');
             let fullYear = data.getFullYear();
 
-            console.log(`${date}.${month}.${fullYear}`);
+            task.dataValues.date_delivery =
+                `${date}.${month}.${fullYear}`
+
+        });
+
+        res.json(tasks);
+
+    },
+    async indexListTask(req, res) {
+
+        const { task_id } = req.params;
+
+        const tasks = await Task.findAll({
+            attributes: ['id', 'name', 'description','date_delivery', 'spots', 'created_at'],
+            where: {
+                id: task_id,
+            },
+            include: [
+                {
+                    association: 'discipline',
+                    attributes: ['user_id', 'school_id'],
+                    include: [
+                        {
+                            association: 'user',
+                            attributes: ['name', 'profile_picture'],
+                        },
+                        {
+                            association: 'school',
+                            attributes: ['name', 'profile_picture'],
+                        }
+                    ]
+                },
+                {
+                    association: 'tasksAttachments',
+                    attributes: ['link', 'link1', 'link2', 'file', 'file1', 'file2']
+                }
+            ],
+        })
+
+        tasks.forEach(task => {
+
+            let dataDelivery = task.date_delivery;
+            let dataCreatedAt = task.dataValues.created_at;
+
             task.dataValues.date_delivery = 
-            `${date}.${month}.${fullYear}`
+            dataDelivery.toLocaleDateString("pt-BR").split('/').join('.');
+
+            task.dataValues.created_at = 
+            dataCreatedAt.toLocaleDateString("pt-BR").split('/').join('.');
 
         });
 
@@ -48,7 +94,7 @@ module.exports = {
             include: {
                 association: 'users',
                 attributes: ['id', 'profile_picture', 'name'],
-                through:{
+                through: {
                     attributes: []
                 }
             },
@@ -70,12 +116,13 @@ module.exports = {
             link,
             link1,
             link2,
-            file,
-            file1,
-            file2
-
         } = req.body;
 
+        const files = req.files;
+
+        const file = files.file ? files.file[0].firebaseUrlFile : null;
+        const file1 = files.file1 ? files.file1[0].firebaseUrlFile1 : null;
+        const file2 = files.file2 ? files.file2[0].firebaseUrlFile2 : null;
 
         try {
 
@@ -108,16 +155,7 @@ module.exports = {
                     .send({ error: "Esta tarefa já foi criado, para essa disciplina" })
             }
 
-
-            task = await Task.create({
-                name,
-                description,
-                date_delivery,
-                spots,
-                discipline_id
-            });
-
-            await TaskAttachments.create({
+            const taskAttachments = await TaskAttachments.create({
                 link,
                 link1,
                 link2,
@@ -125,6 +163,15 @@ module.exports = {
                 file1,
                 file2,
             })
+
+            await Task.create({
+                name,
+                description,
+                date_delivery,
+                spots,
+                discipline_id,
+                task_attachments_id: taskAttachments.id
+            });
 
             const users_id = []
 

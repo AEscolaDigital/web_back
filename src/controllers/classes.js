@@ -5,21 +5,23 @@ const { Readable } = require('stream');
 const readline = require('readline');
 const { Op } = require('sequelize');
 const payloadjtw = require("../utils/payloadjtw");
+const { resolveAny } = require('dns');
 
 module.exports = {
 
     async index(req, res) {
 
         const { page_number } = req.params;
+        let { user_id, school_id, role } = req
 
         const offset = page_number * 10 - 10;
-        const school_id = payloadjtw(req).user_id;
+        school_id = role === "ROLE_ADMIN" ? user_id : school_id
 
         const classes = await Class.findAndCountAll({
             attributes: ['id', 'name'],
             order: [["id", "DESC"]],
             where: {
-                school_id,
+                school_id
             },
             limit: 7,
             offset: parseInt(offset)
@@ -31,8 +33,9 @@ module.exports = {
     async indexSearch(req, res) {
 
         const { search } = req.params;
+        let { user_id, school_id, role } = req
 
-        const school_id = payloadjtw(req).user_id;
+        school_id = role === "ROLE_ADMIN" ? user_id : school_id
 
         const classes = await Class.findAll({
             attributes: ['id', 'name'],

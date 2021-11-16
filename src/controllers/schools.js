@@ -137,8 +137,8 @@ module.exports = {
             res.status(201).send({
                 id: school.id,
                 name: school.name,
-                name: school.name_school,
                 email: school.email,
+                role: "ROLE_ADMIN",
                 token
             });
 

@@ -55,6 +55,7 @@ module.exports = {
 				.send({ error: "Usuário e/ou senha inválidos" });
 		}
 
+
 		const token = jwt.sign({
 			school_id: user.school_id,
 			user_id: user.id,
