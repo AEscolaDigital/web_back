@@ -42,68 +42,29 @@ routes.get('/schools/:school_id/', SchooolController.index);
 routes.post('/users', UserController.store);
 routes.post('/users/excelFile', Multer.single("fileCSV"), UserController.storeExcelFile);
 routes.get('/users/page/:page_number', UserController.index);
-routes.put('/users',
-    Multer.single("image"),
-    uploadImage,
-    UserController.update);
+routes.put('/users', Multer.single("image"), uploadImage, UserController.update);
 
-routes.get('/classes/:page_number',
-    is(["ROLE_ADMIN", "ROLE_TEACHER"]),
-    ClassesController.index);
-routes.get('/classes/search/:search',
-    is(["ROLE_ADMIN", "ROLE_TEACHER"]),
-    ClassesController.indexSearch);
-routes.get('/classes/:class_id/page/:page_number',
-    is(["ROLE_ADMIN"]),
-    ClassesController.indexUsers);
-routes.post('/classes',
-    is(["ROLE_ADMIN"]),
-    ClassesController.store);
-routes.post('/classes/addMember/:class_id',
-    is(["ROLE_ADMIN"]),
-    ClassesController.storeMember);
-routes.post('/classes/addMembers/excelFile',
-    is(["ROLE_ADMIN"]),
-    Multer.single("fileCSV"),
-    ClassesController.storeExcelFile);
-routes.delete('/classes/:class_id',
-    is(["ROLE_ADMIN"]),
-    ClassesController.delete);
-routes.delete('/classes/deleteMember/:class_id/:user_id',
-    is(["ROLE_ADMIN"]),
-    ClassesController.deleteClassMember);
+routes.get('/classes/:page_number', is(["ROLE_ADMIN", "ROLE_TEACHER"]), ClassesController.index);
+routes.get('/classes/search/:search', is(["ROLE_ADMIN", "ROLE_TEACHER"]), ClassesController.indexSearch);
+routes.get('/classes/:class_id/page/:page_number', is(["ROLE_ADMIN"]), ClassesController.indexUsers);
+routes.post('/classes', is(["ROLE_ADMIN"]), ClassesController.store);
+routes.post('/classes/addMember/:class_id', is(["ROLE_ADMIN"]), ClassesController.storeMember);
+routes.post('/classes/addMembers/excelFile', is(["ROLE_ADMIN"]), Multer.single("fileCSV"), ClassesController.storeExcelFile);
+routes.delete('/classes/:class_id', is(["ROLE_ADMIN"]), ClassesController.delete);
+routes.delete('/classes/deleteMember/:class_id/:user_id', is(["ROLE_ADMIN"]), ClassesController.deleteClassMember);
 
-routes.get('/disciplines',
-    DisciplineController.index);
-routes.post('/disciplines',
-    Multer.single("image"),
-    is(["ROLE_ADMIN", "ROLE_TEACHER"]),
-    uploadImage,
-    DisciplineController.store);
-routes.delete('/disciplines/:id',
-    is(["ROLE_ADMIN", "ROLE_TEACHER"]),
-    DisciplineController.delete);
+routes.get('/disciplines',DisciplineController.index);
+routes.post('/disciplines', Multer.single("image"), is(["ROLE_ADMIN", "ROLE_TEACHER"]), uploadImage, DisciplineController.store);
+routes.delete('/disciplines/:id', is(["ROLE_ADMIN", "ROLE_TEACHER"]), DisciplineController.delete);
 
 
-routes.get('/tasks/list/:discipline_id',
-    TakController.index);
-routes.get('/tasks/:task_id',
-    TakController.indexListTask);
-routes.get('/tasks/users/:task_id',
-    is(["ROLE_ADMIN", "ROLE_TEACHER"]),
-    TakController.indexListUserTask);
-routes.post('/tasks/:discipline_id',
-    is(["ROLE_ADMIN", "ROLE_TEACHER"]),
-    uploadfields,
-    uploadTask,
-    TakController.store);
+routes.get('/tasks/list/:discipline_id', TakController.index);
+routes.get('/tasks/:task_id', TakController.indexListTask);
+routes.get('/tasks/users/:task_id', is(["ROLE_ADMIN", "ROLE_TEACHER"]), TakController.indexListUserTask);
+routes.post('/tasks/:discipline_id', is(["ROLE_ADMIN", "ROLE_TEACHER"]), uploadfields, uploadTask, TakController.store);
 
-routes.get('/taskdelivery',
-    is(["ROLE_ADMIN", "ROLE_TEACHER"]),
-    Taskdelivery.index);
-routes.post('/taskdelivery',
-    uploadfields,
-    Taskdelivery.store);
+routes.get('/taskdelivery', is(["ROLE_ADMIN", "ROLE_TEACHER"]), Taskdelivery.index);
+routes.post('/taskdelivery', uploadfields, Taskdelivery.store);
 // routes.put('/taskdelivery',
 //     uploadfields,
 //     Taskdelivery.update);

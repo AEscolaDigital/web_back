@@ -164,7 +164,7 @@ module.exports = {
                 file2,
             })
 
-            await Task.create({
+            task = await Task.create({
                 name,
                 description,
                 date_delivery,
