@@ -63,7 +63,8 @@ routes.get('/tasks/:task_id', TakController.indexListTask);
 routes.get('/tasks/users/:task_id', is(["ROLE_ADMIN", "ROLE_TEACHER"]), TakController.indexListUserTask);
 routes.post('/tasks/:discipline_id', is(["ROLE_ADMIN", "ROLE_TEACHER"]), uploadfields, uploadTask, TakController.store);
 
-routes.get('/taskdelivery/user_id/:user_id/:task_id', is(["ROLE_ADMIN", "ROLE_TEACHER"]), Taskdelivery.index);
+
+routes.get('/taskdelivery/user_id/:user_id/task_id/:task_id', is(["ROLE_ADMIN", "ROLE_TEACHER"]), Taskdelivery.index);
 routes.post('/taskdelivery', uploadfields, Taskdelivery.store);
 // routes.put('/taskdelivery',
 //     uploadfields,

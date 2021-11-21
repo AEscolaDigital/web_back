@@ -173,6 +173,8 @@ module.exports = {
                 task_attachments_id: taskAttachments.id
             });
 
+            console.log(task);
+
             const users_id = []
 
             await discipline.users.forEach(user => {
