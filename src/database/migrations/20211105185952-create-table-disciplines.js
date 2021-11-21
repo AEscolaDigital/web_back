@@ -18,6 +18,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      teacher_name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       class_id: {
         type: Sequelize.INTEGER,
         allowNull: false,

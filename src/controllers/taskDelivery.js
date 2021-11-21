@@ -6,7 +6,7 @@ module.exports = {
 
     async index(req, res) {
 
-        const { user_id, task_id } = req.body;
+        const { user_id, task_id } = req.params;
 
         const taskDelivery = await TaskDelivery.findAll({
            where:{

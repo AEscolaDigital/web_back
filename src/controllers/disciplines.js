@@ -1,6 +1,7 @@
 const Discipline = require("../models/Discipline");
 const Class = require("../models/Class");
 const User = require("../models/User");
+const School = require("../models/School");
 
 module.exports = {
     async index(req, res) {
@@ -14,31 +15,32 @@ module.exports = {
 
         if (!id[1]) {
             disciplines = await Discipline.findAll({
-                attributes: ['id', 'name', 'image'],
+                attributes: ['id', 'name', 'image', 'teacher_name'],
                 where: { school_id: id[0] },
                 order: [["id", "DESC"]],
-                include: {
-                    association: "school",
-                    attributes: ['name']
-                }
             })
         }
 
         if (!id[0]) {
-            disciplines = await Discipline.findAll({
+            discipline = await Discipline.findAll({
+                attributes: ['id', 'name', 'image', 'teacher_name'],
                 include: {
                     association: 'users',
                     attributes: ['id'],
                     where: {
                         id: id[1]
+                    },
+                    through:{
+                        attributes: []
                     }
                 }
             })
+
         }
 
         if (idTeacher) {
             disciplines = await Discipline.findAll({
-                attributes: ['id', 'name', 'image'],
+                attributes: ['id', 'name', 'image', 'teacher_name'],
                 where: { user_id },
                 order: [["id", "DESC"]],
                 //include: {
@@ -96,10 +98,21 @@ module.exports = {
                 return res.status(400)
                     .send({ error: "Esta disciplina já está criada" })
 
+            let teacher
+
+            if (!id[1]) {
+                teacher = await School.findByPk(id[0]);
+            } else {
+                teacher = await User.findByPk(id[1]);
+            }      
+
+            console.log(teacher.name);
+
             discipline = await Discipline.create({
                 name,
                 class_id,
                 image: firebaseUrl,
+                teacherName: teacher.name,
                 user_id: id[1],
                 school_id: id[0]
             });

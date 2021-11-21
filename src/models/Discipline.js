@@ -7,7 +7,8 @@ class Discipline extends Model {
             {  
                 name: DataTypes.STRING,
                 image: DataTypes.STRING,
-                user_id: DataTypes.INTEGER
+                user_id: DataTypes.INTEGER,
+                teacherName: DataTypes.STRING
             },
             {
                sequelize: connection,
