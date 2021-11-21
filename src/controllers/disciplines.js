@@ -11,7 +11,7 @@ module.exports = {
         const id = role === 'ROLE_ADMIN' ? [user_id,] : [, user_id];
         const idTeacher = role === 'ROLE_TEACHER' ? true : false;
         
-        let disciplines
+        let disciplines = []
 
         if (!id[1]) {
             disciplines = await Discipline.findAll({
@@ -22,11 +22,11 @@ module.exports = {
         }
 
         if (!id[0]) {
-            discipline = await Discipline.findAll({
+            disciplines = await Discipline.findAll({
                 attributes: ['id', 'name', 'image', 'teacher_name'],
                 include: {
                     association: 'users',
-                    attributes: ['id'],
+                    attributes: [],
                     where: {
                         id: id[1]
                     },
