@@ -15,7 +15,9 @@ module.exports = {
             where: {
                 discipline_id
             },
-            order: [["id", "DESC"]],
+            order: [
+                ["id", "DESC"]
+            ],
         })
 
         tasks.forEach(task => {
@@ -39,16 +41,14 @@ module.exports = {
         const { task_id } = req.params;
 
         const tasks = await Task.findAll({
-            attributes: ['id', 'name', 'description','date_delivery', 'spots', 'created_at'],
+            attributes: ['id', 'name', 'description', 'date_delivery', 'spots', 'created_at'],
             where: {
                 id: task_id,
             },
-            include: [
-                {
+            include: [{
                     association: 'discipline',
                     attributes: ['user_id', 'school_id'],
-                    include: [
-                        {
+                    include: [{
                             association: 'user',
                             attributes: ['name', 'profile_picture'],
                         },
@@ -70,11 +70,11 @@ module.exports = {
             let dataDelivery = task.date_delivery;
             let dataCreatedAt = task.dataValues.created_at;
 
-            task.dataValues.date_delivery = 
-            dataDelivery.toLocaleDateString("pt-BR").split('/').join('.');
+            task.dataValues.date_delivery =
+                dataDelivery.toLocaleDateString("pt-BR").split('/').join('.');
 
-            task.dataValues.created_at = 
-            dataCreatedAt.toLocaleDateString("pt-BR").split('/').join('.');
+            task.dataValues.created_at =
+                dataCreatedAt.toLocaleDateString("pt-BR").split('/').join('.');
 
         });
 
@@ -173,8 +173,6 @@ module.exports = {
                 task_attachments_id: taskAttachments.id
             });
 
-            console.log(task);
-
             const users_id = []
 
             await discipline.users.forEach(user => {
@@ -184,7 +182,8 @@ module.exports = {
                 })
             })
 
-            for await (let { user_id } of users_id) {
+            for await (let { user_id }
+                of users_id) {
 
                 let user = await User.findOne({
                     where: {

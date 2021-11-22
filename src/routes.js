@@ -53,7 +53,7 @@ routes.post('/classes/addMembers/excelFile', is(["ROLE_ADMIN"]), Multer.single("
 routes.delete('/classes/:class_id', is(["ROLE_ADMIN"]), ClassesController.delete);
 routes.delete('/classes/deleteMember/:class_id/:user_id', is(["ROLE_ADMIN"]), ClassesController.deleteClassMember);
 
-routes.get('/disciplines',DisciplineController.index);
+routes.get('/disciplines', DisciplineController.index);
 routes.post('/disciplines', Multer.single("image"), is(["ROLE_ADMIN", "ROLE_TEACHER"]), uploadImage, DisciplineController.store);
 routes.delete('/disciplines/:id', is(["ROLE_ADMIN", "ROLE_TEACHER"]), DisciplineController.delete);
 
@@ -64,11 +64,9 @@ routes.get('/tasks/users/:task_id', is(["ROLE_ADMIN", "ROLE_TEACHER"]), TakContr
 routes.post('/tasks/:discipline_id', is(["ROLE_ADMIN", "ROLE_TEACHER"]), uploadfields, uploadTask, TakController.store);
 
 
-routes.get('/taskdelivery/user_id/:user_id/task_id/:task_id', is(["ROLE_ADMIN", "ROLE_TEACHER"]), Taskdelivery.index);
+routes.get('/taskdelivery/user_id/:user_id/task_id/:task_id', Taskdelivery.index);
 routes.post('/taskdelivery', uploadfields, Taskdelivery.store);
-// routes.put('/taskdelivery',
-//     uploadfields,
-//     Taskdelivery.update);
+routes.put('/taskdelivery/:taskDelivery_id', Taskdelivery.update);
 
 
 
