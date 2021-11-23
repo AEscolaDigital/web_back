@@ -28,6 +28,8 @@ class User extends Model {
 
         this.belongsToMany(models.Task, { foreignKey: 'user_id', through: 'tasks_users', as: 'task'});
 
+        this.hasOne(models.TaskDelivery, {foreignKey: 'task_id', as: 'taskDelivery'});
+
     }
 }
 
