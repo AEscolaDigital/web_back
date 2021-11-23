@@ -1,6 +1,7 @@
 require('dotenv').config()
+const Sequelize = require('sequelize');
 
-module.exports = {
+const sequelize = new Sequelize({
     url: process.env.DATABASE_URL || "mysql://root:bcd127@localhost:3306/school",
     config: {
         dialect: "postgres",
@@ -9,13 +10,15 @@ module.exports = {
                 require: true,
                 rejectUnauthorized: false
             }
-         },
-        logging: console.log,
+        },
         define: {
             timestamp: true,
             underscored: true
         },
-    
+
     },
-   
-}
+
+})
+
+
+module.exports = sequelize;
