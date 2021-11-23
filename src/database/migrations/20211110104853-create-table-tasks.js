@@ -15,7 +15,7 @@ module.exports = {
         allowNull: false,
       },
       description: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(765),
         allowNull: false,
       },
       date_delivery: {

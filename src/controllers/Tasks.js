@@ -120,9 +120,9 @@ module.exports = {
 
         const files = req.files;
 
-        const file = files.file ? files.file[0].firebaseUrlFile : null;
-        const file1 = files.file1 ? files.file1[0].firebaseUrlFile1 : null;
-        const file2 = files.file2 ? files.file2[0].firebaseUrlFile2 : null;
+        const file = files.file ? files.file[0].firebaseUrlFile : "";
+        const file1 = files.file1 ? files.file1[0].firebaseUrlFile1 : "";
+        const file2 = files.file2 ? files.file2[0].firebaseUrlFile2 : "";
 
         try {
 

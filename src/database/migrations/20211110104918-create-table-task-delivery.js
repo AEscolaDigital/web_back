@@ -39,7 +39,7 @@ module.exports = {
         allowNull: true,
       },
       comment: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(755),
         allowNull: true,
       },
       task_id:{
