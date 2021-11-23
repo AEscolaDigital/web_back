@@ -9,7 +9,7 @@ const UserController = require('./controllers/users');
 const ClassesController = require('./controllers/classes');
 const DisciplineController = require('./controllers/disciplines');
 const TakController = require('./controllers/tasks');
-const Taskdelivery = require('./controllers/taskdelivery');
+const TaskDelivery = require('./controllers/taskDelivery');
 
 
 const uploadImage = require('./services/firebase');
@@ -64,9 +64,9 @@ routes.get('/tasks/users/:task_id', is(["ROLE_ADMIN", "ROLE_TEACHER"]), TakContr
 routes.post('/tasks/:discipline_id', is(["ROLE_ADMIN", "ROLE_TEACHER"]), uploadfields, uploadTask, TakController.store);
 
 
-routes.get('/taskdelivery/user_id/:user_id/task_id/:task_id', Taskdelivery.index);
-routes.post('/taskdelivery', uploadfields, Taskdelivery.store);
-routes.put('/taskdelivery/:taskDelivery_id', Taskdelivery.update);
+routes.get('/taskdelivery/user_id/:user_id/task_id/:task_id', TaskDelivery.index);
+routes.post('/taskdelivery', uploadfields, TaskDelivery.store);
+routes.put('/taskdelivery/:taskDelivery_id', TaskDelivery.update);
 
 
 
