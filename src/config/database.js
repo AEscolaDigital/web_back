@@ -9,9 +9,6 @@ module.exports = {
             timestamp: true,
             underscored: true
         },
-        ssl: {
-            rejectUnauthorized: false
-        }
     },
    
 }
