@@ -8,9 +8,10 @@ module.exports = {
         define: {
             timestamp: true,
             underscored: true
+        },
+        ssl: {
+            rejectUnauthorized: false
         }
     },
-    ssl: {
-        rejectUnauthorized: false
-    }
+   
 }
