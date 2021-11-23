@@ -46,22 +46,22 @@ module.exports = {
                 id: task_id,
             },
             include: [{
-                    association: 'discipline',
-                    attributes: ['user_id', 'school_id'],
-                    include: [{
-                            association: 'user',
-                            attributes: ['name', 'profile_picture'],
-                        },
-                        {
-                            association: 'school',
-                            attributes: ['name', 'profile_picture'],
-                        }
-                    ]
+                association: 'discipline',
+                attributes: ['user_id', 'school_id'],
+                include: [{
+                    association: 'user',
+                    attributes: ['name', 'profile_picture'],
                 },
                 {
-                    association: 'tasksAttachments',
-                    attributes: ['link', 'link1', 'link2', 'file', 'file1', 'file2']
+                    association: 'school',
+                    attributes: ['name', 'profile_picture'],
                 }
+                ]
+            },
+            {
+                association: 'tasksAttachments',
+                attributes: ['link', 'link1', 'link2', 'file', 'file1', 'file2']
+            }
             ],
         })
 
@@ -96,7 +96,7 @@ module.exports = {
                 attributes: ['id', 'profile_picture', 'name'],
                 through: {
                     attributes: []
-                }
+                },
             },
         });
 

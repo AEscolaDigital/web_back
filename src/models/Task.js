@@ -22,6 +22,7 @@ class Task extends Model {
         this.belongsTo(models.TasksAttachments, { foreignKey: 'task_attachments_id', as: 'tasksAttachments' })
 
         this.belongsToMany(models.User, { foreignKey: 'task_id', through: 'tasks_users', as: 'users' });
+
     }
      
 }
