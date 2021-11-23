@@ -9,13 +9,13 @@ const UserController = require('./controllers/users');
 const ClassesController = require('./controllers/classes');
 const DisciplineController = require('./controllers/disciplines');
 const TakController = require('./controllers/tasks');
+const Taskdelivery = require('./controllers/taskdelivery');
 
 
 const uploadImage = require('./services/firebase');
 const uploadTask = require('./services/firebaseTask');
 
 const multer = require('multer');
-const Taskdelivery = require('./controllers/Taskdelivery');
 
 const Multer = multer({
     storange: multer.memoryStorage(),
