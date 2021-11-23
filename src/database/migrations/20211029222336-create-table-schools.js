@@ -2,70 +2,46 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.createTable("students", {
+    queryInterface.createTable("schools", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      genre_id:{
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: { model: 'genres', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
       name: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      email:{
+      name_school:{
         type: Sequelize.STRING,
         allowNull: false
       }, 
+      cnpj: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      school_size: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       password: {
         type: Sequelize.STRING,
-        allowNull: false,
-      },
-      birth_date: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      rg: {
-        type: Sequelize.STRING,
         allowNull: false
       },
-      image_rg: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      cpf: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      image_cpf: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      cpf_responsible: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      image_cpf_responsible: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      valid: {
+      role_id:{
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references: { model: 'roles', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
-      img_proof_of_residence: {
+      profile_picture:{
         type: Sequelize.STRING,
-        allowNull: true
-      },
-      profile_picture: {
-        type: Sequelize.STRING,
-        allowNull: true
+        allowNull: true,
       },
       created_at: {
         type: Sequelize.DATE,
@@ -79,7 +55,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    queryInterface.dropTable("students");
+    queryInterface.dropTable("schools");
   }
 };
 
