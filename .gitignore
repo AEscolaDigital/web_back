@@ -2,7 +2,6 @@
 
 #Chave do firebase
 src/config/stmp.js
-src/config/firebase-key.json
 
 # dependencies
 /node_modules
