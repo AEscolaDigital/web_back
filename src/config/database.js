@@ -1,7 +1,7 @@
 module.exports = {
     url: process.env.DATABASE_URL || "mysql://root:bcd127@localhost:3306/school",
     config: {
-        dialect: "postgres",
+        dialect: "mysql",
         dialectOptions: {
             ssl: {
                 require: true,
