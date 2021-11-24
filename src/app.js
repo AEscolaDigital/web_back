@@ -3,9 +3,9 @@ require("./database");
 require("dotenv").config();
 const routes = require("./routes");
 const app = express();
-const setupCors = require("./config/middlewares")
+const cors = require('cors');
 
-setupCors(app);
+app.use(cors());
 
 //dizemos para o express que ele pode aceitar json
 app.use(express.json());
