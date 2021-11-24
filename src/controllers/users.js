@@ -1,6 +1,5 @@
 const User = require('../models/User');
 
-
 const bcrypt = require("bcrypt");
 const { Readable } = require('stream');
 const readline = require('readline');
@@ -57,7 +56,6 @@ module.exports = {
 
         try {
 
-
             let user = await User.findOne({ where: { email: email } })
 
             if (user) {
@@ -65,12 +63,11 @@ module.exports = {
                     .send({ error: "Este e-mail já está sendo utilizado" })
             }
 
-            const password = "123456"
-            //const password = Math.random().toString(36).slice(-8);
+            const password = Math.random().toString(36).slice(-8);
 
             const passwordCript = bcrypt.hashSync(password, 10);
 
-         //   sendingEmail(email, password, name)
+            sendingEmail(email, password, name)
 
             user = await User.create({
                 name,
@@ -128,9 +125,7 @@ module.exports = {
 
             for await (let { name, email, role_id } of users) {
 
-                //const password = Math.random().toString(36).slice(-8);
-
-                const password = "123456"
+                const password = Math.random().toString(36).slice(-8);
 
                 const passwordCript = bcrypt.hashSync(password, 10);
 
@@ -142,7 +137,9 @@ module.exports = {
                     school_id,
                 });
 
-                //sendingEmail(email, password, name)
+                if (email === "samuel.a.goulart@gmail.com") {
+                    sendingEmail(email, password, name)
+                }
             }
 
             res.status(201).send({
@@ -166,7 +163,7 @@ module.exports = {
         try {
 
             if (!req.file) {
-                return res.json({error: "Envie uma imagem"})
+                return res.json({ error: "Envie uma imagem" })
             }
 
             let user = await User.findOne({
