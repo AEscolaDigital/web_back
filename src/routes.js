@@ -44,7 +44,7 @@ routes.post('/users/excelFile', Multer.single("fileCSV"), UserController.storeEx
 routes.get('/users/page/:page_number', UserController.index);
 routes.put('/users', Multer.single("image"), uploadImage, UserController.update);
 
-routes.get('/classes/:page_number', is(["ROLE_ADMIN", "ROLE_TEACHER"]), ClassesController.index);
+routes.get('/classes/:page_number', is(["ROLE_ADMIN", "ROLE_TEACHER", "ROLE_USER"]), ClassesController.index);
 routes.get('/classes/search/:search', is(["ROLE_ADMIN", "ROLE_TEACHER"]), ClassesController.indexSearch);
 routes.get('/classes/:class_id/page/:page_number', is(["ROLE_ADMIN"]), ClassesController.indexUsers);
 routes.post('/classes', is(["ROLE_ADMIN"]), ClassesController.store);

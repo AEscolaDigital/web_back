@@ -5,7 +5,6 @@ const { Readable } = require('stream');
 const readline = require('readline');
 const { Op } = require('sequelize');
 const payloadjtw = require("../utils/payloadjtw");
-const { resolveAny } = require('dns');
 
 module.exports = {
 
