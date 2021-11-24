@@ -32,12 +32,12 @@ const uploadfields = Multer.fields([
 routes.post('/sessions', SessionController.store);
 
 routes.post("/schools", SchooolController.store);
+routes.get('/schools/:school_id/', SchooolController.index);
 
 
 routes.use(authMiddleware);
 
 // Rotas privadas
-routes.get('/schools/:school_id/', SchooolController.index);
 
 routes.post('/users', UserController.store);
 routes.post('/users/excelFile', Multer.single("fileCSV"), UserController.storeExcelFile);
