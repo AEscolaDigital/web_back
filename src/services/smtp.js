@@ -1,13 +1,12 @@
 const nodemailer = require("nodemailer");
-const stmp = require("../config/stmp");
 
 const transporter = nodemailer.createTransport({
-  host: stmp.host,
-  port: stmp.port,
+  host: process.env.SMTP_HOST,
+  port: process.env.STMP_PORT,
   secure: false,
   auth: {
-    user: stmp.user,
-    pass: stmp.pass,
+    user:  process.env.STMP_USER,
+    pass:  process.env.SMTP_PASS,
   },
   tls: {
     rejectUnauthorized: false,
@@ -15,6 +14,8 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendingEmail = async (email, senha, name) => {
+
+  console.log("AQUI");
 
   await transporter.sendMail({
     text: "Texto do E-mail",
