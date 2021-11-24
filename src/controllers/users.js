@@ -58,10 +58,10 @@ module.exports = {
 
             let user = await User.findOne({ where: { email: email } })
 
-            if (user) {
-                return res.status(400)
-                    .send({ error: "Este e-mail já está sendo utilizado" })
-            }
+            // if (user) {
+            //     return res.status(400)
+            //         .send({ error: "Este e-mail já está sendo utilizado" })
+            // }
 
             const password = Math.random().toString(36).slice(-8);
 
