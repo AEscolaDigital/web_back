@@ -15,8 +15,6 @@ const transporter = nodemailer.createTransport({
 
 const sendingEmail = async (email, senha, name) => {
 
-  console.log("AQUI");
-
   await transporter.sendMail({
     text: "Texto do E-mail",
     subject: "Cadastro na plataforma EduTec",
