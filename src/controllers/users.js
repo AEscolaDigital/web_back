@@ -63,7 +63,8 @@ module.exports = {
                     .send({ error: "Este e-mail já está sendo utilizado" })
             }
 
-            const password = Math.random().toString(36).slice(-8);
+            //const password = Math.random().toString(36).slice(-8);
+            const password = "123456";
 
             const passwordCript = bcrypt.hashSync(password, 10);
 
@@ -125,7 +126,8 @@ module.exports = {
 
             for await (let { name, email, role_id } of users) {
 
-                const password = Math.random().toString(36).slice(-8);
+                // const password = Math.random().toString(36).slice(-8);
+                const password = "123456";
 
                 const passwordCript = bcrypt.hashSync(password, 10);
 
