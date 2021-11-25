@@ -25,7 +25,7 @@ module.exports = {
                     }]
                 });
 
-                return user;
+                return await user;
             }
 
             if (role == 'ROLE_ADMIN') {
@@ -39,7 +39,7 @@ module.exports = {
                     }]
                 });
 
-                return user;
+                return await user;
             }
 
             return res.send({

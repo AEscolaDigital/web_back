@@ -26,7 +26,7 @@ class School extends Model {
 
         this.hasOne(models.Phone, { foreignKey: 'school_id', as: 'phone' });
 
-        this.hasOne(models.Role, { foreignKey: 'id', as: 'role' });
+        this.belongsTo(models.Role, { foreignKey: 'role_id', as: 'role' });
  
     }
 

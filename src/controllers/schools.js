@@ -37,6 +37,9 @@ module.exports = {
                                 attributes: ['name']
                             }
                         ],
+                    },
+                    {
+                        association: 'role',
                     }
                 ]
         });

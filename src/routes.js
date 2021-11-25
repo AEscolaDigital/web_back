@@ -9,13 +9,13 @@ const UserController = require('./controllers/users');
 const ClassesController = require('./controllers/classes');
 const DisciplineController = require('./controllers/disciplines');
 const TakController = require('./controllers/tasks');
+const TaskDelivery = require('./controllers/taskDelivery');
 
 
 const uploadImage = require('./services/firebase');
 const uploadTask = require('./services/firebaseTask');
 
 const multer = require('multer');
-const Taskdelivery = require('./controllers/Taskdelivery');
 
 const Multer = multer({
     storange: multer.memoryStorage(),
@@ -32,12 +32,12 @@ const uploadfields = Multer.fields([
 routes.post('/sessions', SessionController.store);
 
 routes.post("/schools", SchooolController.store);
+routes.get('/schools/:school_id/', SchooolController.index);
 
 
 routes.use(authMiddleware);
 
 // Rotas privadas
-routes.get('/schools/:school_id/', SchooolController.index);
 
 routes.post('/users', UserController.store);
 routes.post('/users/excelFile', Multer.single("fileCSV"), UserController.storeExcelFile);
@@ -64,9 +64,9 @@ routes.get('/tasks/users/:task_id', is(["ROLE_ADMIN", "ROLE_TEACHER"]), TakContr
 routes.post('/tasks/:discipline_id', is(["ROLE_ADMIN", "ROLE_TEACHER"]), uploadfields, uploadTask, TakController.store);
 
 
-routes.get('/taskdelivery/user_id/:user_id/task_id/:task_id', Taskdelivery.index);
-routes.post('/taskdelivery', uploadfields, Taskdelivery.store);
-routes.put('/taskdelivery/:taskDelivery_id', Taskdelivery.update);
+routes.get('/taskdelivery/user_id/:user_id/task_id/:task_id', TaskDelivery.index);
+routes.post('/taskdelivery', uploadfields, TaskDelivery.store);
+routes.put('/taskdelivery/:taskDelivery_id', TaskDelivery.update);
 
 
 

@@ -1,10 +1,18 @@
+require("dotenv").config();
+
 module.exports = {
-    url: "mysql://root:bcd127@localhost:3306/school",
+    url: process.env.DATABASE_URL,
     config: {
         dialect: "mysql",
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+         },
         define: {
             timestamp: true,
             underscored: true
-        }
-    }
+        },
+    },
 }
