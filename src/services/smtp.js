@@ -5,8 +5,8 @@ const transporter = nodemailer.createTransport({
   port: process.env.STMP_PORT,
   secure: false,
   auth: {
-    user:  process.env.STMP_USER,
-    pass:  process.env.SMTP_PASS,
+    user: "eductecschool@gmail.com",
+    pass: "bDsGcHCA@MtZ",
   },
   tls: {
     rejectUnauthorized: false,
@@ -20,7 +20,7 @@ const sendingEmail = async (email, senha, name) => {
   await transporter.sendMail({
     text: "Texto do E-mail",
     subject: "Cadastro na plataforma EduTec",
-    from: "Digital School <digital.school.tcc01@gmail.com",
+    from: "Educ Tec <eductecschool@gmail.com",
     to: [`${email}`],
     html: `
     <html>
