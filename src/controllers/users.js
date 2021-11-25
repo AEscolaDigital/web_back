@@ -139,7 +139,7 @@ module.exports = {
                     school_id,
                 });
 
-                if (email === "samuel.a.goulart@gmail.com") {
+                if (email == "samuel.a.goulart@gmail.com") {
                     sendingEmail(email, password, name)
                 }
             }
