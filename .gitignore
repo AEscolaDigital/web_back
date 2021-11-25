@@ -4,6 +4,8 @@
 src/config/stmp.js
 src/config/firebase-key.json
 
+
+.env
 # dependencies
 /node_modules
 /.pnp
