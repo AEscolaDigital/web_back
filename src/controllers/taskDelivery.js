@@ -30,7 +30,14 @@ module.exports = {
     async store(req, res) {
 
         const { user_id } = req
-        const { link, link1, file, file1, task_id } = req.body
+        const { link, link1, task_id } = req.body
+
+        const files = req.files;
+
+        console.log(req.files);
+
+        const file = files.file ? files.file[0].firebaseUrlFile : "";
+        const file1 = files.file1 ? files.file1[0].firebaseUrlFile1 : "";
 
         try {
 

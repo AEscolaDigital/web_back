@@ -65,7 +65,7 @@ routes.post('/tasks/:discipline_id', is(["ROLE_ADMIN", "ROLE_TEACHER"]), uploadf
 
 
 routes.get('/taskdelivery/user_id/:user_id/task_id/:task_id', TaskDelivery.index);
-routes.post('/taskdelivery', uploadfields, TaskDelivery.store);
+routes.post('/taskdelivery', uploadfields, uploadTask, TaskDelivery.store);
 routes.put('/taskdelivery/:taskDelivery_id', TaskDelivery.update);
 
 
