@@ -72,14 +72,12 @@ module.exports = {
                     attributes: []
                 }
             }],
+            order: [
+                ['users', 'name', 'ASC']
+            ],
+
         });
 
-        // const teste1 = await rows.rows({limit: 10 })
-        // console.log(teste1);
-
-        // const teste = await classe({ limit: 1})
-
-        // console.log(classe);
         if (classe === null)
             res.json({ error: "Essa turma não existe" });
 

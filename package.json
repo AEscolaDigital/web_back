@@ -11,6 +11,7 @@
         "dev": "nodemon src/index.js",
         "start": "node src/index.js",
         "test": "echo \"Error: no test specified\" && exit 1",
+        "db-rebuild-dev": "sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all && npm run dev",
         "db-rebuild": "sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all && npm start"
     },
     "repository": {

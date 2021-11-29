@@ -34,8 +34,6 @@ module.exports = {
 
         const files = req.files;
 
-        console.log(req.files);
-
         const file = files.file ? files.file[0].firebaseUrlFile : "";
         const file1 = files.file1 ? files.file1[0].firebaseUrlFile1 : "";
 
@@ -75,7 +73,7 @@ module.exports = {
     },
     async update(req, res) {
 
-        const { comment, status } = req.body
+        const { comment, status, spots} = req.body
         const { taskDelivery_id } = req.params
 
         try {
@@ -86,6 +84,7 @@ module.exports = {
 
             taskDelivery.comment = comment;
             taskDelivery.status = status;
+            taskDelivery.spots = spots;
 
             taskDelivery.save();
 

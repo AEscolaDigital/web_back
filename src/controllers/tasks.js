@@ -1,39 +1,38 @@
 const Discipline = require('../models/Discipline');
 const Task = require('../models/Task');
+const TaskDelivery = require('../models/TaskDelivery');
 const TaskAttachments = require('../models/TasksAttachments');
 const User = require('../models/User');
 
-const payloadjtw = require("../utils/payloadjtw");
+const sequelize = require("sequelize");
 
 module.exports = {
     async index(req, res) {
 
         const { discipline_id } = req.params;
+        const { user_id } = req
 
-        const tasks = await Task.findAll({
-            attributes: ['id', 'name', 'date_delivery'],
-            where: {
-                discipline_id
+        const userTasks = await User.findAll( {
+            where:{
+                id: user_id,
             },
-            order: [
-                ["id", "DESC"]
-            ],
-        })
-
-        tasks.forEach(task => {
-
-            let data = task.date_delivery;
-
-            let date = String(data.getDate()).padStart(2, '0');
-            let month = String((data.getMonth() + 1)).padStart(2, '0');
-            let fullYear = data.getFullYear();
-
-            task.dataValues.date_delivery =
-                `${date}.${month}.${fullYear}`
-
+            attributes:['id'],
+            include: {
+                attributes: [
+                    'id', 
+                    'name',
+                    [sequelize.fn('date_format', sequelize.col('date_delivery'), '%d.%m.%Y'), 'date_delivery']],
+                association: 'task',
+                where: {
+                    discipline_id
+                },
+                through: {
+                    attributes: [],
+                }
+            }, 
         });
 
-        res.json(tasks);
+        res.json(userTasks[0].task);
 
     },
     async indexListTask(req, res) {
@@ -98,7 +97,32 @@ module.exports = {
                     attributes: []
                 },
             },
+            order: [
+                ['users', 'name', 'ASC']
+            ],
+
         });
+
+        const tasksDelivery = await TaskDelivery.findAll({
+            raw: true,
+            attributes: ['status', 'user_id'],
+            where: {
+                task_id,
+            }
+        })
+
+
+        tasks[0].users.map(taskUser => {
+
+            taskUser.dataValues.status = 0;
+
+            for (let i = 0; i < tasksDelivery.length; i++) {
+
+                if (tasksDelivery[i].user_id === taskUser.dataValues.id) {
+                    taskUser.dataValues.status = tasksDelivery[i].status
+                }
+            }
+        })
 
         res.json(tasks[0].users);
 
@@ -117,6 +141,8 @@ module.exports = {
             link1,
             link2,
         } = req.body;
+
+        const spot = spots === '' ? null : spots
 
         const files = req.files;
 
@@ -168,7 +194,7 @@ module.exports = {
                 name,
                 description,
                 date_delivery,
-                spots,
+                spots: spot,
                 discipline_id,
                 task_attachments_id: taskAttachments.id
             });
@@ -202,5 +228,24 @@ module.exports = {
             console.log('Tasks: ' + error);
         }
 
+    },
+
+    async delete(req, res) {
+
+        const { user_id, task_id } = req.params;
+
+        try {
+
+            let user = await User.findByPk(user_id);
+            let task = await Task.findByPk(task_id);
+
+            await user.removeTask(task);
+
+            res.status(204).send();
+
+        } catch (error) {
+            res.status(500).send(error);
+        }
     }
+
 }
