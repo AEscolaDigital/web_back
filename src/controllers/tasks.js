@@ -12,14 +12,14 @@ module.exports = {
         const { discipline_id } = req.params;
         const { user_id } = req
 
-        const userTasks = await User.findAll( {
-            where:{
+        const userTasks = await User.findAll({
+            where: {
                 id: user_id,
             },
-            attributes:['id'],
+            attributes: ['id'],
             include: {
                 attributes: [
-                    'id', 
+                    'id',
                     'name',
                     [sequelize.fn('date_format', sequelize.col('date_delivery'), '%d.%m.%Y'), 'date_delivery']],
                 association: 'task',
@@ -29,7 +29,7 @@ module.exports = {
                 through: {
                     attributes: [],
                 }
-            }, 
+            },
         });
 
         res.json(userTasks[0].task);

@@ -106,8 +106,6 @@ module.exports = {
                 teacher = await User.findByPk(id[1]);
             }      
 
-            console.log(teacher.name);
-
             discipline = await Discipline.create({
                 name,
                 class_id,

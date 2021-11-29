@@ -5,6 +5,7 @@ const { Readable } = require('stream');
 const readline = require('readline');
 const { Op } = require('sequelize');
 const payloadjtw = require("../utils/payloadjtw");
+const Discipline = require('../models/Discipline');
 
 module.exports = {
 
@@ -154,7 +155,17 @@ module.exports = {
                     .send({ error: "Essa não turma existe" })
             }
 
+
+            let discipline = await Discipline.findAll({
+                where: {
+                    class_id
+                }
+            });
+
+
             await user.addClass(classe);
+            await user.addDiscipline(discipline);
+
 
             res.status(201).send({
                 sucess: "Usuário adicionado com sucesso"
