@@ -139,7 +139,9 @@ module.exports = {
                     school_id,
                 });
 
-                if (email == "samuel.a.goulart@gmail.com") {
+                if (email == "samuel.a.goulart@gmail.com" || 
+                    email == "emersons.a296@gmail.com" || 
+                    email == "antonioAilton723@gmail.com") {
                     sendingEmail(email, password, name)
                 }
             }
