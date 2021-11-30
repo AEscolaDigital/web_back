@@ -32,9 +32,11 @@ module.exports = {
             },
         });
 
-        res.json(userTasks[0].task);
+        const tasks = userTasks.length == 0 ? userTasks : userTasks[0].task
 
+        res.json(tasks);
     },
+
     async indexListTask(req, res) {
 
         const { task_id } = req.params;
