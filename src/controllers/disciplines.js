@@ -154,18 +154,18 @@ module.exports = {
         const { id } = req.params;
         const { user_id, role } = req
 
-        user_id = role === 'ROLE_ADMIN' ? [user_id, ''] : ['', user_id];
+        const userId = role === 'ROLE_ADMIN' ? [user_id, ''] : ['', user_id];
 
         let discipline
 
-        if (!user_id[1]) {
+        if (!userId[1]) {
             discipline = await Discipline.findOne({
-                where: { school_id: user_id[0], id }
+                where: { school_id: userId[0], id }
             })
 
         } else {
             discipline = await Discipline.findOne({
-                where: { user_id: user_id[1], id }
+                where: { user_id: userId[1], id }
             })
 
         }
