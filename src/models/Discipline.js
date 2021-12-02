@@ -6,6 +6,7 @@ class Discipline extends Model {
         super.init(
             {  
                 name: DataTypes.STRING,
+                sigla: DataTypes.STRING,
                 image: DataTypes.STRING,
                 user_id: DataTypes.INTEGER,
                 teacherName: DataTypes.STRING

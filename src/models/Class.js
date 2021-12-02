@@ -5,7 +5,10 @@ class Class extends Model {
     static init(connection){
         super.init(
             {  
-                name: DataTypes.STRING,
+                course_name: DataTypes.STRING,
+                sigla: DataTypes.STRING,
+                start_date: DataTypes.DATE,
+                image: DataTypes.STRING,
             },
             {
                sequelize: connection,

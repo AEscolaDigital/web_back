@@ -10,10 +10,22 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
-      name: {
+      course_name: {
         type: Sequelize.STRING,
         allowNull: false
       },
+      sigla: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      start_date: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      image: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },  
       school_id:{
         type: Sequelize.INTEGER,
         allowNull: true,

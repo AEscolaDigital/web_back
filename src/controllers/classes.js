@@ -18,7 +18,7 @@ module.exports = {
         school_id = role === "ROLE_ADMIN" ? user_id : school_id
 
         const classes = await Class.findAndCountAll({
-            attributes: ['id', 'name'],
+            attributes: ['id', 'course_name', 'sigla'],
             order: [["id", "DESC"]],
             where: {
                 school_id
@@ -55,10 +55,10 @@ module.exports = {
         const { class_id, page_number } = req.params;
 
         const school_id = payloadjtw(req).user_id;
-        // const offset = page_number * 10 - 10;
+        const offset = page_number * 10 - 10;
 
         const classe = await Class.findAndCountAll({
-            attributes: ['id', 'name'],
+            attributes: ['id', 'course_name', 'sigla'],
             where: {
                 id: class_id,
                 school_id,
@@ -67,8 +67,6 @@ module.exports = {
                 association: 'users',
                 order: [["id", "DESC"]],
 
-                // limit: 1,
-                // offset: parseInt(offset),
                 through: {
                     attributes: []
                 }
@@ -76,7 +74,6 @@ module.exports = {
             order: [
                 ['users', 'name', 'ASC']
             ],
-
         });
 
         if (classe === null)
@@ -87,34 +84,38 @@ module.exports = {
 
     async store(req, res) {
 
-        const { name } = req.body;
-
-        const school_id = payloadjtw(req).user_id;
+        const { course_name, sigla, start_date } = req.body;
+        const { firebaseUrl } = req.file ? req.file : "";
+        const { user_id } = req
 
         try {
 
             let classe = await Class.findOne({
                 where: {
-                    school_id,
-                    name,
+                    school_id: user_id,
+                    sigla,
                 }
             })
 
             if (classe) {
                 return res.status(400)
-                    .send({ error: "Esta turma já está criada" })
+                    .send({ error: `Já tem uma turma com essa sigla ${sigla}` })
             }
 
             classe = await Class.create({
-                name,
-                school_id
+                course_name,
+                sigla,
+                start_date,
+                school_id: user_id,
+                image: firebaseUrl,
             });
 
-            res.status(201).send({
-                id: classe.id,
-                name: classe.name,
-
-            });
+            res.status(201).send([{
+                course_name: classe.course_name,
+                sigla: classe.sigla,
+                start_date: classe.start_date,
+                image: classe.image,
+            }]);
 
         } catch (error) {
             console.log('classe: ' + error);

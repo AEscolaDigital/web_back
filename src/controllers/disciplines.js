@@ -56,7 +56,7 @@ module.exports = {
 
     async store(req, res) {
 
-        const { name, class_id } = req.body
+        const { name, class_id, sigla } = req.body
         const { firebaseUrl } = req.file ? req.file : "";
         const { user_id, role } = req
 
@@ -110,6 +110,7 @@ module.exports = {
                 name,
                 class_id,
                 image: firebaseUrl,
+                sigla,
                 teacherName: teacher.name,
                 user_id: id[1],
                 school_id: id[0]
