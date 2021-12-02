@@ -9,31 +9,6 @@ const sequelize = require("sequelize");
 module.exports = {
     async index(req, res) {
 
-        // const { discipline_id } = req.params;
-        // const { user_id } = req
-
-        // const userTasks = await User.findAll({
-        //     where: {
-        //         id: user_id,
-        //     },
-        //     attributes: ['id'],
-        //     include: {
-        //         attributes: [
-        //             'id',
-        //             'name',
-        //             [sequelize.fn('date_format', sequelize.col('date_delivery'), '%d.%m.%Y'), 'date_delivery']],
-        //         association: 'task',
-        //         where: {
-        //             discipline_id
-        //         },
-        //         through: {
-        //             attributes: [],
-        //         }
-        //     },
-        // });
-
-        // const tasks = userTasks.length == 0 ? userTasks : userTasks[0].task
-
         const { discipline_id } = req.params;
 
         const tasks = await Task.findAll({
