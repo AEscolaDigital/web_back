@@ -18,7 +18,7 @@ module.exports = {
         school_id = role === "ROLE_ADMIN" ? user_id : school_id
 
         const classes = await Class.findAndCountAll({
-            attributes: ['id', 'course_name', 'sigla'],
+            attributes: ['id', 'course_name', 'sigla', 'image'],
             order: [["id", "DESC"]],
             where: {
                 school_id

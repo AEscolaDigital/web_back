@@ -15,7 +15,7 @@ module.exports = {
 
         if (!id[1]) {
             disciplines = await Discipline.findAll({
-                attributes: ['id', 'name', 'image', 'teacher_name'],
+                attributes: ['id', 'name', 'image', 'teacher_name', 'sigla'],
                 where: { school_id: id[0] },
                 order: [["id", "DESC"]],
             })
@@ -23,7 +23,7 @@ module.exports = {
 
         if (!id[0]) {
             disciplines = await Discipline.findAll({
-                attributes: ['id', 'name', 'image', 'teacher_name'],
+                attributes: ['id', 'name', 'image', 'teacher_name', 'sigla'],
                 include: {
                     association: 'users',
                     attributes: [],
@@ -40,13 +40,9 @@ module.exports = {
 
         if (idTeacher) {
             disciplines = await Discipline.findAll({
-                attributes: ['id', 'name', 'image', 'teacher_name'],
+                attributes: ['id', 'name', 'image', 'teacher_name', 'sigla'],
                 where: { user_id },
                 order: [["id", "DESC"]],
-                //include: {
-                    //association: "users",
-                    // attributes: ['name']
-                //}
             })
         }
 
