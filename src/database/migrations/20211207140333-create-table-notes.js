@@ -3,27 +3,35 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.createTable("grades", {
+    queryInterface.createTable("notes", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       },
-      grade_1:{
+      note_1:{
         type: Sequelize.INTEGER,
         allowNull: true,
       },
-      grade_2:{
+      note_2:{
         type: Sequelize.INTEGER,
         allowNull: true,
       },
-      grade_3:{
+      note_3:{
         type: Sequelize.INTEGER,
         allowNull: true,
       },
-      grade_4:{
+      note_4:{
         type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      semester:{
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      assessment:{
+        type: Sequelize.STRING,
         allowNull: true,
       },
       discipline_id:{
@@ -40,6 +48,13 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
+      user_id:{
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: 'users', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false
@@ -52,6 +67,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    queryInterface.dropTable("tasks_users");
+    queryInterface.dropTable("notes");
   }
 };

@@ -14,6 +14,7 @@ const Discipline = require("../models/Discipline");
 const Task = require("../models/Task");
 const TasksAttachments = require("../models/TasksAttachments");
 const TaskDelivery = require("../models/TaskDelivery");
+const Note = require("../models/Note");
 
 
 const connection = new Sequelize(dbConfig.url, dbConfig.config);
@@ -32,6 +33,7 @@ Discipline.init(connection);
 Task.init(connection);
 TasksAttachments.init(connection);
 TaskDelivery.init(connection);
+Note.init(connection);
 
 School.associate(connection.models);
 Address.associate(connection.models);
@@ -44,6 +46,7 @@ Classe.associate(connection.models);
 Discipline.associate(connection.models);
 Task.associate(connection.models);
 TaskDelivery.associate(connection.models);
+Note.associate(connection.models);
 
 
 module.exports = connection;

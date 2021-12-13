@@ -30,6 +30,8 @@ class User extends Model {
 
         this.hasOne(models.TaskDelivery, {foreignKey: 'task_id', as: 'taskDelivery'});
 
+        this.hasOne(models.Note, {foreignKey: 'user_id', as: 'user'});
+
     }
 }
 

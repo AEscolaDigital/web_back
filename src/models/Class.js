@@ -23,6 +23,7 @@ class Class extends Model {
         this.belongsTo(models.School, { foreignKey: 'school_id', as: 'school' });
 
         this.hasOne(models.Discipline, { foreignKey: 'class_id', as: 'Discipline' });
+
     }
     
 }

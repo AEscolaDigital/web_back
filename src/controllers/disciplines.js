@@ -2,6 +2,7 @@ const Discipline = require("../models/Discipline");
 const Class = require("../models/Class");
 const User = require("../models/User");
 const School = require("../models/School");
+const Note = require("../models/Note");
 
 module.exports = {
     async index(req, res) {
@@ -112,6 +113,14 @@ module.exports = {
                 school_id: id[0]
             });
 
+            res.status(201).send({
+                id: discipline.id,
+                name: discipline.name,
+                class_id: discipline.class_id,
+                updatedAt: discipline.updated_at,
+                createdAt: discipline.create_at
+            });
+
             const users_id = []
 
             await classe.users.forEach(user => {
@@ -133,13 +142,21 @@ module.exports = {
                 await user.addDiscipline(discipline);
             }
 
-            res.status(201).send({
-                id: discipline.id,
-                name: discipline.name,
-                class_id: discipline.class_id,
-                updatedAt: discipline.updated_at,
-                createdAt: discipline.create_at
-            });
+            for await (let { user_id } of users_id) {
+
+                let user = await User.findOne({
+                    where: {
+                        id: user_id
+                    }
+                })
+
+                await Note.create({
+                    discipline_id: discipline.id,
+                    class_id: classe.id,
+                    user_id: user.id,
+                    assessment: "Não avaliado"
+                });
+            }
 
         } catch (error) {
             console.log('Discipline: ' + error);
