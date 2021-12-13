@@ -52,7 +52,7 @@ module.exports = {
                 [
                     {
                         association: 'user',
-                        attributes: ['name', 'profile_picture']
+                        attributes: ['id', 'name', 'profile_picture']
                     },
                 ]
         });
