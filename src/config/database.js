@@ -1,9 +1,9 @@
 require("dotenv").config();
 
 module.exports = {
-    url: process.env.HEROKU_POSTGRESQL_GREEN_URL,
+    url: process.env.DATABASE_URL,
     config: {
-        dialect: "postgres",
+        dialect: "mysql",
         dialectOptions: {
             ssl: {
                 require: true,
